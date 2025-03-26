@@ -1,4 +1,4 @@
-import { Vertix } from '../vertix'
+import { Vertix } from '../graph/vertix'
 import { ScoreType } from './score-type'
 
 export type MoveScore = {

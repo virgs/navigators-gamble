@@ -1,4 +1,4 @@
-import { Directions } from './directions'
+import { Directions } from '../directions'
 import { Link } from './link'
 
 export type LinkedVertix = {
@@ -56,7 +56,7 @@ export class Vertix {
         })
     }
 
-    public getLinkedVerticesWithCardValue(): LinkedVertix[] {
+    public getLinkedVerticesWithDirection(): LinkedVertix[] {
         return this.getLinkedVertices().filter((linkedVertix) => linkedVertix.vertix.direction !== undefined)
     }
 }

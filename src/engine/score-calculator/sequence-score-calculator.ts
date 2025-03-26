@@ -1,18 +1,18 @@
 import { isNextClockWise, isPreviousClockWise } from '../directions'
-import { LinkedVertix, Vertix } from '../vertix'
-import { Move } from './Move'
-import { MoveScoreChecker } from './move-score-checker'
+import { MoveScoreCalculator } from './move-score-checker'
 import { MoveScore } from './move-score'
 import { ScoreType } from './score-type'
+import { Vertix, LinkedVertix } from '../graph/vertix'
+import { Move } from './move'
 
-export class SequenceScoreChecker implements MoveScoreChecker {
+export class SequenceScoreCalculator implements MoveScoreCalculator {
     private verticesMap: Record<string, Vertix>
 
     public constructor(verticesMap: Record<string, Vertix>) {
         this.verticesMap = verticesMap
     }
 
-    public checkMoveScore(move: Move): MoveScore[] {
+    public calculateMoveScore(move: Move): MoveScore[] {
         const vertix = this.verticesMap[move.vertixId]
 
         const increasingSequences = this.getSequences([vertix], isNextClockWise)
@@ -48,7 +48,7 @@ export class SequenceScoreChecker implements MoveScoreChecker {
         const vertix: Vertix = currentSequence[currentSequence.length - 1]
         const result: Vertix[][] = []
 
-        const linkedVertices = vertix.getLinkedVerticesWithCardValue()
+        const linkedVertices = vertix.getLinkedVerticesWithDirection()
         linkedVertices
             .filter((linkedVertix: LinkedVertix) => !currentSequence.includes(linkedVertix.vertix))
             .filter((linkedVertix: LinkedVertix) => sequenceCheck(vertix.direction!, linkedVertix.vertix.direction!))

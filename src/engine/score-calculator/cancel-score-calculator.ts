@@ -1,21 +1,21 @@
 import { directions } from '../directions'
-import { LinkedVertix, Vertix } from '../vertix'
-import { Move } from './Move'
-import { MoveScoreChecker } from './move-score-checker'
+import { MoveScoreCalculator as ScoreCalculator } from './move-score-checker'
 import { MoveScore } from './move-score'
 import { ScoreType } from './score-type'
+import { Move } from './move'
+import { Vertix, LinkedVertix } from '../graph/vertix'
 
-export class CancelScoreChecker implements MoveScoreChecker {
+export class CancelScoreCalculator implements ScoreCalculator {
     private verticesMap: Record<string, Vertix>
 
     public constructor(verticesMap: Record<string, Vertix>) {
         this.verticesMap = verticesMap
     }
 
-    public checkMoveScore(move: Move): MoveScore[] {
+    public calculateMoveScore(move: Move): MoveScore[] {
         const vertix = this.verticesMap[move.vertixId]
 
-        const linkedVerticesWithCard: LinkedVertix[] = vertix.getLinkedVerticesWithCardValue()
+        const linkedVerticesWithCard: LinkedVertix[] = vertix.getLinkedVerticesWithDirection()
 
         return linkedVerticesWithCard
             .filter(
