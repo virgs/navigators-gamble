@@ -23,12 +23,15 @@ export class GameEngine {
         )
 
         this.board = BoardSerializer.deserialize(config.board)
+        const playersIds = config.players.map((_, index) => `id-${index}`)
 
         this.players = config.players.map((player, index) => {
             const cards = Array.from(Array(config.cardsPerPlayer)).map(() => this.cards.pop()!)
             const aiPlayerConfig: AiPlayerConfig = {
-                id: `id-${index}`,
-                runs: player.runs!,
+                playerId: playersIds[index],
+                playersIds: playersIds,
+                turnOrder: index,
+                iterations: player.runs!,
                 gameConfig: config,
                 cards: cards,
                 algorithm: player.aiAlgorithm,
@@ -38,7 +41,7 @@ export class GameEngine {
             return newPlayer
         })
 
-        this.lastTurnPlayerId = 0
+        this.lastTurnPlayerId = -1
     }
 
     public isGameOver(): boolean {
@@ -46,7 +49,12 @@ export class GameEngine {
     }
 
     public finishGame(): void {
-        this.players.forEach((player) => player.finish())
+        const playerVerticesMap = this.board.getPlayerVerticesMap()
+        console.log(`Adding bonus points`)
+        this.players.forEach((player) => {
+            player.finish()
+            player.addScore(playerVerticesMap[player.id]?.length ?? 0)
+        })
     }
 
     public getScores(): Record<string, number> {
@@ -70,6 +78,7 @@ export class GameEngine {
             const totalScore = moveScores.reduce((acc, moveScore) => {
                 moveScore.vertices.forEach((vertix, index) => {
                     vertix.ownerId = move.playerId
+
                     if (index > 0) {
                         const link = vertix.getLinkTo(moveScore.vertices[index - 1])
                         console.log(`\t\tChanging link '${link?.id}' to ${move.playerId}`)

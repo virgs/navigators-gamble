@@ -53,7 +53,7 @@ const gameConfig: GameConfiguration = {
     players: [
         {
             type: PlayerType.ARTIFICIAL_INTELLIGENCE,
-            runs: 10,
+            runs: 5000,
             aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
         },
         {
@@ -72,9 +72,10 @@ const gameEngine = new GameEngine(gameConfig)
 const iterate = async () => {
     if (!gameEngine.isGameOver()) {
         await gameEngine.playNextRound()
-        setTimeout(iterate, 2000)
+        setTimeout(iterate, 500)
     } else {
         console.log(`End`)
+        gameEngine.finishGame()
         console.log(gameEngine.getScores())
     }
 }

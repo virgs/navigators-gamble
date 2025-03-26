@@ -9,7 +9,6 @@ export class Link {
         this.first = first
         this.second = second
         this._id = `${first.id}-${second.id}`
-        console.log(`Link created '${this.id}'`)
     }
 
     public get id(): string {

@@ -1,5 +1,5 @@
 import { AiAlgorithmType } from '../../ai/algorithms/ai-algorithm-type'
-import { InitializeMessage } from '../../ai/InitializeMessage'
+import { InitializeAiMessage } from '../../ai/messages/initialize-message'
 import { WebWorkerMessage } from '../../ai/messages/message'
 import { MessageType } from '../../ai/messages/message-type'
 import { MoveRequest } from '../../ai/messages/move-request'
@@ -15,8 +15,10 @@ import { ChooseMoveInput, Player } from './player'
 type PromiseResult = (value: Move | PromiseLike<Move>) => void
 
 export type AiPlayerConfig = {
-    id: string
-    runs: number
+    playerId: string
+    iterations: number
+    turnOrder: number
+    playersIds: string[]
     gameConfig: GameConfiguration
     cards: Card[]
     algorithm: AiAlgorithmType
@@ -32,7 +34,7 @@ export class AiPlayer implements Player {
     private readonly readyPromise: Promise<void>
 
     public constructor(aiPlayerConfig: AiPlayerConfig) {
-        this._id = aiPlayerConfig.id
+        this._id = aiPlayerConfig.playerId
         this.cards = aiPlayerConfig.cards
         this._score = 0
 
@@ -41,13 +43,10 @@ export class AiPlayer implements Player {
 
         this.readyPromise = new Promise<void>((resolve) => {
             this.worker.onmessage = () => {
-                const message: InitializeMessage = {
+                const message: InitializeAiMessage = {
                     messageType: MessageType.INITIALIZATION,
                     id: generateUID(),
-                    gameConfig: aiPlayerConfig.gameConfig,
-                    runs: aiPlayerConfig.runs,
-                    playerId: aiPlayerConfig.id,
-                    aiAlgorithm: aiPlayerConfig.algorithm,
+                    ...aiPlayerConfig,
                 }
 
                 this.worker.postMessage(message)
@@ -84,7 +83,7 @@ export class AiPlayer implements Player {
                 messageType: MessageType.MOVE_REQUEST,
                 id: generateUID(),
                 board: BoardSerializer.serialize(chooseMoveInput.board),
-                cards: this.cards.map((card) => card.direction),
+                playerCards: this.cards.map((card) => card.direction),
                 currentScores: chooseMoveInput.scores,
             }
             this.promisesMap[message.id] = resolve

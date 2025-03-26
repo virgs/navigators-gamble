@@ -46,6 +46,7 @@ export class SequenceScoreCalculator implements MoveScoreCalculator {
 
     private getSequences(currentSequence: Vertix[], sequenceCheck: Function): Vertix[][] {
         const vertix: Vertix = currentSequence[currentSequence.length - 1]
+        if (currentSequence.includes(vertix)) return []
         const result: Vertix[][] = []
 
         const linkedVertices = vertix.getLinkedVerticesWithDirection()

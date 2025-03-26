@@ -1,4 +1,4 @@
-import { directions } from '../directions'
+import { Directions, directions } from '../directions'
 import { MoveScoreCalculator as ScoreCalculator } from './move-score-checker'
 import { MoveScore } from './move-score'
 import { ScoreType } from './score-type'
@@ -18,10 +18,11 @@ export class CancelScoreCalculator implements ScoreCalculator {
         const linkedVerticesWithCard: LinkedVertix[] = vertix.getLinkedVerticesWithDirection()
 
         return linkedVerticesWithCard
-            .filter(
-                (linkedVertice: LinkedVertix) =>
-                    Math.abs(linkedVertice.vertix.direction! - move.direction) === directions.length / 2
-            )
+            .filter((linkedVertice: LinkedVertix) => {
+                const linkedVertixDirection = parseInt(Directions[linkedVertice.vertix.direction!])
+                const moveDirection = parseInt(Directions[move.direction])
+                return Math.abs(linkedVertixDirection - moveDirection) === directions.length / 2
+            })
             .map((linkedVertix: LinkedVertix) => ({
                 scoreType: ScoreType.CANCEL,
                 vertices: [vertix, linkedVertix.vertix],

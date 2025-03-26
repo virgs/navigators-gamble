@@ -15,7 +15,10 @@ export const isNextClockWise = (
     first: Directions, // NORTH
     second: Directions // NORTH_EAST
 ): boolean /* true */ => {
-    return first === (second - 1 + directions.length) % directions.length
+    const firstAsNumber = parseInt(Directions[first])
+    const secondAsNumber = parseInt(Directions[second])
+
+    return firstAsNumber === (secondAsNumber - 1 + directions.length) % directions.length
 }
 
 export const isPreviousClockWise = (first: Directions, second: Directions): boolean => {
