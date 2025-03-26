@@ -1,15 +1,11 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
-import { arrayShuffler } from './contants/array-shufller.ts'
-import { Board } from './engine/board/board.ts'
-import { Card } from './engine/card.ts'
-import { directions } from './engine/directions.ts'
-import { GameConfiguration } from './engine/game-configuration.ts'
-import './index.css'
 import { SerializabledBoard } from './engine/board/serializable-board.ts'
-import { BoardSerializer } from './engine/board/board-serializer.ts'
+import { GameConfiguration } from './engine/game-configuration.ts'
 import { GameEngine } from './engine/game-engine.ts'
+import { PlayerType } from './engine/players/player-type.ts'
+import './index.css'
 
 const serializabledBoard: SerializabledBoard = {
   vertices: [
@@ -27,7 +23,7 @@ const serializabledBoard: SerializabledBoard = {
     },
     {
       id: '4',
-      linkedVertices: ['5', '7']
+      linkedVertices: ['5', '7'],
     },
     {
       id: '5',
@@ -35,7 +31,7 @@ const serializabledBoard: SerializabledBoard = {
     },
     {
       id: '6',
-      linkedVertices: ['9']
+      linkedVertices: ['9'],
     },
     {
       id: '7',
@@ -52,21 +48,26 @@ const serializabledBoard: SerializabledBoard = {
   ],
 }
 
-const board = BoardSerializer.deserialize(JSON.stringify(serializabledBoard))
-
 const gameConfig: GameConfiguration = {
-  players: [],
+  players: [{ type: PlayerType.ARTIFICIAL_INTELLIGENCE, runs: 10 }, { type: PlayerType.ARTIFICIAL_INTELLIGENCE, runs: 10 }],
   cardsPerDirection: 4,
-  cardsPerPlayer: 5
+  cardsPerPlayer: 5,
+  board: serializabledBoard,
 }
 
-const cards = arrayShuffler(
-  directions
-    .map((direction) => Array(gameConfig.cardsPerDirection).fill(direction))
-    .flat()
-    .map((direction, index) => new Card(`id${index}`, direction))
-)
+const gameEngine = new GameEngine(gameConfig)
 
+const iterate = async () => {
+  if (!gameEngine.isGameOver()) {
+    await gameEngine.playNextRound()
+    setTimeout(iterate, 2000)
+  } else {
+    console.log(`End`)
+    console.log(gameEngine.getScores())
+  }
+}
+
+iterate()
 
 
 createRoot(document.getElementById('root')!).render(

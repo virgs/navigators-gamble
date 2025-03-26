@@ -1,11 +1,13 @@
-import { Vertix } from '../graph/vertix'
+import { LinkedVertix, Vertix } from '../graph/vertix'
 import { Board } from './board'
 import { SerializabledBoard } from './serializable-board'
 
 export class BoardSerializer {
-    public static deserialize(serialized: string): Board {
+    public static deserialize(serializableBoard: SerializabledBoard): Board {
         const verticesMap: Record<string, Vertix> = {}
-        const serializableBoard: SerializabledBoard = JSON.parse(serialized)
+        if (serializableBoard.vertices.length >= 22) {
+            throw Error(`Board has to more positions '${serializableBoard.vertices.length}' than max allowed '22'`)
+        }
         serializableBoard.vertices.forEach((serializableVertix) => {
             verticesMap[serializableVertix.id] = new Vertix(
                 serializableVertix.id,
@@ -22,17 +24,18 @@ export class BoardSerializer {
         return new Board(verticesMap)
     }
 
-    public static serialize(board: Board): string {
-        const serializable: SerializabledBoard = {
+    public static serialize(board: Board): SerializabledBoard {
+        return {
             vertices: board.getVertices().map((vertix) => {
                 return {
                     id: vertix.id,
                     direction: vertix.direction,
                     ownerId: vertix.ownerId,
-                    linkedVertices: vertix.getLinkedVertices().map((vertix: Vertix) => vertix.id),
+                    linkedVertices: vertix
+                        .getLinkedVertices()
+                        .map((linkedVertice: LinkedVertix) => linkedVertice.vertix.id),
                 }
             }),
         }
-        return JSON.stringify(serializable)
     }
 }
