@@ -1,29 +1,11 @@
-import { SerializabledBoard } from '../engine/board/serializable-board'
-import { Directions } from '../engine/directions'
-import { GameConfiguration } from '../engine/game-configuration'
-
-export enum MessageType {
-    INITIALIZATION,
-    MOVE_REQUEST,
-    READY,
-}
-
-export type WebWorkerMessage = {
-    id: string
-    messageType: MessageType
-}
-
-export type InitializeMessage = {
-    gameConfig: GameConfiguration
-    runs: number
-    playerId: string
-    playerCards: Directions[]
-} & WebWorkerMessage
-
-export type MoveRequest = {
-    board: SerializabledBoard
-    currentScores: Record<string, number>
-} & WebWorkerMessage
+import { AiAlgorithm } from './algorithms/ai-algorithm'
+import { AiAlgorithmType } from './algorithms/ai-algorithm-type'
+import { PureMonteCarloTreeSearch } from './algorithms/pure-monte-carlo-tree-search'
+import { ArtificialIntelligence } from './artificial-intelligence'
+import { InitializeMessage } from './InitializeMessage'
+import { WebWorkerMessage } from './messages/message'
+import { MessageType } from './messages/message-type'
+import { MoveRequest } from './messages/move-request'
 
 const readyMessage: WebWorkerMessage = {
     id: 'ready',
@@ -31,20 +13,25 @@ const readyMessage: WebWorkerMessage = {
 }
 postMessage(readyMessage)
 
-self.onmessage = (event: MessageEvent<WebWorkerMessage>) => {
-    const request = event.data
+let artificialIntelligence: ArtificialIntelligence
+
+self.onmessage = async (event: MessageEvent<WebWorkerMessage>) => {
     try {
         switch (event.data.messageType) {
             case MessageType.INITIALIZATION:
-                console.log(event.data)
+                const initializeMessage = event.data as unknown as InitializeMessage
+                let aiAlgorithm: AiAlgorithm
+                if (initializeMessage.aiAlgorithm === AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH) {
+                    aiAlgorithm = new PureMonteCarloTreeSearch(event.data as unknown as InitializeMessage)
+                }
+                artificialIntelligence = new ArtificialIntelligence(aiAlgorithm!)
                 break
             case MessageType.MOVE_REQUEST:
-                console.log(event.data)
+                self.postMessage(await artificialIntelligence!.makeMove(event.data as unknown as MoveRequest))
                 break
         }
-        // self.postMessage('response')
     } catch (exception) {
-        console.log(`WW ${request} got exception`)
+        console.log(`WW ${event.data} got exception`)
         console.error(exception)
         self.postMessage(exception)
     }

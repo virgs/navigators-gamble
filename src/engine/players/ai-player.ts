@@ -1,13 +1,16 @@
-import { Board } from '../board/board'
-import { Card } from '../card'
-import { Directions } from '../directions'
-import { Move } from '../score-calculator/move'
-import { Player } from './player'
+import { AiAlgorithmType } from '../../ai/algorithms/ai-algorithm-type'
+import { InitializeMessage } from '../../ai/InitializeMessage'
+import { WebWorkerMessage } from '../../ai/messages/message'
+import { MessageType } from '../../ai/messages/message-type'
+import { MoveRequest } from '../../ai/messages/move-request'
+import { MoveResponse } from '../../ai/messages/move-response'
 import Worker from '../../ai/web-worker?worker'
-import { GameConfiguration } from '../game-configuration'
-import { BoardSerializer } from '../board/board-serializer'
-import { WebWorkerMessage, InitializeMessage, MessageType, MoveRequest } from '../../ai/web-worker'
 import { generateUID } from '../../math/generate-id'
+import { BoardSerializer } from '../board/board-serializer'
+import { Card } from '../card'
+import { GameConfiguration } from '../game-configuration'
+import { Move } from '../score-calculator/move'
+import { ChooseMoveInput, Player } from './player'
 
 type PromiseResult = (value: Move | PromiseLike<Move>) => void
 
@@ -16,6 +19,7 @@ export type AiPlayerConfig = {
     runs: number
     gameConfig: GameConfiguration
     cards: Card[]
+    algorithm: AiAlgorithmType
 }
 
 export class AiPlayer implements Player {
@@ -25,6 +29,7 @@ export class AiPlayer implements Player {
 
     private readonly worker: Worker
     private readonly promisesMap: Record<string, PromiseResult>
+    private readonly readyPromise: Promise<void>
 
     public constructor(aiPlayerConfig: AiPlayerConfig) {
         this._id = aiPlayerConfig.id
@@ -34,19 +39,22 @@ export class AiPlayer implements Player {
         this.worker = new Worker()
         this.promisesMap = {}
 
-        this.worker.onmessage = () => {
-            const message: InitializeMessage = {
-                gameConfig: aiPlayerConfig.gameConfig,
-                runs: aiPlayerConfig.runs,
-                playerId: aiPlayerConfig.id,
-                playerCards: aiPlayerConfig.cards.map((card) => card.direction),
-                id: generateUID(),
-                messageType: MessageType.INITIALIZATION,
-            }
+        this.readyPromise = new Promise<void>((resolve) => {
+            this.worker.onmessage = () => {
+                const message: InitializeMessage = {
+                    messageType: MessageType.INITIALIZATION,
+                    id: generateUID(),
+                    gameConfig: aiPlayerConfig.gameConfig,
+                    runs: aiPlayerConfig.runs,
+                    playerId: aiPlayerConfig.id,
+                    aiAlgorithm: aiPlayerConfig.algorithm,
+                }
 
-            this.worker.postMessage(message)
-            this.createWorkerHooks()
-        }
+                this.worker.postMessage(message)
+                this.createWorkerHooks()
+                resolve()
+            }
+        })
     }
 
     public get id(): string {
@@ -57,28 +65,28 @@ export class AiPlayer implements Player {
         return this._score
     }
 
+    public finish(): void {
+        this.worker.terminate()
+    }
+
     public addScore(score: number): void {
         this._score += score
     }
 
-    public terminate(): void {
-        this.worker.terminate()
-    }
-
     public drawCard(card: Card): void {
-        console.log(`Player ${this.id} got card: ${Directions[card.direction]}`)
         this.cards.push(card)
     }
 
-    public async chooseMove(board: Board, scores: Record<string, number>): Promise<Move> {
+    public async makeMove(chooseMoveInput: ChooseMoveInput): Promise<Move> {
+        await this.readyPromise
         return new Promise((resolve) => {
             const message: MoveRequest = {
-                board: BoardSerializer.serialize(board),
-                currentScores: scores,
-                id: generateUID(),
                 messageType: MessageType.MOVE_REQUEST,
+                id: generateUID(),
+                board: BoardSerializer.serialize(chooseMoveInput.board),
+                cards: this.cards.map((card) => card.direction),
+                currentScores: chooseMoveInput.scores,
             }
-            console.log(`player cards: ${this.cards.map((card) => Directions[card.direction])}`)
             this.promisesMap[message.id] = resolve
             this.worker.postMessage(message)
         })
@@ -89,7 +97,12 @@ export class AiPlayer implements Player {
         this.worker.onmessage = async (event: MessageEvent<WebWorkerMessage>) => {
             const resolveMap = this.promisesMap[event.data.id]
             if (resolveMap) {
-                resolveMap(event.data as unknown as Move)
+                const moveResponse = event.data as unknown as MoveResponse
+                console.log(
+                    `Player ${this.id} played card index ${moveResponse.move.cardIndex} whose value is: ${moveResponse.move.direction} on vertix in ${moveResponse.move.vertixId}`
+                )
+                this.cards.splice(moveResponse.move.cardIndex, 1)
+                resolveMap(moveResponse.move)
                 delete this.promisesMap[event.data.id]
             }
         }

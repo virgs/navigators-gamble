@@ -31,6 +31,7 @@ export class GameEngine {
                 runs: player.runs!,
                 gameConfig: config,
                 cards: cards,
+                algorithm: player.aiAlgorithm,
             }
             const newPlayer = new AiPlayer(aiPlayerConfig)
 
@@ -42,6 +43,10 @@ export class GameEngine {
 
     public isGameOver(): boolean {
         return this.board.getEmptyVertices().length <= 0
+    }
+
+    public finishGame(): void {
+        this.players.forEach((player) => player.finish())
     }
 
     public getScores(): Record<string, number> {
@@ -57,8 +62,7 @@ export class GameEngine {
     public async playNextRound() {
         const turnPlayerId = (this.lastTurnPlayerId + 1) % this.players.length
         const currentPlayer = this.players[turnPlayerId]
-        console.log(this.board.getEmptyVertices())
-        const move = await currentPlayer.chooseMove(this.board, this.getScores())
+        const move = await currentPlayer.makeMove({ board: this.board, scores: this.getScores() })
         const moveScores = this.board.makeMove(move)
 
         moveScores.forEach((moveScore) => {

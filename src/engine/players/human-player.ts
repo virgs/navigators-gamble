@@ -1,8 +1,7 @@
-import { Board } from '../board/board'
 import { Card } from '../card'
 import { Directions } from '../directions'
 import { Move } from '../score-calculator/move'
-import { Player } from './player'
+import { ChooseMoveInput, Player } from './player'
 
 // Object.defineProperty(window, 'play', {
 //     get: function () {
@@ -40,9 +39,11 @@ export class HumanPlayer implements Player {
         this._score += score
     }
 
-    public async chooseMove(board: Board): Promise<Move> {
+    public finish(): void {}
+
+    public async makeMove(chooseMoveInput: ChooseMoveInput): Promise<Move> {
         console.log(`PLAYER ${this.id} turn`)
-        console.log(`available vertices: ${board.getEmptyVertices().map((vertix) => vertix.id)}`)
+        console.log(`available vertices: ${chooseMoveInput.board.getEmptyVertices().map((vertix) => vertix.id)}`)
         console.log(`player cards: ${this.cards.map((card) => Directions[card.direction])}`)
         const vertixId = prompt('VertixId? ')!
         const cardPosition = prompt('Card? ')!

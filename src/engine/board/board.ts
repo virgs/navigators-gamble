@@ -25,6 +25,18 @@ export class Board {
         return Object.values(this.verticesMap)
     }
 
+    public getPlayerVerticesMap(): Record<string, Vertix[]> {
+        return this.getVertices()
+            .filter((vertix) => vertix.ownerId !== undefined)
+            .reduce(
+                (acc, vertix) => {
+                    ;(acc[vertix.ownerId!] ??= []).push(vertix)
+                    return acc
+                },
+                {} as Record<string, Vertix[]>
+            )
+    }
+
     public getEmptyVertices(): Vertix[] {
         return this.getVertices().filter((vertix) => vertix.direction === undefined)
     }
@@ -38,6 +50,7 @@ export class Board {
             `\tPlayer '${move.playerId}' putting card '${Directions[move.direction]}' on vertix ${move.vertixId}`
         )
         vertix.direction = move.direction
+        vertix.ownerId = move.playerId
 
         const moveScores = this.moveScoreCheckers
             .map((checker) => checker.calculateMoveScore(move))
