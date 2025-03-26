@@ -1,4 +1,4 @@
-import { Move } from '../engine/board'
+import { Move } from '../engine/Move'
 import Worker from './web-worker?worker'
 
 type OptionalMove = Move | undefined

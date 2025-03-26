@@ -1,6 +1,5 @@
-import { CardValues } from './card-value'
+import { Directions } from './directions'
 import { Link } from './link'
-import { Colors } from './colors'
 
 export type LinkedVertix = {
     vertix: Vertix
@@ -8,15 +7,15 @@ export type LinkedVertix = {
 }
 
 export class Vertix {
-    private readonly id: string
+    private readonly _id: string
     private readonly links: Link[]
-    private cardValue?: CardValues
-    private color?: Colors
+    private _ownerId?: string | undefined
+    private _direction?: Directions | undefined
 
-    constructor(id: string, cardValue?: CardValues, color?: Colors) {
-        this.id = id
-        this.cardValue = cardValue
-        this.color = color
+    constructor(id: string, ownerId?: string, direction?: Directions) {
+        this._id = id
+        this._direction = direction
+        this._ownerId = ownerId
         this.links = []
     }
 
@@ -26,37 +25,38 @@ export class Vertix {
         vertix.links.push(link)
     }
 
-    public getId(): string {
-        return this.id
+    public getLinkTo(vertix: Vertix): Link | undefined {
+        return this.links.find((link) => link.getVertices().includes(vertix))
     }
 
-    public getCardValue(): CardValues | undefined {
-        return this.cardValue
+    public get direction(): Directions | undefined {
+        return this._direction
+    }
+    public set direction(value: Directions | undefined) {
+        this._direction = value
+    }
+    public get ownerId(): string | undefined {
+        return this._ownerId
+    }
+    public set ownerId(value: string | undefined) {
+        this._ownerId = value
     }
 
-    public setColor(color: Colors): void {
-        this.color = color
-    }
-
-    public getColor(): Colors | undefined {
-        return this.color
-    }
-
-    public putCard(card_value: CardValues): void {
-        this.cardValue = card_value
+    public get id(): string {
+        return this._id
     }
 
     public getLinkedVertices(): LinkedVertix[] {
         return this.links.map((link) => {
             const linkVertices = link.getVertices()
             return {
-                vertix: linkVertices.find((linkVertix) => linkVertix.getId() !== this.id) as Vertix,
+                vertix: linkVertices.find((linkVertix) => linkVertix.id !== this._id) as Vertix,
                 link: link,
             }
         })
     }
 
     public getLinkedVerticesWithCardValue(): LinkedVertix[] {
-        return this.getLinkedVertices().filter((linkedVertix) => linkedVertix.vertix.getCardValue() !== undefined)
+        return this.getLinkedVertices().filter((linkedVertix) => linkedVertix.vertix.direction !== undefined)
     }
 }

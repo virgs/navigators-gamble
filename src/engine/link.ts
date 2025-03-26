@@ -3,13 +3,17 @@ import { Vertix } from './vertix'
 export class Link {
     private readonly first: Vertix
     private readonly second: Vertix
-    private readonly id: string
+    private readonly _id: string
 
     constructor(first: Vertix, second: Vertix) {
         this.first = first
         this.second = second
-        this.id = `${first.getId()}-${second.getId()}`
-        console.log(`Link created '${this.id}': ${this.first.getId()} <-> ${this.second.getId()}`)
+        this._id = `${first.id}-${second.id}`
+        console.log(`Link created '${this.id}'`)
+    }
+
+    public get id(): string {
+        return this._id
     }
 
     public getVertices(): Vertix[] {
