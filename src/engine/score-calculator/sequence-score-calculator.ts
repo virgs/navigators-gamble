@@ -15,10 +15,12 @@ export class SequenceScoreCalculator implements MoveScoreCalculator {
     public calculateMoveScore(move: Move): MoveScore[] {
         const vertix = this.verticesMap[move.vertixId]
 
-        const increasingSequences = this.getSequences([vertix], isNextClockWise)
-        const decreasingSequences = this.getSequences([vertix], isPreviousClockWise)
+        const clockwiseSequences = this.getSequences([vertix], isNextClockWise)
+        const counterClockwiseSequences = this.getSequences([vertix], isPreviousClockWise).map((sequence) =>
+            sequence.reverse()
+        )
 
-        return this.combineSequences(increasingSequences, decreasingSequences)
+        return this.combineSequences(clockwiseSequences, counterClockwiseSequences)
             .filter((sequence: Vertix[]) => sequence.length >= 3)
             .map((sequence: Vertix[]) => {
                 return {
@@ -29,19 +31,19 @@ export class SequenceScoreCalculator implements MoveScoreCalculator {
             })
     }
 
-    private combineSequences(increasingSequences: Vertix[][], decreasingSequences: Vertix[][]) {
-        if (increasingSequences.length === 0 || decreasingSequences.length === 0) {
-            return increasingSequences.concat(decreasingSequences)
-        } else {
-            const sequences: Vertix[][] = []
-            increasingSequences.forEach((increasingSequence: Vertix[]) => {
-                decreasingSequences.forEach((decreasingSequence: Vertix[]) => {
-                    const [, ...restIncreasingSequence] = increasingSequence
-                    sequences.push(restIncreasingSequence.concat(decreasingSequence))
+    private combineSequences(clockwiseSequences: Vertix[][], counterClockwiseSequences: Vertix[][]): Vertix[][] {
+        const sequences: Vertix[][] = []
+        if (clockwiseSequences.length === 0 || counterClockwiseSequences.length === 0) {
+            return clockwiseSequences.concat(counterClockwiseSequences)
+        } else if (clockwiseSequences.length + counterClockwiseSequences.length > 4) {
+            counterClockwiseSequences.forEach((counterClockwiseSequence: Vertix[]) => {
+                const nonDuplicatedCounterClockwiseSequence = counterClockwiseSequence.slice(0, -1)
+                clockwiseSequences.forEach((clockwiseSequence: Vertix[]) => {
+                    sequences.push(nonDuplicatedCounterClockwiseSequence.concat(clockwiseSequence))
                 })
             })
-            return sequences
         }
+        return sequences
     }
 
     private getSequences(currentSequence: Vertix[], sequenceCheck: DirectionsComparer): Vertix[][] {

@@ -55,7 +55,7 @@ const gameConfig: GameConfiguration = {
         // { type: PlayerType.HUMAN },
         {
             type: PlayerType.ARTIFICIAL_INTELLIGENCE,
-            runs: 10000,
+            runs: 20000,
             aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
         },
         {

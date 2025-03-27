@@ -1,4 +1,3 @@
-import { Directions } from '../directions'
 import { Vertix } from '../graph/vertix'
 import { CancelScoreCalculator } from '../score-calculator/cancel-score-calculator'
 import { Move } from '../score-calculator/move'

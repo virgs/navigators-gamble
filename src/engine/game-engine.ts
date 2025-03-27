@@ -2,7 +2,7 @@ import { arrayShuffler } from '../math/array-shufller'
 import { Board } from './board/board'
 import { BoardSerializer } from './board/board-serializer'
 import { Card } from './card'
-import { Directions, directions } from './directions'
+import { directions } from './directions'
 import { GameConfiguration } from './game-configuration'
 import { AiPlayer, AiPlayerConfig } from './players/ai-player'
 import { HumanPlayer } from './players/human-player'
@@ -25,7 +25,7 @@ export class GameEngine {
         )
 
         this.board = BoardSerializer.deserialize(config.board)
-        const playersIds = config.players.map((_, index) => `id-${index}`)
+        const playersIds = config.players.map((_, index) => `player-${index}`)
 
         this.players = config.players.map((player, index) => {
             const cards = Array.from(Array(config.cardsPerPlayer)).map(() => this.cards.pop()!)
@@ -75,6 +75,35 @@ export class GameEngine {
         const turnPlayerId = (this.lastTurnPlayerId + 1) % this.players.length
         const currentPlayer = this.players[turnPlayerId]
 
+        const move = await currentPlayer.makeMove({ board: this.board, scores: this.getScores() })
+        const moveScores = this.board.makeMove(move)
+
+        console.log(`\tPlayer '${move.playerId}' putting card '${move.direction}' on vertix ${move.vertixId}`)
+
+        const totalScore = moveScores.reduce((acc, moveScore) => {
+            console.log(`\t======== ${ScoreType[moveScore.scoreType]} ========`)
+            moveScore.vertices.forEach((vertix, index) => {
+                vertix.ownerId = move.playerId
+
+                if (index > 0) {
+                    const link = vertix.getLinkTo(moveScore.vertices[index - 1])
+                    // console.log(`\t\tChanging link '${link?.id}' to ${move.playerId}`)
+                }
+            })
+            console.log(
+                `\t\t\tCombination vertices: ${moveScore.vertices.map((vertix) => `${vertix.id} (${vertix.direction!})`).join(', ')}`
+            )
+            return acc + moveScore.points
+        }, 0)
+        console.log(`\t\tTotal: ${totalScore}`)
+        currentPlayer.addScore(totalScore)
+
+        currentPlayer.drawCard(this.cards.pop()!)
+        this.lastTurnPlayerId = turnPlayerId
+        this.printBoard()
+    }
+
+    private printBoard() {
         const vertices = this.board.getVertices()
         for (let i = 0; i < 9; i += 3) {
             let text = ''
@@ -84,33 +113,6 @@ export class GameEngine {
             }
             console.log(text)
         }
-
-        const move = await currentPlayer.makeMove({ board: this.board, scores: this.getScores() })
-        const moveScores = this.board.makeMove(move)
-
-        console.log(`\tPlayer '${move.playerId}' putting card '${move.direction}' on vertix ${move.vertixId}`)
-
-        moveScores.forEach((moveScore) => {
-            console.log(`\t======== ${ScoreType[moveScore.scoreType]} ========`)
-            const totalScore = moveScores.reduce((acc, moveScore) => {
-                moveScore.vertices.forEach((vertix, index) => {
-                    vertix.ownerId = move.playerId
-
-                    if (index > 0) {
-                        const link = vertix.getLinkTo(moveScore.vertices[index - 1])
-                        // console.log(`\t\tChanging link '${link?.id}' to ${move.playerId}`)
-                    }
-                })
-                console.log(
-                    `\t\t\tCombination vertices: ${moveScore.vertices.map((vertix) => `${vertix.id} (${vertix.direction!})`).join(', ')}`
-                )
-                return acc + moveScore.points
-            }, 0)
-            console.log(`\t\tTotal: ${totalScore}`)
-            currentPlayer.addScore(totalScore)
-        })
-
-        currentPlayer.drawCard(this.cards.pop()!)
-        this.lastTurnPlayerId = turnPlayerId
+        console.log(`Current score: ` + JSON.stringify(this.getScores()))
     }
 }
