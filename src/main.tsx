@@ -1,11 +1,21 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
+import './scss/styles.scss'
+import './index.css'
+
+
+
+// Import all of Bootstrap's JS
+import * as bootstrap from 'bootstrap'
+
+// import 'bootswatch/dist/morph/bootstrap.min.css'
+import 'bootswatch/dist/sandstone/bootstrap.min.css'
+
 import { SerializabledBoard } from './engine/board/serializable-board.ts'
 import { GameConfiguration } from './engine/game-configuration/game-configuration.ts'
 import { GameEngine } from './engine/game-engine.ts'
 import { PlayerType } from './engine/game-configuration/player-type.ts'
-import './index.css'
 import { AiAlgorithmType } from './ai/algorithms/ai-algorithm-type.ts'
 
 const serializabledBoard: SerializabledBoard = {

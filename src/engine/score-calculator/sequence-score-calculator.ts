@@ -4,23 +4,31 @@ import { Move } from './move'
 import { MoveScore } from './move-score'
 import { MoveScoreCalculator } from './move-score-checker'
 import { ScoreType } from './score-type'
+import { SequenceMerger } from './sequence-merger'
+import { UniqueSequenceFinder } from './unique-sequence-finder'
 
 export class SequenceScoreCalculator implements MoveScoreCalculator {
-    private verticesMap: Record<string, Vertix>
+    private readonly verticesMap: Record<string, Vertix>
+    private readonly merger: SequenceMerger
 
     public constructor(verticesMap: Record<string, Vertix>) {
         this.verticesMap = verticesMap
+        this.merger = new SequenceMerger()
     }
 
     public calculateMoveScore(move: Move): MoveScore[] {
         const vertix = this.verticesMap[move.vertixId]
 
-        const clockwiseSequences = this.getSequences([vertix], isNextClockWise)
-        const counterClockwiseSequences = this.getSequences([vertix], isPreviousClockWise).map((sequence) =>
-            sequence.reverse()
-        )
+        const finderCW = new UniqueSequenceFinder()
+        const clockwiseSequences = finderCW.findUniqueSequences([vertix], isNextClockWise)
 
-        return this.mergeSequences(clockwiseSequences, counterClockwiseSequences)
+        const finderCCW = new UniqueSequenceFinder()
+        const counterClockwiseSequences = finderCCW
+            .findUniqueSequences([vertix], isPreviousClockWise)
+            .map((seq) => seq.reverse())
+
+        return this.merger
+            .merge(clockwiseSequences, counterClockwiseSequences)
             .filter((sequence: Vertix[]) => sequence.length >= 3)
             .map((sequence: Vertix[]) => {
                 return {
@@ -50,39 +58,5 @@ export class SequenceScoreCalculator implements MoveScoreCalculator {
             })
         }
         return sequences
-    }
-    private getSequences(
-        currentSequence: Vertix[],
-        sequenceCheck: DirectionsComparer,
-        seen = new Set<string>()
-    ): Vertix[][] {
-        const current: Vertix = currentSequence[currentSequence.length - 1]
-        const result: Vertix[][] = []
-
-        const key = currentSequence.map((vertix) => vertix.id).join('-')
-        if (seen.has(key)) return [] // sequence has already been analyzed
-        seen.add(key)
-
-        const linkedVertices = current.getLinkedVerticesWithDirection()
-
-        linkedVertices
-            .filter(
-                (linkedVertix: LinkedVertix) => sequenceCheck(current.direction!, linkedVertix.vertix.direction!) // ensures direction
-            )
-            .filter(
-                (linkedVertix: LinkedVertix) => !currentSequence.find((vertix) => vertix.id === linkedVertix.vertix.id) // prevents loops
-            )
-            .forEach((linkedVertix: LinkedVertix) => {
-                const extendedSequence = currentSequence.concat(linkedVertix.vertix)
-                const childSequences = this.getSequences(extendedSequence, sequenceCheck, seen)
-
-                if (childSequences.length === 0) {
-                    result.push(extendedSequence)
-                } else {
-                    result.push(...childSequences)
-                }
-            })
-
-        return result
     }
 }

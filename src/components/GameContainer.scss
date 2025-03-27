@@ -1,0 +1,45 @@
+.game-container {
+    position: relative;
+    height: 100vh;
+    background-image: url('../assets/resized-background.jpg');
+    background-origin: content-box;
+    background-size: cover;
+    transition: all ease 1s;
+    background-position: left;
+    filter: opacity(1) brightness(1);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.game-running {
+        filter: opacity(0.4) brightness(1);
+        background-position: right;
+    }
+
+    // &:before {
+    //     content: ' ';
+    //     position: absolute;
+    //     z-index: 1;
+    //     top: 15px;
+    //     left: 15px;
+    //     right: 15px;
+    //     bottom: 15px;
+    //     border-style: solid;
+    //     border-color: #b06e26;
+    //     border-width: 3px;
+    // }
+
+    // &:after {
+    //     content: ' ';
+    //     position: absolute;
+    //     z-index: 1;
+    //     top: 5px;
+    //     left: 5px;
+    //     right: 5px;
+    //     bottom: 5px;
+    //     border-style: solid;
+    //     border-color: #b06e26;
+    //     border-width: 3px;
+    // }
+}
