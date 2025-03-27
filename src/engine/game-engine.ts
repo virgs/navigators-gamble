@@ -25,6 +25,13 @@ export class GameEngine {
         )
 
         this.board = BoardSerializer.deserialize(config.board)
+
+        if (this.board.getVertices().length >= this.cards.length - config.players.length * config.cardsPerPlayer) {
+            throw Error(
+                `Board has too many vertix to game configuration '${this.board.getVertices().length}'. Max allowed '${this.cards.length - config.players.length * config.cardsPerPlayer}'`
+            )
+        }
+
         const playersIds = config.players.map((_, index) => `player-${index}`)
 
         this.players = config.players.map((player, index) => {
@@ -91,7 +98,7 @@ export class GameEngine {
                 }
             })
             console.log(
-                `\t\t\tCombination vertices: ${moveScore.vertices.map((vertix) => `${vertix.id} (${vertix.direction!})`).join(', ')}`
+                `\t\t\tCombination vertices [${moveScore.vertices.length}]: ${moveScore.vertices.map((vertix) => `${vertix.id} (${vertix.direction!})`).join(', ')}`
             )
             return acc + moveScore.points
         }, 0)

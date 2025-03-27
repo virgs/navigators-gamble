@@ -64,7 +64,7 @@ const gameConfig: GameConfiguration = {
             aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
         },
     ],
-    cardsPerDirection: 4,
+    cardsPerDirection: 3,
     cardsPerPlayer: 4,
     board: serializabledBoard,
 }

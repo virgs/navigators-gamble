@@ -5,6 +5,7 @@ import { MoveScore } from '../score-calculator/move-score'
 import { MoveScoreCalculator } from '../score-calculator/move-score-checker'
 import { PairScoreCalculator } from '../score-calculator/pair-score-calculator'
 import { SequenceScoreCalculator } from '../score-calculator/sequence-score-calculator'
+import { BoardSerializer } from './board-serializer'
 
 export class Board {
     private readonly verticesMap: Record<string, Vertix>
@@ -18,6 +19,10 @@ export class Board {
             new CancelScoreCalculator(this.verticesMap),
             new SequenceScoreCalculator(this.verticesMap),
         ]
+    }
+
+    public clone(): Board {
+        return BoardSerializer.deserialize(BoardSerializer.serialize(this))
     }
 
     public getVertices(): Vertix[] {

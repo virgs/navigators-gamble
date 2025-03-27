@@ -2,7 +2,7 @@ import { AiAlgorithm } from './algorithms/ai-algorithm'
 import { AiAlgorithmType } from './algorithms/ai-algorithm-type'
 import { PureMonteCarloTreeSearch } from './algorithms/pure-monte-carlo-tree-search'
 import { ArtificialIntelligence } from './artificial-intelligence'
-import { InitializeAiMessage } from './messages/initialize-message'
+import { InitializePureMonteCarloTreeSearchMessage } from './messages/initialize-message'
 import { WebWorkerMessage } from './messages/message'
 import { MessageType } from './messages/message-type'
 import { MoveRequest } from './messages/move-request'
@@ -13,21 +13,21 @@ const readyMessage: WebWorkerMessage = {
 }
 postMessage(readyMessage)
 
-let artificialIntelligence: ArtificialIntelligence
+let aiAlgorithm: AiAlgorithm
 
 self.onmessage = async (event: MessageEvent<WebWorkerMessage>) => {
     try {
         switch (event.data.messageType) {
             case MessageType.INITIALIZATION:
-                const initializeMessage = event.data as unknown as InitializeAiMessage
-                let aiAlgorithm: AiAlgorithm
+                const initializeMessage = event.data as unknown as InitializePureMonteCarloTreeSearchMessage
                 if (initializeMessage.algorithm === AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH) {
-                    aiAlgorithm = new PureMonteCarloTreeSearch(event.data as unknown as InitializeAiMessage)
+                    aiAlgorithm = new PureMonteCarloTreeSearch(
+                        event.data as unknown as InitializePureMonteCarloTreeSearchMessage
+                    )
                 }
-                artificialIntelligence = new ArtificialIntelligence(aiAlgorithm!)
                 break
             case MessageType.MOVE_REQUEST:
-                self.postMessage(await artificialIntelligence!.makeMove(event.data as unknown as MoveRequest))
+                self.postMessage(await aiAlgorithm!.makeMove(event.data as unknown as MoveRequest))
                 break
         }
     } catch (exception) {

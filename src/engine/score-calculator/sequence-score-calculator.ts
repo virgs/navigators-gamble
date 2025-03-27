@@ -20,7 +20,7 @@ export class SequenceScoreCalculator implements MoveScoreCalculator {
             sequence.reverse()
         )
 
-        return this.combineSequences(clockwiseSequences, counterClockwiseSequences)
+        return this.mergeSequences(clockwiseSequences, counterClockwiseSequences)
             .filter((sequence: Vertix[]) => sequence.length >= 3)
             .map((sequence: Vertix[]) => {
                 return {
@@ -31,15 +31,21 @@ export class SequenceScoreCalculator implements MoveScoreCalculator {
             })
     }
 
-    private combineSequences(clockwiseSequences: Vertix[][], counterClockwiseSequences: Vertix[][]): Vertix[][] {
+    private mergeSequences(clockwiseSequences: Vertix[][], counterClockwiseSequences: Vertix[][]): Vertix[][] {
         const sequences: Vertix[][] = []
         if (clockwiseSequences.length === 0 || counterClockwiseSequences.length === 0) {
             return clockwiseSequences.concat(counterClockwiseSequences)
-        } else if (clockwiseSequences.length + counterClockwiseSequences.length > 4) {
+        } else {
+            //cw: 4567
+            //ccw: 23456
             counterClockwiseSequences.forEach((counterClockwiseSequence: Vertix[]) => {
-                const nonDuplicatedCounterClockwiseSequence = counterClockwiseSequence.slice(0, -1)
                 clockwiseSequences.forEach((clockwiseSequence: Vertix[]) => {
-                    sequences.push(nonDuplicatedCounterClockwiseSequence.concat(clockwiseSequence))
+                    const firstNotIncludedItem = clockwiseSequence.findIndex(
+                        // item 7, index: 3
+                        (clockwiseItem) => !counterClockwiseSequence.includes(clockwiseItem)
+                    )
+
+                    sequences.push(counterClockwiseSequence.concat(clockwiseSequence.slice(firstNotIncludedItem)))
                 })
             })
         }
@@ -54,10 +60,10 @@ export class SequenceScoreCalculator implements MoveScoreCalculator {
 
         linkedVertices
             .filter(
-                (linkedVertix: LinkedVertix) => !currentSequence.find((vertix) => vertix.id === linkedVertix.vertix.id) // evita ciclos
+                (linkedVertix: LinkedVertix) => sequenceCheck(current.direction!, linkedVertix.vertix.direction!) // ensures direction
             )
             .filter(
-                (linkedVertix: LinkedVertix) => sequenceCheck(current.direction!, linkedVertix.vertix.direction!) // confere direção
+                (linkedVertix: LinkedVertix) => !currentSequence.find((vertix) => vertix.id === linkedVertix.vertix.id) // prevents loops
             )
             .forEach((linkedVertix: LinkedVertix) => {
                 const extendedSequence = currentSequence.concat(linkedVertix.vertix)

@@ -1,5 +1,5 @@
 import { AiAlgorithmType } from '../../ai/algorithms/ai-algorithm-type'
-import { InitializeAiMessage } from '../../ai/messages/initialize-message'
+import { InitializePureMonteCarloTreeSearchMessage } from '../../ai/messages/initialize-message'
 import { WebWorkerMessage } from '../../ai/messages/message'
 import { MessageType } from '../../ai/messages/message-type'
 import { MoveRequest } from '../../ai/messages/move-request'
@@ -16,13 +16,22 @@ type PromiseResult = (value: Move | PromiseLike<Move>) => void
 
 export type AiPlayerConfig = {
     playerId: string
-    iterations: number
     turnOrder: number
     playersIds: string[]
     gameConfig: GameConfiguration
     cards: Card[]
     algorithm: AiAlgorithmType
 }
+
+export type AiPureMonteCarloTreeSearchPlayerConfig = {
+    algorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH
+    iterations: number
+} & AiPlayerConfig
+
+export type AiMinimaxPlayerConfig = {
+    algorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH
+    maxDepth: number
+} & AiPlayerConfig
 
 export class AiPlayer implements Player {
     private readonly _id: string
@@ -43,7 +52,7 @@ export class AiPlayer implements Player {
 
         this.readyPromise = new Promise<void>((resolve) => {
             this.worker.onmessage = () => {
-                const message: InitializeAiMessage = {
+                const message: InitializePureMonteCarloTreeSearchMessage = {
                     messageType: MessageType.INITIALIZATION,
                     id: generateUID(),
                     ...aiPlayerConfig,

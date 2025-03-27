@@ -5,7 +5,7 @@ import { GameConfiguration } from '../../engine/game-configuration'
 import { Vertix } from '../../engine/graph/vertix'
 import { Move } from '../../engine/score-calculator/move'
 import { MoveScore } from '../../engine/score-calculator/move-score'
-import { InitializeAiMessage } from '../messages/initialize-message'
+import { InitializePureMonteCarloTreeSearchMessage } from '../messages/initialize-message'
 import { MessageType } from '../messages/message-type'
 import { MoveRequest } from '../messages/move-request'
 import { MoveResponse } from '../messages/move-response'
@@ -19,7 +19,7 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
     private readonly iterations: number
     private readonly gameCards: Directions[]
 
-    constructor(initMessage: InitializeAiMessage) {
+    constructor(initMessage: InitializePureMonteCarloTreeSearchMessage) {
         this.gameConfig = initMessage.gameConfig
         this.iterations = initMessage.iterations
         this.playerId = initMessage.playerId
@@ -39,7 +39,7 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
             let totalScore = 0
 
             for (let i = 0; i < iterationsPerMove; i++) {
-                const boardCopy = BoardSerializer.deserialize(BoardSerializer.serialize(board))
+                const boardCopy = board.clone()
                 totalScore += this.simulateRandomGame(move, moveRequest, boardCopy)
             }
 
@@ -63,7 +63,7 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
     private simulateRandomGame(initialMove: Move, moveRequest: MoveRequest, board: Board): number {
         let turn = this.playerTurnOrder
         let move = initialMove
-        const playerHand = [...moveRequest.playerCards]
+        let playerHand = [...moveRequest.playerCards]
         const scores = { ...moveRequest.currentScores }
         const availableCards = this.computeNotPlayedCards(board, playerHand)
 
@@ -71,7 +71,7 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
             const moveScores = board.makeMove(move)
 
             if (turn === this.playerTurnOrder) {
-                this.updateCardsAfterMove(playerHand, move.direction, availableCards.pop()!)
+                playerHand = this.updateCardsAfterMove(playerHand, move.direction, availableCards.pop()!)
             }
 
             scores[this.playerId] += this.calculateScore(moveScores, move.playerId)
@@ -114,8 +114,8 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
         const remaining = [...this.gameCards]
         const used = board
             .getVertices()
-            .filter((v) => v.direction !== undefined)
-            .map((v) => v.direction!)
+            .filter((vertix) => vertix.direction !== undefined)
+            .map((vertix) => vertix.direction!)
             .concat(playerCards)
 
         used.forEach((dir) => {
@@ -132,8 +132,8 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
 
         for (const card of cards) {
             for (const vertix of empty) {
-                if (!moves.find((m) => m.direction === card && m.vertixId === vertix.id)) {
-                    moves.push({ vertixId: vertix.id, direction: card, playerId })
+                if (!moves.find((move) => move.direction === card && move.vertixId === vertix.id)) {
+                    moves.push({ vertixId: vertix.id, direction: card, playerId: playerId })
                 }
             }
         }

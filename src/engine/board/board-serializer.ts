@@ -5,9 +5,6 @@ import { SerializabledBoard } from './serializable-board'
 export class BoardSerializer {
     public static deserialize(serializableBoard: SerializabledBoard): Board {
         const verticesMap: Record<string, Vertix> = {}
-        if (serializableBoard.vertices.length >= 22) {
-            throw Error(`Board has to more positions '${serializableBoard.vertices.length}' than max allowed '22'`)
-        }
         serializableBoard.vertices.forEach((serializableVertix) => {
             verticesMap[serializableVertix.id] = new Vertix(
                 serializableVertix.id,
