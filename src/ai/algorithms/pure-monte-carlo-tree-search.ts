@@ -36,7 +36,7 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
         )
 
         let bestMove: Move & { score: number } = { ...nextMoveAlternatives[0], score: 0 }
-        const iterationsPerAlternative = this.iterations / nextMoveAlternatives.length
+        const iterationsPerAlternative = Math.ceil(this.iterations / nextMoveAlternatives.length)
         nextMoveAlternatives.map((moveAlternative) => {
             let alternativeTotalScore = 0
             Array.from(Array(iterationsPerAlternative)).forEach(() => {
@@ -79,6 +79,7 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
                 }
             }
         }
+        // console.log(playerCards.length, emptyVertices.length, alternatives.length)
         return alternatives
     }
 
@@ -103,8 +104,10 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
         while (board.getEmptyVertices().length > 0) {
             const moveScores = board.makeMove(currentMove)
             if (turnPlayer === this.playerTurnOrder) {
+                const newCard = notPlayedCards.pop()!
                 //remove player's card and give them a new one
-                playerCards.splice(playerCards.indexOf(currentMove.direction), 1).push(notPlayedCards.pop()!)
+                playerCards.splice(playerCards.indexOf(currentMove.direction), 1)
+                playerCards.push(newCard)
             }
 
             currentScores[this.playerId] += moveScores.reduce((acc, moveScore) => acc + moveScore.points, 0)

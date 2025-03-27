@@ -1,9 +1,9 @@
-import { isNextClockWise, isPreviousClockWise } from '../directions'
-import { MoveScoreCalculator } from './move-score-checker'
-import { MoveScore } from './move-score'
-import { ScoreType } from './score-type'
-import { Vertix, LinkedVertix } from '../graph/vertix'
+import { DirectionsComparer, isNextClockWise, isPreviousClockWise } from '../directions'
+import { LinkedVertix, Vertix } from '../graph/vertix'
 import { Move } from './move'
+import { MoveScore } from './move-score'
+import { MoveScoreCalculator } from './move-score-checker'
+import { ScoreType } from './score-type'
 
 export class SequenceScoreCalculator implements MoveScoreCalculator {
     private verticesMap: Record<string, Vertix>
@@ -44,25 +44,30 @@ export class SequenceScoreCalculator implements MoveScoreCalculator {
         }
     }
 
-    private getSequences(currentSequence: Vertix[], sequenceCheck: Function): Vertix[][] {
-        const vertix: Vertix = currentSequence[currentSequence.length - 1]
-        if (currentSequence.includes(vertix)) return []
+    private getSequences(currentSequence: Vertix[], sequenceCheck: DirectionsComparer): Vertix[][] {
+        const current: Vertix = currentSequence[currentSequence.length - 1]
         const result: Vertix[][] = []
 
-        const linkedVertices = vertix.getLinkedVerticesWithDirection()
+        const linkedVertices = current.getLinkedVerticesWithDirection()
+
         linkedVertices
-            .filter((linkedVertix: LinkedVertix) => !currentSequence.includes(linkedVertix.vertix))
-            .filter((linkedVertix: LinkedVertix) => sequenceCheck(vertix.direction!, linkedVertix.vertix.direction!))
+            .filter(
+                (linkedVertix: LinkedVertix) => !currentSequence.find((vertix) => vertix.id === linkedVertix.vertix.id) // evita ciclos
+            )
+            .filter(
+                (linkedVertix: LinkedVertix) => sequenceCheck(current.direction!, linkedVertix.vertix.direction!) // confere direção
+            )
             .forEach((linkedVertix: LinkedVertix) => {
-                const children = this.getSequences([...currentSequence, linkedVertix.vertix], sequenceCheck)
-                if (children.length === 0) {
-                    result.push([vertix, linkedVertix.vertix])
+                const extendedSequence = currentSequence.concat(linkedVertix.vertix)
+                const childSequences = this.getSequences(extendedSequence, sequenceCheck)
+
+                if (childSequences.length === 0) {
+                    result.push(extendedSequence)
                 } else {
-                    children.forEach((children: Vertix[]) => {
-                        result.push([vertix, ...children])
-                    })
+                    result.push(...childSequences)
                 }
             })
+
         return result
     }
 }

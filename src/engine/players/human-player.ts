@@ -3,28 +3,14 @@ import { Directions } from '../directions'
 import { Move } from '../score-calculator/move'
 import { ChooseMoveInput, Player } from './player'
 
-// Object.defineProperty(window, 'play', {
-//     get: function () {
-//         function move(direction: string, vertixId: string) {
-//             board.putCard({
-//                 vertixId: vertixId,
-//                 direction: parseInt(direction),
-//                 playerId: Colors[Colors.WHITE],
-//             })
-//         }
-//         return move
-//         //your code logic
-//     },
-// })
-
 export class HumanPlayer implements Player {
     private readonly _id: string
     private _score: number = 0
     private readonly cards: Card[]
 
-    public constructor(id: string) {
+    public constructor(id: string, cards: Card[]) {
         this._id = id
-        this.cards = []
+        this.cards = cards
         this._score = 0
     }
 
@@ -43,10 +29,16 @@ export class HumanPlayer implements Player {
 
     public async makeMove(chooseMoveInput: ChooseMoveInput): Promise<Move> {
         console.log(`PLAYER ${this.id} turn`)
-        console.log(`available vertices: ${chooseMoveInput.board.getEmptyVertices().map((vertix) => vertix.id)}`)
-        console.log(`player cards: ${this.cards.map((card) => Directions[card.direction])}`)
-        const vertixId = prompt('VertixId? ')!
-        const cardPosition = prompt('Card? ')!
+        console.log(`player cards: ${this.cards.map((card, index) => `(${index}) ${card.direction}`).join(', ')}`)
+        console.log(
+            `available vertices: ${chooseMoveInput.board
+                .getEmptyVertices()
+                .map((vertix) => vertix.id)
+                .join(', ')}`
+        )
+
+        const cardPosition = prompt('Card index ')!
+        const vertixId = prompt('VertixId ')!
 
         const chosenCard = this.cards[parseInt(cardPosition)]
 

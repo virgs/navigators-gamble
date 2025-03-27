@@ -97,9 +97,6 @@ export class AiPlayer implements Player {
             const resolveMap = this.promisesMap[event.data.id]
             if (resolveMap) {
                 const moveResponse = event.data as unknown as MoveResponse
-                console.log(
-                    `Player ${this.id} played card index ${moveResponse.move.cardIndex} whose value is: ${moveResponse.move.direction} on vertix in ${moveResponse.move.vertixId}`
-                )
                 this.cards.splice(moveResponse.move.cardIndex, 1)
                 resolveMap(moveResponse.move)
                 delete this.promisesMap[event.data.id]

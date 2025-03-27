@@ -46,9 +46,6 @@ export class Board {
         if (vertix.direction !== undefined) {
             throw new Error(`Vertix ${move.vertixId} already has a card`)
         }
-        // console.log(
-        //     `\tPlayer '${move.playerId}' putting card '${Directions[move.direction]}' on vertix ${move.vertixId}`
-        // )
         vertix.direction = move.direction
 
         const moveScores = this.moveScoreCheckers

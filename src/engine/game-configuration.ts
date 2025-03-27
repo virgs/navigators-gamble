@@ -5,7 +5,7 @@ import { PlayerType } from './players/player-type'
 export type GameConfiguration = {
     players: {
         type: PlayerType
-        aiAlgorithm: AiAlgorithmType
+        aiAlgorithm?: AiAlgorithmType
         runs?: number
     }[]
     cardsPerDirection: number

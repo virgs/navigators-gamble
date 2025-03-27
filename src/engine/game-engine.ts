@@ -5,7 +5,9 @@ import { Card } from './card'
 import { Directions, directions } from './directions'
 import { GameConfiguration } from './game-configuration'
 import { AiPlayer, AiPlayerConfig } from './players/ai-player'
+import { HumanPlayer } from './players/human-player'
 import { Player } from './players/player'
+import { PlayerType } from './players/player-type'
 import { ScoreType } from './score-calculator/score-type'
 
 export class GameEngine {
@@ -27,18 +29,20 @@ export class GameEngine {
 
         this.players = config.players.map((player, index) => {
             const cards = Array.from(Array(config.cardsPerPlayer)).map(() => this.cards.pop()!)
-            const aiPlayerConfig: AiPlayerConfig = {
-                playerId: playersIds[index],
-                playersIds: playersIds,
-                turnOrder: index,
-                iterations: player.runs!,
-                gameConfig: config,
-                cards: cards,
-                algorithm: player.aiAlgorithm,
+            if (player.type === PlayerType.HUMAN) {
+                return new HumanPlayer(playersIds[index], cards)
+            } else {
+                const aiPlayerConfig: AiPlayerConfig = {
+                    playerId: playersIds[index],
+                    playersIds: playersIds,
+                    turnOrder: index,
+                    iterations: player.runs!,
+                    gameConfig: config,
+                    cards: cards,
+                    algorithm: player.aiAlgorithm!,
+                }
+                return new AiPlayer(aiPlayerConfig)
             }
-            const newPlayer = new AiPlayer(aiPlayerConfig)
-
-            return newPlayer
         })
 
         this.lastTurnPlayerId = -1
@@ -70,8 +74,21 @@ export class GameEngine {
     public async playNextRound() {
         const turnPlayerId = (this.lastTurnPlayerId + 1) % this.players.length
         const currentPlayer = this.players[turnPlayerId]
+
+        const vertices = this.board.getVertices()
+        for (let i = 0; i < 9; i += 3) {
+            let text = ''
+            for (let j = 0; j < 3; ++j) {
+                const vertice = vertices[i + j]
+                text += `(${vertice.id}) ${vertice.direction ?? '-'}\t\t`
+            }
+            console.log(text)
+        }
+
         const move = await currentPlayer.makeMove({ board: this.board, scores: this.getScores() })
         const moveScores = this.board.makeMove(move)
+
+        console.log(`\tPlayer '${move.playerId}' putting card '${move.direction}' on vertix ${move.vertixId}`)
 
         moveScores.forEach((moveScore) => {
             console.log(`\t======== ${ScoreType[moveScore.scoreType]} ========`)
@@ -81,11 +98,11 @@ export class GameEngine {
 
                     if (index > 0) {
                         const link = vertix.getLinkTo(moveScore.vertices[index - 1])
-                        console.log(`\t\tChanging link '${link?.id}' to ${move.playerId}`)
+                        // console.log(`\t\tChanging link '${link?.id}' to ${move.playerId}`)
                     }
                 })
                 console.log(
-                    `\t\t\tCombination vertices: ${moveScore.vertices.map((vertix) => `${vertix.id} (${Directions[vertix.direction!]})`).join(', ')}`
+                    `\t\t\tCombination vertices: ${moveScore.vertices.map((vertix) => `${vertix.id} (${vertix.direction!})`).join(', ')}`
                 )
                 return acc + moveScore.points
             }, 0)

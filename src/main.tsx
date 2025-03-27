@@ -51,9 +51,11 @@ const serializabledBoard: SerializabledBoard = {
 
 const gameConfig: GameConfiguration = {
     players: [
+        // { type: PlayerType.HUMAN },
+        // { type: PlayerType.HUMAN },
         {
             type: PlayerType.ARTIFICIAL_INTELLIGENCE,
-            runs: 5000,
+            runs: 10000,
             aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
         },
         {
@@ -63,7 +65,7 @@ const gameConfig: GameConfiguration = {
         },
     ],
     cardsPerDirection: 4,
-    cardsPerPlayer: 5,
+    cardsPerPlayer: 4,
     board: serializabledBoard,
 }
 

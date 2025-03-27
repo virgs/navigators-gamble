@@ -11,9 +11,11 @@ export enum Directions {
 
 export const directions: string[] = Object.keys(Directions).filter((value) => Number(isNaN(Number(value))))
 
-export const isNextClockWise = (
-    first: Directions, // NORTH
-    second: Directions // NORTH_EAST
+export type DirectionsComparer = (first: Directions, seconds: Directions) => boolean
+
+export const isNextClockWise: DirectionsComparer = (
+    first: Directions, // NORTH 0
+    second: Directions // NORTH_EAST 1
 ): boolean /* true */ => {
     const firstAsNumber = parseInt(Directions[first])
     const secondAsNumber = parseInt(Directions[second])
@@ -21,7 +23,7 @@ export const isNextClockWise = (
     return firstAsNumber === (secondAsNumber - 1 + directions.length) % directions.length
 }
 
-export const isPreviousClockWise = (first: Directions, second: Directions): boolean => {
+export const isPreviousClockWise: DirectionsComparer = (first: Directions, second: Directions): boolean => {
     return isNextClockWise(second, first)
 }
 
