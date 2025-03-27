@@ -1,5 +1,4 @@
-import { AiAlgorithmType } from '../../ai/algorithms/ai-algorithm-type'
-import { InitializePureMonteCarloTreeSearchMessage } from '../../ai/messages/initialize-message'
+import { InitializeAiMessage } from '../../ai/messages/initialize-ai-message'
 import { WebWorkerMessage } from '../../ai/messages/message'
 import { MessageType } from '../../ai/messages/message-type'
 import { MoveRequest } from '../../ai/messages/move-request'
@@ -8,7 +7,7 @@ import Worker from '../../ai/web-worker?worker'
 import { generateUID } from '../../math/generate-id'
 import { BoardSerializer } from '../board/board-serializer'
 import { Card } from '../card'
-import { GameConfiguration } from '../game-configuration'
+import { GameAiPlayerConfiguration, GameConfiguration } from '../game-configuration/game-configuration'
 import { Move } from '../score-calculator/move'
 import { ChooseMoveInput, Player } from './player'
 
@@ -20,18 +19,8 @@ export type AiPlayerConfig = {
     playersIds: string[]
     gameConfig: GameConfiguration
     cards: Card[]
-    algorithm: AiAlgorithmType
+    aiConfiguration: GameAiPlayerConfiguration
 }
-
-export type AiPureMonteCarloTreeSearchPlayerConfig = {
-    algorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH
-    iterations: number
-} & AiPlayerConfig
-
-export type AiMinimaxPlayerConfig = {
-    algorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH
-    maxDepth: number
-} & AiPlayerConfig
 
 export class AiPlayer implements Player {
     private readonly _id: string
@@ -52,12 +41,11 @@ export class AiPlayer implements Player {
 
         this.readyPromise = new Promise<void>((resolve) => {
             this.worker.onmessage = () => {
-                const message: InitializePureMonteCarloTreeSearchMessage = {
+                const message: InitializeAiMessage = {
                     messageType: MessageType.INITIALIZATION,
                     id: generateUID(),
                     ...aiPlayerConfig,
                 }
-
                 this.worker.postMessage(message)
                 this.createWorkerHooks()
                 resolve()

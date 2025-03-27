@@ -3,50 +3,52 @@ import { Board } from './board/board'
 import { BoardSerializer } from './board/board-serializer'
 import { Card } from './card'
 import { directions } from './directions'
-import { GameConfiguration } from './game-configuration'
+import { GameConfiguration } from './game-configuration/game-configuration'
 import { AiPlayer, AiPlayerConfig } from './players/ai-player'
 import { HumanPlayer } from './players/human-player'
 import { Player } from './players/player'
-import { PlayerType } from './players/player-type'
+import { PlayerType } from './game-configuration/player-type'
 import { ScoreType } from './score-calculator/score-type'
 
 export class GameEngine {
     private readonly cards: Card[]
     private readonly players: Player[]
-    private board: Board
+    private readonly board: Board
     private lastTurnPlayerId: number
 
-    public constructor(config: GameConfiguration) {
+    public constructor(gameConfiguration: GameConfiguration) {
         this.cards = arrayShuffler(
             directions
-                .map((direction) => Array(config.cardsPerDirection).fill(direction))
+                .map((direction) => Array(gameConfiguration.cardsPerDirection).fill(direction))
                 .flat()
                 .map((direction, index) => new Card(`id${index}`, direction))
         )
 
-        this.board = BoardSerializer.deserialize(config.board)
+        this.board = BoardSerializer.deserialize(gameConfiguration.board)
 
-        if (this.board.getVertices().length >= this.cards.length - config.players.length * config.cardsPerPlayer) {
+        if (
+            this.board.getVertices().length >=
+            this.cards.length - gameConfiguration.players.length * gameConfiguration.cardsPerPlayer
+        ) {
             throw Error(
-                `Board has too many vertix to game configuration '${this.board.getVertices().length}'. Max allowed '${this.cards.length - config.players.length * config.cardsPerPlayer}'`
+                `Board has too many vertix to game configuration '${this.board.getVertices().length}'. Max allowed '${this.cards.length - gameConfiguration.players.length * gameConfiguration.cardsPerPlayer}'`
             )
         }
 
-        const playersIds = config.players.map((_, index) => `player-${index}`)
+        const playersIds = gameConfiguration.players.map((_, index) => `player-${index}`)
 
-        this.players = config.players.map((player, index) => {
-            const cards = Array.from(Array(config.cardsPerPlayer)).map(() => this.cards.pop()!)
-            if (player.type === PlayerType.HUMAN) {
+        this.players = gameConfiguration.players.map((playerConfiguration, index) => {
+            const cards = Array.from(Array(gameConfiguration.cardsPerPlayer)).map(() => this.cards.pop()!)
+            if (playerConfiguration.type === PlayerType.HUMAN) {
                 return new HumanPlayer(playersIds[index], cards)
             } else {
                 const aiPlayerConfig: AiPlayerConfig = {
                     playerId: playersIds[index],
                     playersIds: playersIds,
-                    turnOrder: index,
-                    iterations: player.runs!,
-                    gameConfig: config,
                     cards: cards,
-                    algorithm: player.aiAlgorithm!,
+                    turnOrder: index,
+                    gameConfig: gameConfiguration,
+                    aiConfiguration: playerConfiguration,
                 }
                 return new AiPlayer(aiPlayerConfig)
             }
@@ -92,10 +94,10 @@ export class GameEngine {
             moveScore.vertices.forEach((vertix, index) => {
                 vertix.ownerId = move.playerId
 
-                if (index > 0) {
-                    const link = vertix.getLinkTo(moveScore.vertices[index - 1])
-                    // console.log(`\t\tChanging link '${link?.id}' to ${move.playerId}`)
-                }
+                // if (index > 0) {
+                //     const link = vertix.getLinkTo(moveScore.vertices[index - 1])
+                //     console.log(`\t\tChanging link '${link?.id}' to ${move.playerId}`)
+                // }
             })
             console.log(
                 `\t\t\tCombination vertices [${moveScore.vertices.length}]: ${moveScore.vertices.map((vertix) => `${vertix.id} (${vertix.direction!})`).join(', ')}`
@@ -116,7 +118,7 @@ export class GameEngine {
             let text = ''
             for (let j = 0; j < 3; ++j) {
                 const vertice = vertices[i + j]
-                text += `(${vertice.id}) ${vertice.direction ?? '-'}\t\t`
+                text += `(${vertice.id}) ${vertice.direction ?? '-'}\t\t\t\t`
             }
             console.log(text)
         }

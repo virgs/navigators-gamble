@@ -1,11 +1,11 @@
 import { Board } from '../../engine/board/board'
 import { BoardSerializer } from '../../engine/board/board-serializer'
 import { Directions, directions } from '../../engine/directions'
-import { GameConfiguration } from '../../engine/game-configuration'
+import { GameConfiguration } from '../../engine/game-configuration/game-configuration'
 import { Vertix } from '../../engine/graph/vertix'
 import { Move } from '../../engine/score-calculator/move'
 import { MoveScore } from '../../engine/score-calculator/move-score'
-import { InitializePureMonteCarloTreeSearchMessage } from '../messages/initialize-message'
+import { InitializeAiMessage } from '../messages/initialize-ai-message'
 import { MessageType } from '../messages/message-type'
 import { MoveRequest } from '../messages/move-request'
 import { MoveResponse } from '../messages/move-response'
@@ -19,9 +19,9 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
     private readonly iterations: number
     private readonly gameCards: Directions[]
 
-    constructor(initMessage: InitializePureMonteCarloTreeSearchMessage) {
+    constructor(initMessage: InitializeAiMessage) {
         this.gameConfig = initMessage.gameConfig
-        this.iterations = initMessage.iterations
+        this.iterations = initMessage.aiConfiguration.iterations
         this.playerId = initMessage.playerId
         this.playersIds = initMessage.playersIds
         this.playerTurnOrder = initMessage.turnOrder

@@ -51,10 +51,17 @@ export class SequenceScoreCalculator implements MoveScoreCalculator {
         }
         return sequences
     }
-
-    private getSequences(currentSequence: Vertix[], sequenceCheck: DirectionsComparer): Vertix[][] {
+    private getSequences(
+        currentSequence: Vertix[],
+        sequenceCheck: DirectionsComparer,
+        seen = new Set<string>()
+    ): Vertix[][] {
         const current: Vertix = currentSequence[currentSequence.length - 1]
         const result: Vertix[][] = []
+
+        const key = currentSequence.map((vertix) => vertix.id).join('-')
+        if (seen.has(key)) return [] // sequence has already been analyzed
+        seen.add(key)
 
         const linkedVertices = current.getLinkedVerticesWithDirection()
 
@@ -67,7 +74,7 @@ export class SequenceScoreCalculator implements MoveScoreCalculator {
             )
             .forEach((linkedVertix: LinkedVertix) => {
                 const extendedSequence = currentSequence.concat(linkedVertix.vertix)
-                const childSequences = this.getSequences(extendedSequence, sequenceCheck)
+                const childSequences = this.getSequences(extendedSequence, sequenceCheck, seen)
 
                 if (childSequences.length === 0) {
                     result.push(extendedSequence)

@@ -2,9 +2,9 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import { SerializabledBoard } from './engine/board/serializable-board.ts'
-import { GameConfiguration } from './engine/game-configuration.ts'
+import { GameConfiguration } from './engine/game-configuration/game-configuration.ts'
 import { GameEngine } from './engine/game-engine.ts'
-import { PlayerType } from './engine/players/player-type.ts'
+import { PlayerType } from './engine/game-configuration/player-type.ts'
 import './index.css'
 import { AiAlgorithmType } from './ai/algorithms/ai-algorithm-type.ts'
 
@@ -55,17 +55,17 @@ const gameConfig: GameConfiguration = {
         // { type: PlayerType.HUMAN },
         {
             type: PlayerType.ARTIFICIAL_INTELLIGENCE,
-            runs: 20000,
+            iterations: 50000,
             aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
         },
         {
             type: PlayerType.ARTIFICIAL_INTELLIGENCE,
-            runs: 10,
+            iterations: 1,
             aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
         },
     ],
     cardsPerDirection: 3,
-    cardsPerPlayer: 4,
+    cardsPerPlayer: 3,
     board: serializabledBoard,
 }
 
@@ -74,9 +74,9 @@ const gameEngine = new GameEngine(gameConfig)
 const iterate = async () => {
     if (!gameEngine.isGameOver()) {
         await gameEngine.playNextRound()
-        setTimeout(iterate, 500)
+        setTimeout(iterate, 100)
     } else {
-        console.log(`End`)
+        console.log(`Game over`)
         gameEngine.finishGame()
         console.log(gameEngine.getScores())
     }

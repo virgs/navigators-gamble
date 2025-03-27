@@ -1,8 +1,7 @@
 import { AiAlgorithm } from './algorithms/ai-algorithm'
 import { AiAlgorithmType } from './algorithms/ai-algorithm-type'
 import { PureMonteCarloTreeSearch } from './algorithms/pure-monte-carlo-tree-search'
-import { ArtificialIntelligence } from './artificial-intelligence'
-import { InitializePureMonteCarloTreeSearchMessage } from './messages/initialize-message'
+import { InitializeAiMessage } from './messages/initialize-ai-message'
 import { WebWorkerMessage } from './messages/message'
 import { MessageType } from './messages/message-type'
 import { MoveRequest } from './messages/move-request'
@@ -19,11 +18,9 @@ self.onmessage = async (event: MessageEvent<WebWorkerMessage>) => {
     try {
         switch (event.data.messageType) {
             case MessageType.INITIALIZATION:
-                const initializeMessage = event.data as unknown as InitializePureMonteCarloTreeSearchMessage
-                if (initializeMessage.algorithm === AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH) {
-                    aiAlgorithm = new PureMonteCarloTreeSearch(
-                        event.data as unknown as InitializePureMonteCarloTreeSearchMessage
-                    )
+                const initializeMessage = event.data as unknown as InitializeAiMessage
+                if (initializeMessage.aiConfiguration.aiAlgorithm === AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH) {
+                    aiAlgorithm = new PureMonteCarloTreeSearch(initializeMessage)
                 }
                 break
             case MessageType.MOVE_REQUEST:
@@ -31,7 +28,7 @@ self.onmessage = async (event: MessageEvent<WebWorkerMessage>) => {
                 break
         }
     } catch (exception) {
-        console.log(`WW ${event.data} got exception`)
+        console.log(`WW got exception`, event.data)
         console.error(exception)
         self.postMessage(exception)
     }
