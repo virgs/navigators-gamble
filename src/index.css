@@ -11,6 +11,9 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    --game-container-size: 720px;
+    --board-size: min(100svmin, calc(0.77 * var(--game-container-size)));
 }
 
 body {
@@ -18,5 +21,20 @@ body {
     display: flex;
     place-items: center;
     min-width: 320px;
-    min-height: 100vh;
+    min-height: 100svh;
+    background-color: wheat !important;
+    justify-content: center;
+
+    touch-action: pan-y;
+    overflow: hidden;
+    user-select: none;
+}
+
+#root {
+    min-height: 100svh;
+    display: flex;
+    justify-content: center;
+    background-color: black;
+    max-width: var(--game-container-size);
+    width: var(--game-container-size);
 }

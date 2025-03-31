@@ -33,6 +33,7 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
         const possibleMoves = this.findNextMoveAlternatives(this.playerId, moveRequest.playerCards, board)
 
         let bestMove: Move & { score: number } = { ...possibleMoves[0], score: Number.NEGATIVE_INFINITY }
+        //TODO: calculate number of moves left and take that into consideration so the iterations can reflect more precisely the number of iterations
         const iterationsPerMove = Math.ceil(this.iterations / possibleMoves.length)
 
         for (const move of possibleMoves) {
@@ -74,6 +75,7 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
                 playerHand = this.updateCardsAfterMove(playerHand, move.direction, availableCards.pop()!)
             }
 
+            //TODO terminate the while earlier in case of a expressive score difference
             scores[this.playerId] += this.calculateScore(moveScores, move.playerId)
 
             turn = (turn + 1) % this.playersIds.length
