@@ -1,14 +1,14 @@
 import classnames from 'classnames';
 import { ReactNode } from 'react';
 import { AiAlgorithmType } from '../ai/algorithms/ai-algorithm-type';
-import { PositionedSerializabledBoard } from '../engine/board/serializable-board';
+import { SerializabledBoard } from '../engine/board/serializable-board';
 import { GameConfiguration } from '../engine/game-configuration/game-configuration';
 import { PlayerType } from '../engine/game-configuration/player-type';
 import './GameContainer.scss';
 
 
 
-const serializabledBoard: PositionedSerializabledBoard = {
+const serializabledBoard: SerializabledBoard = {
     vertices: [
         {
             id: '1',
@@ -67,13 +67,11 @@ const gameConfig: GameConfiguration = {
             aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
         },
         {
-            type: PlayerType.ARTIFICIAL_INTELLIGENCE,
-            iterations: 1,
-            aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
+            type: PlayerType.HUMAN
         },
     ],
     cardsPerDirection: 3,
-    cardsPerPlayer: 3,
+    cardsPerPlayer: 7,
     board: serializabledBoard,
 }
 

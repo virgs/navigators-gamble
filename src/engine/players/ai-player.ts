@@ -8,6 +8,7 @@ import { generateUID } from '../../math/generate-id'
 import { BoardSerializer } from '../board/board-serializer'
 import { Card } from '../card'
 import { GameAiPlayerConfiguration, GameConfiguration } from '../game-configuration/game-configuration'
+import { PlayerType } from '../game-configuration/player-type'
 import { Move } from '../score-calculator/move'
 import { ChooseMoveInput, Player } from './player'
 
@@ -24,7 +25,7 @@ export type AiPlayerConfig = {
 
 export class AiPlayer implements Player {
     private readonly _id: string
-    private readonly cards: Card[]
+    private readonly _cards: Card[]
     private _score: number = 0
 
     private readonly worker: Worker
@@ -33,7 +34,7 @@ export class AiPlayer implements Player {
 
     public constructor(aiPlayerConfig: AiPlayerConfig) {
         this._id = aiPlayerConfig.playerId
-        this.cards = aiPlayerConfig.cards
+        this._cards = aiPlayerConfig.cards
         this._score = 0
 
         this.worker = new Worker()
@@ -51,6 +52,14 @@ export class AiPlayer implements Player {
                 resolve()
             }
         })
+    }
+
+    public get type() {
+        return PlayerType.ARTIFICIAL_INTELLIGENCE
+    }
+
+    public get cards(): Card[] {
+        return this._cards
     }
 
     public get id(): string {

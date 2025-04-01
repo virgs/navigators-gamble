@@ -1,16 +1,16 @@
 import classnames from 'classnames';
-import { ReactNode, useState } from 'react';
-import { PositionedSerializabledBoard, PositionedSerializableVertix } from '../engine/board/serializable-board';
-import compass from '../assets/transparent-compass.webp'
-import needle from '../assets/needle.png'
+import { ReactNode } from 'react';
+import needle from '../assets/needle.png';
+import compass from '../assets/transparent-compass.webp';
+import { Vertix } from '../engine/graph/vertix';
 
 
 
 type VertixProps = {
-    vertix: PositionedSerializableVertix;
+    vertix: Vertix;
 };
 
-export const Vertix = (props: VertixProps): ReactNode => {
+export const VertixComponent = (props: VertixProps): ReactNode => {
 
     const classes = classnames({
         'row': true

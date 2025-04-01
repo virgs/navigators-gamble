@@ -1,3 +1,4 @@
+import { Point } from '../../math/point'
 import { Directions } from '../directions'
 import { Link } from './link'
 
@@ -9,14 +10,20 @@ export type LinkedVertix = {
 export class Vertix {
     private readonly _id: string
     private readonly links: Link[]
+    private readonly _position: Point
     private _ownerId?: string | undefined
     private _direction?: Directions | undefined
 
-    constructor(id: string, ownerId?: string, direction?: Directions) {
+    public constructor(id: string, position: Point, ownerId?: string, direction?: Directions) {
         this._id = id
+        this._position = position
         this._direction = direction
         this._ownerId = ownerId
         this.links = []
+    }
+
+    public get position(): Point {
+        return this._position
     }
 
     public linkTo(vertix: Vertix): void {

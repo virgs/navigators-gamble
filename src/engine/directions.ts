@@ -9,7 +9,9 @@ export enum Directions {
     NORTH_WEST = 7,
 }
 
-export const directions: string[] = Object.keys(Directions).filter((value) => Number(isNaN(Number(value))))
+export const directions: Directions[] = Object.keys(Directions)
+    .filter((key) => !isNaN(Number(key)))
+    .map((key) => Number(key) as Directions)
 
 export type DirectionsComparer = (first: Directions, seconds: Directions) => boolean
 
@@ -25,6 +27,27 @@ export const isNextClockWise: DirectionsComparer = (
 
 export const isPreviousClockWise: DirectionsComparer = (first: Directions, second: Directions): boolean => {
     return isNextClockWise(second, first)
+}
+
+export const getAbbreviation = (direction: Directions): string => {
+    switch (direction) {
+        case Directions.NORTH:
+            return 'N'
+        case Directions.NORTH_EAST:
+            return 'NE'
+        case Directions.EAST:
+            return 'E'
+        case Directions.SOUTH_EAST:
+            return 'SE'
+        case Directions.SOUTH:
+            return 'S'
+        case Directions.SOUTH_WEST:
+            return 'SW'
+        case Directions.WEST:
+            return 'W'
+        case Directions.NORTH_WEST:
+            return 'NW'
+    }
 }
 
 export const directionToAngle = (direction: Directions): number => {

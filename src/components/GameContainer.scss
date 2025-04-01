@@ -9,8 +9,8 @@
     display: block;
     background-origin: content-box;
     background-size: auto;
-    transition: all ease 1s;
     background-position: left;
+    transition: all ease 1s;
     filter: opacity(1) brightness(1);
 
     &.game-running {

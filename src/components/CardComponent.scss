@@ -1,0 +1,59 @@
+.card-box {
+    width: var(--card-size);
+    position: relative;
+    overflow: hidden;
+
+    background-color: #bdae7b;
+    border-radius: 12px;
+}
+.card-box:before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+}
+.background-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    filter: opacity(0.5);
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+}
+.needle-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 100%;
+    width: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.card-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    border-radius: 12px;
+    display: flex;
+    color: #982123;
+
+    border: 3px solid #886d4b;
+    padding: 2px;
+}
+
+.abbreviation {
+    display: flex;
+    // line-height: normal;
+    line-height: 15px;
+
+    font-family: 'Pirata One', system-ui;
+    font-weight: lighter;
+    font-style: normal;
+    font-size: large;
+}
