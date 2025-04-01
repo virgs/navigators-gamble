@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './scss/styles.scss'
-import './index.css'
+import './index.scss'
 
 // Import all of Bootstrap's JS
 import * as bootstrap from 'bootstrap'

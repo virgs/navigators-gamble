@@ -3,7 +3,7 @@
     position: relative;
     overflow: hidden;
 
-    background-color: #bdae7b;
+    background-color: var(--compass-tertiary);
     border-radius: 12px;
 }
 .card-box:before {
@@ -41,9 +41,9 @@
     right: 0;
     border-radius: 12px;
     display: flex;
-    color: #982123;
+    color: var(--compass-highlight-red);
 
-    border: 3px solid #886d4b;
+    border: 3px solid var(--compass-primary);
     padding: 2px;
 }
 
@@ -56,4 +56,12 @@
     font-weight: lighter;
     font-style: normal;
     font-size: large;
+}
+
+.card-corner {
+    position: absolute;
+    width: 10%;
+    height: 10%;
+    border-radius: 10px;
+    background-color: var(--compass-primary);
 }

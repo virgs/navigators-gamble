@@ -1,21 +1,18 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 import { Card } from '../engine/card';
 import { Directions, directionToAngle, getAbbreviation } from '../engine/directions';
-import revealedCardBackgroundImage from '../assets/transparent-compass.webp'
-import needleImage from '../assets/needle.png'
+import needleImage from '../assets/needle.png';
+import revealedCardBackgroundImage from '../assets/transparent-compass.webp';
+import cardCoverImage from '../assets/card-cover-black.png'
 import './CardComponent.scss';
 
-
+// https://remove-bg.io/upload
 
 type CardComponentProps = {
     card: Card;
 };
 
 export const CardComponent = (props: CardComponentProps): ReactNode => {
-    useEffect(() => {
-        // console.log(getAbbreviation(props.card.direction));
-    }, [props]);
-
     const style = {
         alignItems: 'center',
         justifyContent: 'center'
@@ -32,13 +29,27 @@ export const CardComponent = (props: CardComponentProps): ReactNode => {
         style.justifyContent = 'start'
     }
 
+    if (props.card.covered) {
+        return <div className='card-box' >
+            <div className='card-content' style={{ ...style, backgroundColor: 'var(--compass-highlight-blue)' }} />
+            <div className='background-image' style={{
+                filter: 'opacity(1)',
+                backgroundImage: `url(${cardCoverImage})`,
+            }}></div>
+        </div>
+    }
+
 
     return <div className='card-box' >
-        <div className='background-image' style={{ backgroundImage: `url(${revealedCardBackgroundImage})` }}></div>
+        <div className='card-corner' style={{ top: 0, left: 0 }} />
+        <div className='card-corner' style={{ top: 0, right: 0 }} />
+        <div className='card-corner' style={{ bottom: 0, left: 0 }} />
+        <div className='card-corner' style={{ bottom: 0, right: 0 }} />
         <div className='needle-image' style={{
             backgroundImage: `url(${needleImage})`,
             transform: `translate(-50%, -50%) rotate(${directionToAngle(props.card.direction)}deg) `
         }}></div>
+        <div className='background-image' style={{ backgroundImage: `url(${revealedCardBackgroundImage})` }}></div>
         <div className='card-content' style={style}>
             <span className='abbreviation'>{getAbbreviation(props.card.direction)}</span>
         </div>

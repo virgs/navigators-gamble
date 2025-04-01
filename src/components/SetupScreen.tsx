@@ -61,6 +61,11 @@ const gameConfig: GameConfiguration = {
     players: [
         // { type: PlayerType.HUMAN },
         // { type: PlayerType.HUMAN },
+        // {
+        //     type: PlayerType.ARTIFICIAL_INTELLIGENCE,
+        //     iterations: 50000,
+        //     aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
+        // },
         {
             type: PlayerType.ARTIFICIAL_INTELLIGENCE,
             iterations: 50000,

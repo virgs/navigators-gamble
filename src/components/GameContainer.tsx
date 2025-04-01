@@ -2,9 +2,9 @@ import classnames from 'classnames';
 import { ReactNode, useState } from 'react';
 import backgroundImage from '../assets/resized-background.jpg';
 import { GameConfiguration } from '../engine/game-configuration/game-configuration';
-import './GameContainer.scss';
 import { GameScreen } from './GameScreen';
 import { SetupScreen } from './SetupScreen';
+import './GameContainer.scss';
 
 
 export const GameContainer = (): ReactNode => {
@@ -34,7 +34,7 @@ export const GameContainer = (): ReactNode => {
     const screen = () => {
         if (gameConfiguration && gameIsRunning) {
             return <>
-                <GameScreen gameConfig={gameConfiguration} onGameFinished={() => onGameFinished()}></GameScreen>
+                <GameScreen gameConfiguration={gameConfiguration} onGameFinished={() => onGameFinished()}></GameScreen>
             </>
         } else {
             return <>

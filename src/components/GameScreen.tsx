@@ -1,13 +1,13 @@
 import classnames from 'classnames';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { GameConfiguration } from '../engine/game-configuration/game-configuration';
 import { PlayerType } from '../engine/game-configuration/player-type';
 import { GameEngine } from '../engine/game-engine';
-import { Player } from '../engine/players/player';
 import { BoardComponent } from './BoardComponent';
 import './GameContainer.scss';
 import { HeaderComponent } from './HeaderComponent';
 import { PlayerHandComponent } from './PlayerHandComponent';
+import { AIHandComponent } from './AIHandComponent';
 
 
 
@@ -24,9 +24,9 @@ import { PlayerHandComponent } from './PlayerHandComponent';
 // }
 // iterate()
 
-export const GameScreen = (props: { gameConfig: GameConfiguration, onGameFinished: () => void }): ReactNode => {
+export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGameFinished: () => void }): ReactNode => {
 
-    const [gameEngine, setGameEngine] = useState<GameEngine>(new GameEngine(props.gameConfig))
+    const [gameEngine, setGameEngine] = useState<GameEngine>(new GameEngine(props.gameConfiguration))
 
     const classes = classnames({
         "w-100": true,
@@ -38,25 +38,31 @@ export const GameScreen = (props: { gameConfig: GameConfiguration, onGameFinishe
     const renderHumanPlayer = (): ReactNode => {
         const humanPlayer = gameEngine.players.find(player => player.type === PlayerType.HUMAN)
         if (humanPlayer) {
-            return <PlayerHandComponent cards={humanPlayer.cards} score={humanPlayer.score} turn={false} onCardSelected={() => 4} />
+            return <PlayerHandComponent cards={humanPlayer.cards} score={humanPlayer.score} turn={true} onCardSelected={() => 4} />
         }
         return <></>
     }
 
+    const renderArtificialIntelligencePlayers = (): ReactNode => {
+        return gameEngine.players.filter(player => player.type !== PlayerType.HUMAN).map(aiPlayer => {
+            return <AIHandComponent key={aiPlayer.id} cards={aiPlayer.cards} score={aiPlayer.score} turn={true} onCardSelected={() => 4}></AIHandComponent>
+        })
+    }
+
     return (
         <>
-            <div className={classes} onClick={() => props.onGameFinished()}>
+            <div className={classes}>
                 <div className='col-12 col-md-6 col-lg-12 d-flex' style={{ height: '100%', flexWrap: 'wrap', alignContent: 'space-evenly' }}>
-                    <div className='w-100 d-md-none d-lg-block' style={{ height: '10svh' }}>
+                    <div onClick={() => props.onGameFinished()} className='w-100 d-md-none d-lg-block' style={{ height: '10svh' }}>
                         <HeaderComponent></HeaderComponent>
                     </div>
-                    <div className='w-100 d-md-none d-lg-block' style={{ height: '10svh' }}>
-                        {/* <PlayerHandComponent cards={gameEngine.players[0].cards} score={gameEngine.players[0].score} turn={false} onCardSelected={() => 4} /> */}
+                    <div className='w-100 d-flex d-md-none d-lg-flex' style={{ height: '10svh', alignItems: 'center', justifyContent: 'left' }}>
+                        {renderArtificialIntelligencePlayers()}
                     </div>
                     <div className='w-100' style={{ height: 'min(100svmin, 600px)' }}>
                         <BoardComponent board={gameEngine.board} />
                     </div>
-                    <div className='w-100 d-md-none d-lg-block' style={{ height: '10svh' }}>
+                    <div className='w-100 mb-2 d-md-none d-lg-block' style={{}}>
                         {renderHumanPlayer()}
                     </div>
 
@@ -65,10 +71,10 @@ export const GameScreen = (props: { gameConfig: GameConfiguration, onGameFinishe
                     <div className='w-100' style={{ height: '10svh' }}>
                         <HeaderComponent></HeaderComponent>
                     </div>
-                    <div className='w-100' style={{ height: '30svh' }}>
-                        {/* <PlayerHandComponent cards={gameEngine.players[0].cards} score={gameEngine.players[0].score} turn={false} onCardSelected={() => 4} />                    */}
+                    <div className='w-100 d-flex' style={{ height: '30svh', alignItems: 'center', justifyContent: 'space-left' }}>
+                        {renderArtificialIntelligencePlayers()}
                     </div>
-                    <div className='w-100' style={{ height: '30svh' }}>
+                    <div className='w-100 mb-2' style={{}}>
                         {renderHumanPlayer()}
                     </div>
                 </div>
