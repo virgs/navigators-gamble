@@ -5,10 +5,9 @@
 
     color-scheme: light dark;
 
-    --game-container-size: 720px;
-    --board-size: min(100svmin, calc(0.77 * var(--game-container-size)));
-    // clamp(min, val, max)
+    --game-container-size: 576px;
     --card-size: clamp(50px, 14%, 90px);
+    --screen-transitions: 1s;
 
     // palette
 

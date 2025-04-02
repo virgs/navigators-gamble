@@ -1,0 +1,26 @@
+.board-box {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+
+    background-color: var(--compass-tertiary);
+    border-radius: 12px;
+}
+.board-box:before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+}
+.board-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    border-radius: 12px;
+    display: flex;
+    color: var(--compass-highlight-red);
+
+    border: 3px solid var(--compass-primary);
+    padding: 2px;
+}

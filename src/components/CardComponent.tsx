@@ -13,9 +13,21 @@ type CardComponentProps = {
 };
 
 export const CardComponent = (props: CardComponentProps): ReactNode => {
-    const style = {
+
+    if (props.card.covered) {
+        return <div className='card-box' >
+            <div className='card-content' style={{ backgroundColor: 'var(--compass-highlight-blue)' }} />
+            <div className='background-image' style={{
+                filter: 'opacity(1)',
+                backgroundImage: `url(${cardCoverImage})`,
+            }}></div>
+        </div>
+    }
+
+    const style: React.CSSProperties = {
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        cursor: 'pointer'
     }
 
     if ([Directions.NORTH, Directions.NORTH_EAST, Directions.NORTH_WEST].includes(props.card.direction)) {
@@ -29,28 +41,17 @@ export const CardComponent = (props: CardComponentProps): ReactNode => {
         style.justifyContent = 'start'
     }
 
-    if (props.card.covered) {
-        return <div className='card-box' >
-            <div className='card-content' style={{ ...style, backgroundColor: 'var(--compass-highlight-blue)' }} />
-            <div className='background-image' style={{
-                filter: 'opacity(1)',
-                backgroundImage: `url(${cardCoverImage})`,
-            }}></div>
-        </div>
-    }
-
-
     return <div className='card-box' >
         <div className='card-corner' style={{ top: 0, left: 0 }} />
         <div className='card-corner' style={{ top: 0, right: 0 }} />
         <div className='card-corner' style={{ bottom: 0, left: 0 }} />
         <div className='card-corner' style={{ bottom: 0, right: 0 }} />
-        <div className='needle-image' style={{
+        <div className='needle-image' data-needle-direction={Directions[props.card.direction].toString().toLowerCase()} style={{
             backgroundImage: `url(${needleImage})`,
             transform: `translate(-50%, -50%) rotate(${directionToAngle(props.card.direction)}deg) `
         }}></div>
         <div className='background-image' style={{ backgroundImage: `url(${revealedCardBackgroundImage})` }}></div>
-        <div className='card-content' style={style}>
+        <div className='card-content' onPointerDown={() => console.log(props.card.id)} style={style}>
             <span className='abbreviation'>{getAbbreviation(props.card.direction)}</span>
         </div>
     </div>

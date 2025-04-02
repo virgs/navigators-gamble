@@ -10,7 +10,7 @@
     background-origin: content-box;
     background-size: auto;
     background-position: left;
-    transition: all ease 1s;
+    transition: all ease var(--screen-transitions);
     filter: opacity(1) brightness(1);
 
     &.game-running {
