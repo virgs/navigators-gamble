@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { GameConfiguration } from '../engine/game-configuration/game-configuration';
 import { PlayerType } from '../engine/game-configuration/player-type';
 import { GameEngine } from '../engine/game-engine';
@@ -11,26 +11,33 @@ import './GameScreen.scss';
 
 
 
-// const gameEngine = new GameEngine(gameConfig)
-// const iterate = async () => {
-//     if (!gameEngine.isGameOver()) {
-//         await gameEngine.playNextRound()
-//         setTimeout(iterate, 100)
-//     } else {
-//         console.log(`Game over`)
-//         gameEngine.finishGame()
-//         console.log(gameEngine.getScores())
-//     }
-// }
-// iterate()
-
 export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGameFinished: () => void }): ReactNode => {
 
-    const [gameEngine, setGameEngine] = useState<GameEngine>(new GameEngine(props.gameConfiguration))
+    const iterate = async (gameConfiguration: GameConfiguration, iterations: number) => {
+        const gameEngine = new GameEngine(gameConfiguration)
+        while (!gameEngine.isGameOver() && iterations > 0) {
+            await gameEngine.playNextRound()
+            --iterations
+        }
+        return gameEngine
+    }
+
+    const [gameEngine, setGameEngine] = useState<GameEngine | undefined>(undefined)
     const [classes, setClasses] = useState<string[]>(['game-screen', 'w-100', 'h-100', 'row', 'g-0'])
+
+    useEffect(() => {
+        iterate(props.gameConfiguration, 1).then(gameEngine => {
+            return setGameEngine(gameEngine);
+        })
+    }, [])
 
     const onGameFinished = () => {
         setTimeout(() => props.onGameFinished(), 1000)
+    }
+
+
+    if (!gameEngine) {
+        return <div />
     }
 
     const renderHumanPlayer = (): ReactNode => {

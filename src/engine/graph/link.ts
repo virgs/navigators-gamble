@@ -1,4 +1,3 @@
-import { Point } from '../../math/point'
 import { Vertix } from './vertix'
 
 export class Link {

@@ -1,34 +1,32 @@
-import classnames from 'classnames';
 import { ReactNode } from 'react';
-import needle from '../assets/needle.png';
-import compass from '../assets/transparent-compass.webp';
+import { Card } from '../engine/card';
 import { Vertix } from '../engine/graph/vertix';
 import { CardComponent } from './CardComponent';
-import { Card } from '../engine/card';
-
-
+import './VertixComponent.scss';
 
 type VertixProps = {
     vertix: Vertix;
 };
 
 export const VertixComponent = (props: VertixProps): ReactNode => {
+    const classes = ['vertix'];
+    const style: React.CSSProperties = {
+        top: `${props.vertix.position.y * 100}%`,
+        left: `${props.vertix.position.x * 100}%`,
+    };
+    let cardComponent = <></>
     if (props.vertix.hasCardOn()) {
-        return <CardComponent card={new Card(props.vertix.id, props.vertix.direction!)}></CardComponent>
+        const card = new Card(props.vertix.id, props.vertix.direction!);
+        card.reveal()
+        card.ownerId = '0'
+        cardComponent = <CardComponent card={card}></CardComponent>
+    } else {
+        classes.push('empty')
     }
 
     return (
-        <>
-            <div data-id={props.vertix.id} style={{
-                top: `${props.vertix.position.y * 100}%`,
-                left: `${props.vertix.position.x * 100}%`,
-                position: 'absolute',
-                width: 'var(--vertix-size)',
-                height: 'var(--vertix-size)',
-                border: 'var(--compass-highlight-red) 3px dashed',
-                borderRadius: '5px',
-                transform: 'translate(-50%,-50%)',
-            }}></div>
-        </>
+        <div className={classes.join(' ')} data-id={props.vertix.id} style={style}><div >
+            {cardComponent}</div>
+        </div>
     )
 }

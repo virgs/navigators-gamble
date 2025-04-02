@@ -17,7 +17,9 @@ export const AIHandComponent = (props: AIHandComponentProps): ReactNode => {
         <ScoreComponent score={props.score} turn={props.turn} ></ScoreComponent>
         <div className='ai-hand'>
             {props.cards.map((card, index) => {
-                return <div key={card.id} className='ai-card' style={{ left: (index * spacingBetweenCards) + 'px' }}><CardComponent card={card}></CardComponent></div>
+                return <div key={card.id} className='ai-card' style={{ left: (index * spacingBetweenCards) + 'px' }}>
+                    <CardComponent card={card}></CardComponent>
+                </div>
             })}
             <ScoreComponent score={props.score} turn={props.turn} ></ScoreComponent>
         </div>

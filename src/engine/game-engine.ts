@@ -2,7 +2,7 @@ import { arrayShuffler } from '../math/array-shufller'
 import { Board } from './board/board'
 import { BoardSerializer } from './board/board-serializer'
 import { Card } from './card'
-import { directions } from './directions'
+import { Directions, directions } from './directions'
 import { GameConfiguration } from './game-configuration/game-configuration'
 import { AiPlayer, AiPlayerConfig } from './players/ai-player'
 import { HumanPlayer } from './players/human-player'
@@ -126,7 +126,7 @@ export class GameEngine {
             let text = ''
             for (let j = 0; j < 3; ++j) {
                 const vertice = vertices[i + j]
-                text += `(${vertice.id}) ${vertice.direction ?? '-'}\t\t\t\t`
+                text += `(${vertice.id}) ${vertice.direction ? Directions[vertice.direction] : '-'}\t\t\t\t`
             }
             console.log(text)
         }

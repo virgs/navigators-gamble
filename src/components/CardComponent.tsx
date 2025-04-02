@@ -41,6 +41,9 @@ export const CardComponent = (props: CardComponentProps): ReactNode => {
         style.justifyContent = 'start'
     }
 
+    const ownerPlayerColor = 'white'
+    style.borderColor = ownerPlayerColor
+
     return <div className='card-box' >
         <div className='card-corner' style={{ top: 0, left: 0 }} />
         <div className='card-corner' style={{ top: 0, right: 0 }} />
@@ -52,7 +55,7 @@ export const CardComponent = (props: CardComponentProps): ReactNode => {
         }}></div>
         <div className='background-image' style={{ backgroundImage: `url(${revealedCardBackgroundImage})` }}></div>
         <div className='card-content' onPointerDown={() => console.log(props.card.id)} style={style}>
-            <span className='abbreviation'>{getAbbreviation(props.card.direction)}</span>
+            <span className='abbreviation' style={{ color: ownerPlayerColor }}>{getAbbreviation(props.card.direction)}</span>
         </div>
     </div>
 

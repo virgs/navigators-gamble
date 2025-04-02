@@ -33,26 +33,20 @@ export const GameContainer = (): ReactNode => {
 
     const screen = () => {
         if (gameConfiguration && gameIsRunning) {
-            return <>
-                <GameScreen gameConfiguration={gameConfiguration} onGameFinished={() => onGameFinished()}></GameScreen>
-            </>
+            return <GameScreen gameConfiguration={gameConfiguration} onGameFinished={() => onGameFinished()}></GameScreen>
         } else {
-            return <>
-                <SetupScreen onStartButton={(config) => onStartButton(config)}></SetupScreen>
-            </>
+            return <SetupScreen onStartButton={(config) => onStartButton(config)}></SetupScreen>
         }
     }
 
 
 
     return (
-        <>
-            <div className={classes}>
-                <div className={backgroundClasses} style={{ backgroundImage: `url(${backgroundImage})` }} />
-                <div className='w-100 h-100' style={{ zIndex: 10 }}>
-                    {screen()}
-                </div>
+        <div className={classes}>
+            <div className={backgroundClasses} style={{ backgroundImage: `url(${backgroundImage})` }} />
+            <div className='w-100 h-100' style={{ zIndex: 10 }}>
+                {screen()}
             </div>
-        </>
+        </div>
     )
 }
