@@ -37,7 +37,8 @@ const serializabledBoard: SerializabledBoard = {
         {
             id: '6',
             position: { x: 1, y: .5 },
-            linkedVertices: ['9'],
+            linkedVertices: [],
+            // linkedVertices: ['9'],
         },
         {
             id: '7',
@@ -47,7 +48,8 @@ const serializabledBoard: SerializabledBoard = {
         {
             id: '8',
             position: { x: .5, y: 1 },
-            linkedVertices: ['9'],
+            linkedVertices: [],
+            // linkedVertices: ['9'],
         },
         {
             id: '9',

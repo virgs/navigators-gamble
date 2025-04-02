@@ -8,6 +8,7 @@ export class BoardSerializer {
         serializableBoard.vertices.forEach((serializableVertix) => {
             verticesMap[serializableVertix.id] = new Vertix(
                 serializableVertix.id,
+                serializableVertix.position,
                 serializableVertix.ownerId,
                 serializableVertix.direction
             )
@@ -26,6 +27,7 @@ export class BoardSerializer {
             vertices: board.getVertices().map((vertix) => {
                 return {
                     id: vertix.id,
+                    position: vertix.position,
                     direction: vertix.direction,
                     ownerId: vertix.ownerId,
                     linkedVertices: vertix

@@ -36,6 +36,10 @@ export class Vertix {
         return this.links.find((link) => link.getVertices().includes(vertix))
     }
 
+    public hasCardOn(): boolean {
+        return this._direction !== undefined
+    }
+
     public get direction(): Directions | undefined {
         return this._direction
     }

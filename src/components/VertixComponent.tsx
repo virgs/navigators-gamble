@@ -3,6 +3,8 @@ import { ReactNode } from 'react';
 import needle from '../assets/needle.png';
 import compass from '../assets/transparent-compass.webp';
 import { Vertix } from '../engine/graph/vertix';
+import { CardComponent } from './CardComponent';
+import { Card } from '../engine/card';
 
 
 
@@ -11,44 +13,22 @@ type VertixProps = {
 };
 
 export const VertixComponent = (props: VertixProps): ReactNode => {
-
-    const classes = classnames({
-        'row': true
-    });
-    const cardSide = '10svw'
+    if (props.vertix.hasCardOn()) {
+        return <CardComponent card={new Card(props.vertix.id, props.vertix.direction!)}></CardComponent>
+    }
 
     return (
         <>
-            <div className={classes} style={{
-                position: 'absolute',
-                padding: '3px',
+            <div style={{
                 top: `${props.vertix.position.y * 100}%`,
                 left: `${props.vertix.position.x * 100}%`,
-                width: cardSide,
-                height: cardSide,
-                border: 'brown 3px solid',
-                backgroundColor: '#b06e26',
+                position: 'absolute',
+                width: 'var(--card-size)',
+                height: 'var(--card-size)',
+                border: 'var(--compass-highlight-red) 3px dashed',
                 borderRadius: '5px',
                 transform: 'translate(-50%,-50%)',
-                color: 'black',
-            }} >
-                <div className='col-12 align-self-start' style={{ textAlign: 'right', height: '10%' }}>{props.vertix.id}</div>
-                <div className='col-12' style={{
-                    textAlign: 'center',
-                    backgroundSize: 'contain',
-                    backgroundPosition: 'center',
-                    backgroundImage: `url(${compass})`
-                }}>
-                    <img className='img-fluid align-self-center' style={{
-                        textAlign: 'center',
-                        height: `calc(${cardSide} / 1.5)`,
-                        rotate: '45deg'
-                    }} src={needle}></img>
-                    {/* <img className='img-fluid' style={{ textAlign: 'center', width: '80%' }} src={compass}></img> */}
-                </div>
-                <div className='col-12 align-self-end' style={{ textAlign: 'left', height: '10%' }}>{props.vertix.id}</div>
-
-            </div>
+            }}></div>
         </>
     )
 }

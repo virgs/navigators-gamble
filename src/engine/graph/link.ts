@@ -18,4 +18,16 @@ export class Link {
     public getVertices(): Vertix[] {
         return [this.first, this.second]
     }
+
+    public get length(): number {
+        const xDistance = this.first.position.x - this.second.position.x
+        const yDistance = this.first.position.y - this.second.position.y
+        return Math.sqrt(xDistance * xDistance + yDistance * yDistance)
+    }
+
+    public get inclination(): number {
+        const xDistance = this.first.position.x - this.second.position.x
+        const yDistance = this.first.position.y - this.second.position.y
+        return Math.atan(yDistance / xDistance)
+    }
 }
