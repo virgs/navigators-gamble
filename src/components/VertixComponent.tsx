@@ -19,12 +19,12 @@ export const VertixComponent = (props: VertixProps): ReactNode => {
 
     return (
         <>
-            <div style={{
+            <div data-id={props.vertix.id} style={{
                 top: `${props.vertix.position.y * 100}%`,
                 left: `${props.vertix.position.x * 100}%`,
                 position: 'absolute',
-                width: 'var(--card-size)',
-                height: 'var(--card-size)',
+                width: 'var(--vertix-size)',
+                height: 'var(--vertix-size)',
                 border: 'var(--compass-highlight-red) 3px dashed',
                 borderRadius: '5px',
                 transform: 'translate(-50%,-50%)',
