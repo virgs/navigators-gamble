@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import { Link } from '../engine/graph/link';
-import { getAngle, getDistance } from '../math/point';
+import { Link } from '../../engine/graph/link';
+import { getAngle, getDistance } from '../../math/point';
 import "./LinkComponent.scss";
 
 type LinkComponentProps = {

@@ -1,0 +1,22 @@
+.vertix {
+    position: absolute;
+    width: var(--vertix-size);
+    height: var(--vertix-size);
+    border-radius: 40%;
+    transform: translate(-50%, -50%);
+
+    &.empty {
+        // border: var(--compass-highlight-red) 3px dashed;
+        // background-color: var(--compass-secondary);
+        opacity: 0.75;
+        line-height: 15px;
+        font-family: 'Pirata One', system-ui;
+        font-weight: lighter;
+        font-style: normal;
+        font-size: 3em;
+        color: var(--compass-highlight-red);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

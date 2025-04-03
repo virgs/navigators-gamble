@@ -1,12 +1,11 @@
-import classnames from 'classnames';
 import { ReactNode, useEffect, useState } from 'react';
 import { GameConfiguration } from '../engine/game-configuration/game-configuration';
 import { PlayerType } from '../engine/game-configuration/player-type';
 import { GameEngine } from '../engine/game-engine';
 import { BoardComponent } from './BoardComponent';
 import { HeaderComponent } from './HeaderComponent';
-import { PlayerHandComponent } from './PlayerHandComponent';
-import { AIHandComponent } from './AIHandComponent';
+import { PlayerHandComponent } from './hands/PlayerHandComponent';
+import { AIHandComponent } from './hands/AIHandComponent';
 import './GameScreen.scss';
 
 

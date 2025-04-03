@@ -13,47 +13,47 @@ const serializabledBoard: SerializabledBoard = {
         {
             id: 'v1',
             position: { x: .15, y: .15 },
-            linkedVertices: ['v2', 'v4', 'v8'],
+            linkedVertices: ['v2', 'v4'],
         },
         {
             id: 'v2',
             position: { x: .5, y: 0 },
-            linkedVertices: ['v3', 'v5', 'v9'],
+            linkedVertices: ['v3', 'v9'],
         },
         {
             id: 'v3',
             position: { x: .85, y: .15 },
-            linkedVertices: ['v4'],
+            linkedVertices: [],
         },
         {
             id: 'v4',
             position: { x: 0, y: .5 },
-            linkedVertices: ['v5', 'v7'],
+            linkedVertices: ['v3', 'v7'],
         },
         {
             id: 'v5',
             position: { x: .5, y: .5 },
-            linkedVertices: ['v6', 'v8'],
+            linkedVertices: ['v2', 'v4', 'v6', 'v8'],
         },
         {
             id: 'v6',
             position: { x: 1, y: .5 },
-            linkedVertices: ['v3', 'v7', 'v9'],
+            linkedVertices: ['v3', 'v7'],
         },
         {
             id: 'v7',
             position: { x: .15, y: .85 },
-            linkedVertices: ['v8'],
+            linkedVertices: [],
         },
         {
             id: 'v8',
             position: { x: .5, y: 1 },
-            linkedVertices: [],
+            linkedVertices: ['v7', 'v1'],
         },
         {
             id: 'v9',
             position: { x: .85, y: .85 },
-            linkedVertices: ['v8'],
+            linkedVertices: ['v8', 'v6'],
         },
     ],
 }

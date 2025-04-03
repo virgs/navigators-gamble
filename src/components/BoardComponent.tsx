@@ -2,8 +2,8 @@ import classnames from 'classnames';
 import { ReactNode } from 'react';
 import { Board } from '../engine/board/board';
 import { Vertix } from '../engine/graph/vertix';
-import { VertixComponent } from './VertixComponent';
-import { LinkComponent } from './LinkComponent';
+import { VertixComponent } from './graph/VertixComponent';
+import { LinkComponent } from './graph/LinkComponent';
 import { Link } from '../engine/graph/link';
 import "./BoardComponent.scss"
 

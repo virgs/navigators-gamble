@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
-import { Card } from '../engine/card';
-import { CardComponent } from './CardComponent';
-import { ScoreComponent } from './ScoreComponent';
 import './PlayerHandComponent.scss'
+import { Card } from '../../engine/card';
+import { CardComponent } from '../CardComponent';
+import { ScoreComponent } from '../ScoreComponent';
 
 
 type PlayerHandComponentProps = {
