@@ -7,12 +7,14 @@ import { ChooseMoveInput, Player } from './player'
 export class HumanPlayer implements Player {
     private readonly _id: string
     private readonly _cards: Card[]
+    private readonly _turnOrder: number
     private _score: number = 0
 
-    public constructor(id: string, cards: Card[]) {
+    public constructor(id: string, turnOrder: number, cards: Card[]) {
         this._id = id
         this._cards = cards
         this._score = 0
+        this._turnOrder = turnOrder
         this._cards.forEach((card) => card.reveal())
         this._cards.sort((a, b) => a.direction - b.direction)
     }

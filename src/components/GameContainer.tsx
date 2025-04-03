@@ -2,8 +2,8 @@ import classnames from 'classnames';
 import { ReactNode, useState } from 'react';
 import backgroundImage from '../assets/resized-background.jpg';
 import { GameConfiguration } from '../engine/game-configuration/game-configuration';
-import { GameScreen } from './GameScreen';
-import { SetupScreen } from './SetupScreen';
+import { GameScreen } from './screens/GameScreen';
+import { SetupScreen } from './screens/SetupScreen';
 import './GameContainer.scss';
 
 

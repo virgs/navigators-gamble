@@ -1,20 +1,26 @@
+import {
+    emitCardAddedToPlayer,
+    emitMakeMoveCommand,
+    emitPlayerMadeMoveEvent,
+    emitPlayerTurnChanged,
+} from '../events/events'
 import { arrayShuffler } from '../math/array-shufller'
 import { Board } from './board/board'
 import { BoardSerializer } from './board/board-serializer'
 import { Card } from './card'
 import { Directions, directions } from './directions'
 import { GameConfiguration } from './game-configuration/game-configuration'
+import { PlayerType } from './game-configuration/player-type'
 import { AiPlayer, AiPlayerConfig } from './players/ai-player'
 import { HumanPlayer } from './players/human-player'
 import { Player } from './players/player'
-import { PlayerType } from './game-configuration/player-type'
 import { ScoreType } from './score-calculator/score-type'
 
 export class GameEngine {
     private readonly _notPlayedCards: Card[]
     private readonly _players: Player[]
     private readonly _board: Board
-    private lastTurnPlayerId: number
+    private lastPlayerToPlayIndex: number
 
     public constructor(gameConfiguration: GameConfiguration) {
         this._notPlayedCards = arrayShuffler(
@@ -35,16 +41,20 @@ export class GameEngine {
             )
         }
 
-        const playersIds = gameConfiguration.players.map((_, index) => `player-${index}`)
+        this._players = this.createPlayers(gameConfiguration)
 
-        this._players = gameConfiguration.players.map((playerConfiguration, index) => {
+        this.lastPlayerToPlayIndex = -1
+    }
+
+    private createPlayers(gameConfiguration: GameConfiguration): Player[] {
+        return gameConfiguration.players.map((playerConfiguration, index) => {
             const cards = Array.from(Array(gameConfiguration.cardsPerPlayer)).map(() => this._notPlayedCards.pop()!)
             if (playerConfiguration.type === PlayerType.HUMAN) {
-                return new HumanPlayer(playersIds[index], cards)
+                return new HumanPlayer(playerConfiguration.id, index, cards)
             } else {
                 const aiPlayerConfig: AiPlayerConfig = {
-                    playerId: playersIds[index],
-                    playersIds: playersIds,
+                    playerId: playerConfiguration.id,
+                    playersIds: gameConfiguration.players.map((player) => player.id),
                     cards: cards,
                     turnOrder: index,
                     gameConfig: gameConfiguration,
@@ -53,16 +63,23 @@ export class GameEngine {
                 return new AiPlayer(aiPlayerConfig)
             }
         })
-
-        this.lastTurnPlayerId = -1
-    }
-
-    public get players(): Player[] {
-        return this._players
     }
 
     public get board(): Board {
         return this._board
+    }
+
+    public start(): void {
+        this._players.forEach((player) => {
+            console.log(`Player ${player.id} (${player.type})`)
+            console.log(`\tCards: ${player.cards.map((card) => card.direction).join(', ')}`)
+            player.cards.forEach((card) => {
+                emitCardAddedToPlayer({
+                    playerId: player.id,
+                    card: card,
+                })
+            })
+        })
     }
 
     public isGameOver(): boolean {
@@ -88,11 +105,25 @@ export class GameEngine {
         )
     }
 
-    public async playNextRound() {
-        const turnPlayerId = (this.lastTurnPlayerId + 1) % this._players.length
+    private startNextPlayerTurn(): Player {
+        this.lastPlayerToPlayIndex
+        const turnPlayerId = (this.lastPlayerToPlayIndex + 1) % this._players.length
         const currentPlayer = this._players[turnPlayerId]
+        console.log(`\n\n================= Player ${currentPlayer.id} turn =================`)
+        emitPlayerTurnChanged({
+            playerId: currentPlayer.id,
+        })
+        return currentPlayer
+    }
 
+    public async playNextRound() {
+        const currentPlayer = this.startNextPlayerTurn()
+
+        emitMakeMoveCommand({
+            playerId: currentPlayer.id,
+        })
         const move = await currentPlayer.makeMove({ board: this._board, scores: this.getScores() })
+        emitPlayerMadeMoveEvent(move)
         const moveScores = this._board.makeMove(move)
 
         console.log(`\tPlayer '${move.playerId}' putting card '${move.direction}' on vertix ${move.vertixId}`)
@@ -115,8 +146,15 @@ export class GameEngine {
         console.log(`\t\tTotal: ${totalScore}`)
         currentPlayer.addScore(totalScore)
 
-        currentPlayer.drawCard(this._notPlayedCards.pop()!)
-        this.lastTurnPlayerId = turnPlayerId
+        const playersNewCard = this._notPlayedCards.pop()
+        if (playersNewCard) {
+            currentPlayer.drawCard(playersNewCard)
+            emitCardAddedToPlayer({
+                playerId: currentPlayer.id,
+                card: playersNewCard,
+            })
+        }
+
         this.printBoard()
     }
 

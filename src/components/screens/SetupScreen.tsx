@@ -1,10 +1,9 @@
 import classnames from 'classnames';
 import { ReactNode } from 'react';
-import { AiAlgorithmType } from '../ai/algorithms/ai-algorithm-type';
-import { SerializabledBoard } from '../engine/board/serializable-board';
-import { GameConfiguration } from '../engine/game-configuration/game-configuration';
-import { PlayerType } from '../engine/game-configuration/player-type';
-import './GameContainer.scss';
+import { AiAlgorithmType } from '../../ai/algorithms/ai-algorithm-type';
+import { SerializabledBoard } from '../../engine/board/serializable-board';
+import { GameConfiguration } from '../../engine/game-configuration/game-configuration';
+import { PlayerType } from '../../engine/game-configuration/player-type';
 
 
 
@@ -68,14 +67,17 @@ const gameConfig: GameConfiguration = {
         //     aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
         // },
         {
+            id: 'ai-player',
             type: PlayerType.ARTIFICIAL_INTELLIGENCE,
             iterations: 50000,
             aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
         },
         {
+            id: 'human-player',
             type: PlayerType.HUMAN
         },
     ],
+    visibleHandPlayerId: 'human-player',
     cardsPerDirection: 3,
     cardsPerPlayer: 7,
     board: serializabledBoard,

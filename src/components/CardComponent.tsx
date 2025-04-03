@@ -45,10 +45,10 @@ export const CardComponent = (props: CardComponentProps): ReactNode => {
     style.borderColor = ownerPlayerColor
 
     return <div className='card-box' >
-        <div className='card-corner' style={{ top: 0, left: 0 }} />
-        <div className='card-corner' style={{ top: 0, right: 0 }} />
-        <div className='card-corner' style={{ bottom: 0, left: 0 }} />
-        <div className='card-corner' style={{ bottom: 0, right: 0 }} />
+        <div className='card-corner' style={{ top: 0, left: 0, backgroundColor: ownerPlayerColor }} />
+        <div className='card-corner' style={{ top: 0, right: 0, backgroundColor: ownerPlayerColor }} />
+        <div className='card-corner' style={{ bottom: 0, left: 0, backgroundColor: ownerPlayerColor }} />
+        <div className='card-corner' style={{ bottom: 0, right: 0, backgroundColor: ownerPlayerColor }} />
         <div className='needle-image' data-needle-direction={Directions[props.card.direction].toString().toLowerCase()} style={{
             backgroundImage: `url(${needleImage})`,
             transform: `translate(-50%, -50%) rotate(${directionToAngle(props.card.direction)}deg) `

@@ -1,25 +1,32 @@
 import classnames from 'classnames';
 import { ReactNode } from 'react';
-import { Board } from '../engine/board/board';
-import { Vertix } from '../engine/graph/vertix';
-import { VertixComponent } from './graph/VertixComponent';
-import { LinkComponent } from './graph/LinkComponent';
+import { SerializabledBoard, SerializableVertix } from '../engine/board/serializable-board';
 import { Link } from '../engine/graph/link';
-import "./BoardComponent.scss"
+import "./BoardComponent.scss";
+import { LinkComponent, LinkComponentProps } from './graph/LinkComponent';
+import { VertixComponent } from './graph/VertixComponent';
 
 type BoardComponentProps = {
-    board: Board;
+    board: SerializabledBoard;
 };
 
 
 //https://stackoverflow.com/a/28985475
 export const BoardComponent = (props: BoardComponentProps): ReactNode => {
     const getLinks = () => {
-        const links: { [linkId: string]: Link } = {}
-        props.board.getVertices()
-            .forEach(vertix => vertix.getLinkedVertices()
-                .forEach(linkedVertix => links[linkedVertix.link.id] ??= linkedVertix.link))
-        return Object.values(links)
+        const verticesMap = props.board.vertices.reduce((acc, vertix) => {
+            acc[vertix.id] = vertix;
+            return acc;
+        }, {} as { [key: string]: SerializableVertix });
+
+        const links: { [linkId: string]: LinkComponentProps } = {}
+        props.board.vertices
+            .forEach(vertix => vertix.linkedVertices
+                .forEach(linkedVertix => {
+                    const linkId = `${vertix.id}-${linkedVertix}`;
+                    return links[linkId] ??= { first: vertix, second: verticesMap[linkedVertix] };
+                }))
+        return Object.values(links);
     }
 
     const classes = classnames({
@@ -31,8 +38,9 @@ export const BoardComponent = (props: BoardComponentProps): ReactNode => {
         <div className={classes}>
             <div className='board-square'>
                 <div className='board-content'>
-                    {getLinks().map((link: Link) => <LinkComponent key={link.id} link={link} />)}
-                    {props.board.getVertices().map((vertix: Vertix) => {
+                    {getLinks()
+                        .map((link: LinkComponentProps, index: number) => <LinkComponent key={index} first={link.first} second={link.second} />)}
+                    {props.board.vertices.map((vertix: SerializableVertix) => {
                         return <VertixComponent key={vertix.id} vertix={vertix}></VertixComponent>
                     })}
                 </div>

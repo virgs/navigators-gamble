@@ -1,21 +1,23 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
+import { SerializableVertix } from '../../engine/board/serializable-board';
 import { Card } from '../../engine/card';
-import { Vertix } from '../../engine/graph/vertix';
 import { CardComponent } from '../CardComponent';
 import './VertixComponent.scss';
 
 type VertixProps = {
-    vertix: Vertix;
+    vertix: SerializableVertix;
 };
 
 export const VertixComponent = (props: VertixProps): ReactNode => {
+    const [hasCard, setHasCard] = useState<boolean>(false);
+
     const classes = ['vertix'];
     const style: React.CSSProperties = {
         top: `${props.vertix.position.y * 100}%`,
         left: `${props.vertix.position.x * 100}%`,
     };
     let cardComponent = <>X</>
-    if (props.vertix.hasCardOn()) {
+    if (hasCard) {
         const card = new Card(props.vertix.id, props.vertix.direction!);
         card.reveal()
         card.ownerId = '0'
@@ -30,3 +32,4 @@ export const VertixComponent = (props: VertixProps): ReactNode => {
         </div>
     )
 }
+
