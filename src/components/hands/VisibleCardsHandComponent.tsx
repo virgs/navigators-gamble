@@ -1,10 +1,11 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, use, useState } from 'react';
 import { GamePlayerCommonAttributes } from '../../engine/game-configuration/game-configuration';
 import { CardComponent } from '../CardComponent';
 import { ScoreComponent } from '../ScoreComponent';
 import './VisibleCardsHandComponent.scss';
 import { Card } from '../../engine/card';
 import { useCardAddedToPlayerListener } from '../../events/events';
+import { motion, Reorder, useDragControls } from 'framer-motion';
 
 
 type VisibleCardsHandComponentProps = {
@@ -22,10 +23,19 @@ export const VisibleCardsHandComponent = (props: VisibleCardsHandComponentProps)
 
     return <div className='px-2'>
         <ScoreComponent player={props.player} ></ScoreComponent>
-        <div className='visible-cards-hand'>
+        <Reorder.Group className='d-flex p-0 m-0 align-items-start' values={cards} onReorder={setCards} axis='x'>
             {cards.map(card => {
-                return <CardComponent key={card.id} card={card}></CardComponent>
-            })}
-        </div>
+                return <Reorder.Item key={card.id} value={card}
+                    className='p-1 w-100 d-flex justify-content-center'
+                    dragListener={true}
+                    axis='x'
+                    // drag // allows to move in both directions
+                    dragElastic={0.2}
+                    dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}>
+                    <CardComponent card={card}></CardComponent>
+                </Reorder.Item>
+            }
+            )}
+        </Reorder.Group>
     </div>
 };

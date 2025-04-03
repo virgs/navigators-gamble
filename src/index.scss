@@ -6,7 +6,7 @@
     color-scheme: light dark;
 
     --game-container-size: 576px;
-    --card-size: clamp(50px, 14%, 90px);
+    --card-size: clamp(50px, 100%, 90px);
     --vertix-size: calc(var(--card-size) * 0.75);
     --screen-transitions: 1s;
 

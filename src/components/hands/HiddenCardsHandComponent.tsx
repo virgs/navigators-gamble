@@ -5,6 +5,7 @@ import { useCardAddedToPlayerListener } from '../../events/events';
 import { CardComponent } from '../CardComponent';
 import { ScoreComponent } from '../ScoreComponent';
 import './HiddenCardsHandComponent.scss';
+import { Reorder } from 'framer-motion';
 
 type HiddenCardsHandComponentProps = {
     player: GamePlayerCommonAttributes
@@ -20,7 +21,7 @@ export const HiddenCardsHandComponent = (props: HiddenCardsHandComponentProps): 
         }
     })
 
-    return <div className='px-2'>
+    const old = <div className='px-2 h-100'>
         <ScoreComponent player={props.player} ></ScoreComponent>
         <div className='hidden-cards-hand'>
             {cards.map((card, index) => {
@@ -29,6 +30,29 @@ export const HiddenCardsHandComponent = (props: HiddenCardsHandComponentProps): 
                 </div>
             })}
         </div>
+    </div>
+    return <div className='px-2 h-100'>
+        <ScoreComponent player={props.player} ></ScoreComponent>
+        <Reorder.Group className='d-flex p-0 m-0 align-items-start' values={cards} onReorder={setCards} axis='x'
+            style={{ position: 'relative' }}>
+            {cards.map((card, index) => {
+                return <Reorder.Item key={card.id} value={card}
+                    className='d-flex justify-content-start'
+                    style={{ width: '15%' }}
+                    dragListener={false}
+                    axis=''
+                    // drag // allows to move in both directions
+                    dragElastic={0.2}
+                    dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}>
+                    <div key={card.id} className='hidden-cards-hand-card'
+                    // style={{ left: (index * spacingBetweenCards) + 'px' }}
+                    >
+                        <CardComponent card={card}></CardComponent>
+                    </div>
+                </Reorder.Item>
+            }
+            )}
+        </Reorder.Group>
     </div>
 };
 
