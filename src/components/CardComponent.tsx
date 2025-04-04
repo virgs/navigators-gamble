@@ -1,21 +1,22 @@
 import { ReactNode } from 'react';
-import { Card } from '../engine/card';
-import { Directions, directionToAngle, getAbbreviation } from '../engine/directions';
+import cardCoverImage from '../assets/card-cover-black.png';
 import needleImage from '../assets/needle.png';
 import revealedCardBackgroundImage from '../assets/transparent-compass.webp';
-import cardCoverImage from '../assets/card-cover-black.png'
+import { Card } from '../engine/card';
+import { Directions, directionToAngle, getAbbreviation } from '../engine/directions';
 import './CardComponent.scss';
 
 // https://remove-bg.io/upload
 
 type CardComponentProps = {
-    card: Card;
+    card: Card
+    selected: boolean
 };
 
 export const CardComponent = (props: CardComponentProps): ReactNode => {
 
     if (props.card.covered) {
-        return <div className='card-box' >
+        return <div className='card-box show' >
             <div className='card-content' style={{ backgroundColor: 'var(--compass-highlight-blue)' }} />
             <div className='background-image' style={{
                 filter: 'opacity(1)',
@@ -23,6 +24,7 @@ export const CardComponent = (props: CardComponentProps): ReactNode => {
             }}></div>
         </div>
     }
+
 
     const style: React.CSSProperties = {
         alignItems: 'center',
@@ -44,7 +46,7 @@ export const CardComponent = (props: CardComponentProps): ReactNode => {
     const ownerPlayerColor = 'white'
     style.borderColor = ownerPlayerColor
 
-    return <div className='card-box' >
+    return <div className='card-box show' >
         <div className='card-corner' style={{ top: 0, left: 0, backgroundColor: ownerPlayerColor }} />
         <div className='card-corner' style={{ top: 0, right: 0, backgroundColor: ownerPlayerColor }} />
         <div className='card-corner' style={{ bottom: 0, left: 0, backgroundColor: ownerPlayerColor }} />
@@ -54,7 +56,7 @@ export const CardComponent = (props: CardComponentProps): ReactNode => {
             transform: `translate(-50%, -50%) rotate(${directionToAngle(props.card.direction)}deg) `
         }}></div>
         <div className='background-image' style={{ backgroundImage: `url(${revealedCardBackgroundImage})` }}></div>
-        <div className='card-content' onPointerDown={() => console.log(props.card.id)} style={style}>
+        <div className='card-content' style={style}>
             <span className='abbreviation' style={{ color: ownerPlayerColor }}>{getAbbreviation(props.card.direction)}</span>
         </div>
     </div>

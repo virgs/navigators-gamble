@@ -3,6 +3,7 @@ import { SerializableVertix } from '../../engine/board/serializable-board';
 import { Card } from '../../engine/card';
 import { CardComponent } from '../CardComponent';
 import './VertixComponent.scss';
+import { useVisibleCardSelectedEventListener } from '../../events/events';
 
 type VertixProps = {
     vertix: SerializableVertix;
@@ -10,6 +11,10 @@ type VertixProps = {
 
 export const VertixComponent = (props: VertixProps): ReactNode => {
     const [hasCard, setHasCard] = useState<boolean>(false);
+
+    useVisibleCardSelectedEventListener((event) => {
+        console.log('event', event);
+    });
 
     const classes = ['vertix'];
     const style: React.CSSProperties = {
@@ -21,7 +26,7 @@ export const VertixComponent = (props: VertixProps): ReactNode => {
         const card = new Card(props.vertix.id, props.vertix.direction!);
         card.reveal()
         card.ownerId = '0'
-        cardComponent = <div style={{ position: 'absolute' }}><CardComponent card={card}></CardComponent></div>
+        cardComponent = <div style={{ position: 'absolute' }}><CardComponent selected={false} card={card}></CardComponent></div>
     } else {
         classes.push('empty')
     }

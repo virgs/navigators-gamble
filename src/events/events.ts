@@ -12,6 +12,7 @@ export type CardAddedToPlayerEvent = {
 }
 
 export type MakeMoveCommand = {
+    id: string
     playerId: string
 }
 
@@ -20,13 +21,22 @@ export type ScoreChangedEvent = {
     score: number
 }
 
+export type VisibleCardSelectedEvent = {
+    card: Card
+}
+
 export const { usePlayerTurnChangedListener, emitPlayerTurnChanged } =
     createEvent('player-turn-changed')<PlayerTurnChangeEvent>()
 
 export const { useCardAddedToPlayerListener, emitCardAddedToPlayer } =
     createEvent('card-added-to-player')<CardAddedToPlayerEvent>()
-export const { useMakeMoveCommandListener, emitMakeMoveCommand } = createEvent('make-move-command')<MakeMoveCommand>()
+export const { useVisibleHandMakeMoveCommandListener, emitVisibleHandMakeMoveCommand } = createEvent(
+    'visible-hand-make-move-command'
+)<MakeMoveCommand>()
 
 export const { usePlayerMadeMoveEventListener, emitPlayerMadeMoveEvent } = createEvent('player-made-move-event')<Move>()
 export const { useScoreChangedEventListener, emitScoreChangedEvent } =
     createEvent('score-changed-event')<ScoreChangedEvent>()
+
+export const { useVisibleCardSelectedEventListener, emitVisibleCardSelectedEvent } =
+    createEvent('visible-card-selected-event')<VisibleCardSelectedEvent>()

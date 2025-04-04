@@ -67,14 +67,14 @@ const gameConfig: GameConfiguration = {
         //     aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
         // },
         {
+            id: 'human-player',
+            type: PlayerType.HUMAN
+        },
+        {
             id: 'ai-player',
             type: PlayerType.ARTIFICIAL_INTELLIGENCE,
             iterations: 50000,
             aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
-        },
-        {
-            id: 'human-player',
-            type: PlayerType.HUMAN
         },
     ],
     visibleHandPlayerId: 'human-player',

@@ -4,8 +4,9 @@ import { CardComponent } from '../CardComponent';
 import { ScoreComponent } from '../ScoreComponent';
 import './VisibleCardsHandComponent.scss';
 import { Card } from '../../engine/card';
-import { useCardAddedToPlayerListener } from '../../events/events';
+import { emitPlayerMadeMoveEvent, emitVisibleCardSelectedEvent, useCardAddedToPlayerListener, usePlayerTurnChangedListener } from '../../events/events';
 import { motion, Reorder, useDragControls } from 'framer-motion';
+import { emit } from 'process';
 
 
 type VisibleCardsHandComponentProps = {
@@ -14,12 +15,31 @@ type VisibleCardsHandComponentProps = {
 
 export const VisibleCardsHandComponent = (props: VisibleCardsHandComponentProps): ReactNode => {
     const [cards, setCards] = useState<Card[]>([]);
+    const [selectedCardId, setSelectedCardId] = useState<string>('');
+    const [playerTurn, setPlayerTurn] = useState<boolean>(false);
+
 
     useCardAddedToPlayerListener((event) => {
         if (event.playerId === props.player.id) {
             setCards((prevCards) => [...prevCards, event.card]);
         }
     })
+
+    usePlayerTurnChangedListener((event => {
+        if (event.playerId === props.player.id) {
+            setPlayerTurn(true)
+            setSelectedCardId('')
+        } else {
+            setPlayerTurn(false)
+        }
+    }))
+
+    const onCardSelected = (card: Card) => {
+        if (playerTurn) {
+            setSelectedCardId(card.id);
+            emitVisibleCardSelectedEvent({ card: card });
+        }
+    }
 
     return <div className='px-2'>
         <ScoreComponent player={props.player} ></ScoreComponent>
@@ -29,10 +49,11 @@ export const VisibleCardsHandComponent = (props: VisibleCardsHandComponentProps)
                     className='p-1 w-100 d-flex justify-content-center'
                     dragListener={true}
                     axis='x'
+                    onPointerDown={() => onCardSelected(card)}
                     // drag // allows to move in both directions
                     dragElastic={0.2}
                     dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}>
-                    <CardComponent card={card}></CardComponent>
+                    <CardComponent selected={selectedCardId === card.id} card={card}></CardComponent>
                 </Reorder.Item>
             }
             )}

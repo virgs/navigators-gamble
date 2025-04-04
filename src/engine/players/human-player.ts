@@ -1,22 +1,36 @@
+import { emitVisibleHandMakeMoveCommand, usePlayerMadeMoveEventListener } from '../../events/events'
+import { generateUID } from '../../math/generate-id'
 import { Card } from '../card'
 import { Directions } from '../directions'
 import { PlayerType } from '../game-configuration/player-type'
 import { Move } from '../score-calculator/move'
-import { ChooseMoveInput, Player } from './player'
+import { Player } from './player'
 
 export class HumanPlayer implements Player {
     private readonly _id: string
     private readonly _cards: Card[]
-    private readonly _turnOrder: number
+    private readonly _movePromises: Record<string, (value: Move | PromiseLike<Move>) => void>
     private _score: number = 0
 
-    public constructor(id: string, turnOrder: number, cards: Card[]) {
+    public constructor(id: string, cards: Card[]) {
         this._id = id
         this._cards = cards
         this._score = 0
-        this._turnOrder = turnOrder
         this._cards.forEach((card) => card.reveal())
         this._cards.sort((a, b) => a.direction - b.direction)
+        this._movePromises = {}
+
+        usePlayerMadeMoveEventListener((event) => {
+            if (event.playerId === this._id) {
+                const cardPosition = this._cards.findIndex((card) => card.id === event.cardId)
+                if (cardPosition === -1) {
+                    throw new Error(`Card with id ${event.cardId} not found in player ${this._id} cards`)
+                }
+                this._cards.splice(cardPosition, 1)
+                this._movePromises[event.moveId!](event)
+                delete this._movePromises[event.moveId!]
+            }
+        })
     }
 
     public get type() {
@@ -40,28 +54,15 @@ export class HumanPlayer implements Player {
 
     public finish(): void {}
 
-    public async makeMove(chooseMoveInput: ChooseMoveInput): Promise<Move> {
-        console.log(`PLAYER ${this.id} turn`)
-        console.log(`player cards: ${this._cards.map((card, index) => `(${index}) ${card.direction}`).join(', ')}`)
-        console.log(
-            `available vertices: ${chooseMoveInput.board
-                .getEmptyVertices()
-                .map((vertix) => vertix.id)
-                .join(', ')}`
-        )
-
-        const cardPosition = prompt('Card index ')!
-        const vertixId = prompt('VertixId ')!
-
-        const chosenCard = this._cards[parseInt(cardPosition)]
-
-        this._cards.splice(parseInt(cardPosition), 1)
-
-        return {
-            vertixId: vertixId,
-            direction: chosenCard.direction,
+    public async makeMove(): Promise<Move> {
+        const id = generateUID()
+        emitVisibleHandMakeMoveCommand({
             playerId: this.id,
-        }
+            id: id,
+        })
+        return new Promise<Move>((resolve) => {
+            this._movePromises[id] = resolve
+        })
     }
 
     public drawCard(card: Card): void {

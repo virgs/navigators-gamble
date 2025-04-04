@@ -40,12 +40,9 @@ export const HiddenCardsHandComponent = (props: HiddenCardsHandComponentProps): 
                     className='d-flex justify-content-start'
                     style={{ width: '15%' }}
                     dragListener={false}
-                    axis=''
-                    // drag // allows to move in both directions
-                    dragElastic={0.2}
-                    dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}>
+                    axis='' // do not allow drags
+                >
                     <div key={card.id} className='hidden-cards-hand-card'
-                    // style={{ left: (index * spacingBetweenCards) + 'px' }}
                     >
                         <CardComponent card={card}></CardComponent>
                     </div>

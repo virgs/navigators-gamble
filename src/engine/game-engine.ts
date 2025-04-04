@@ -17,13 +17,13 @@ import { Player } from './players/player'
 import { ScoreType } from './score-calculator/score-type'
 
 export class GameEngine {
-    private readonly _notPlayedCards: Card[]
+    private readonly _notPlayedYetCards: Card[]
     private readonly _players: Player[]
     private readonly _board: Board
     private lastPlayerToPlayIndex: number
 
     public constructor(gameConfiguration: GameConfiguration) {
-        this._notPlayedCards = arrayShuffler(
+        this._notPlayedYetCards = arrayShuffler(
             directions
                 .map((direction) => Array(gameConfiguration.cardsPerDirection).fill(direction))
                 .flat()
@@ -34,10 +34,10 @@ export class GameEngine {
 
         if (
             this._board.getVertices().length >=
-            this._notPlayedCards.length - gameConfiguration.players.length * gameConfiguration.cardsPerPlayer
+            this._notPlayedYetCards.length - gameConfiguration.players.length * gameConfiguration.cardsPerPlayer
         ) {
             throw Error(
-                `Board has too many vertix to game configuration '${this._board.getVertices().length}'. Max allowed '${this._notPlayedCards.length - gameConfiguration.players.length * gameConfiguration.cardsPerPlayer}'`
+                `Board has too many vertix to game configuration '${this._board.getVertices().length}'. Max allowed '${this._notPlayedYetCards.length - gameConfiguration.players.length * gameConfiguration.cardsPerPlayer}'`
             )
         }
 
@@ -48,9 +48,14 @@ export class GameEngine {
 
     private createPlayers(gameConfiguration: GameConfiguration): Player[] {
         return gameConfiguration.players.map((playerConfiguration, index) => {
-            const cards = Array.from(Array(gameConfiguration.cardsPerPlayer)).map(() => this._notPlayedCards.pop()!)
+            const cards = Array.from(Array(gameConfiguration.cardsPerPlayer))
+                .map(() => this._notPlayedYetCards.pop()!)
+                .map((card) => {
+                    card.ownerId = playerConfiguration.id
+                    return card
+                })
             if (playerConfiguration.type === PlayerType.HUMAN) {
-                return new HumanPlayer(playerConfiguration.id, index, cards)
+                return new HumanPlayer(playerConfiguration.id, cards)
             } else {
                 const aiPlayerConfig: AiPlayerConfig = {
                     playerId: playerConfiguration.id,
@@ -73,6 +78,7 @@ export class GameEngine {
         this._players.forEach((player) => {
             console.log(`Player ${player.id} (${player.type})`)
             console.log(`\tCards: ${player.cards.map((card) => card.direction).join(', ')}`)
+            console.log(`\tCardsOwner: ${player.cards.map((card) => card.ownerId).join(', ')}`)
             player.cards.forEach((card) => {
                 emitCardAddedToPlayer({
                     playerId: player.id,
@@ -83,10 +89,15 @@ export class GameEngine {
     }
 
     public isGameOver(): boolean {
+        if (this._notPlayedYetCards.length <= 0) {
+            console.log('No more cards to play')
+            return true
+        }
+
         return this._board.getEmptyVertices().length <= 0
     }
 
-    public finishGame(): void {
+    public finish(): void {
         const playerVerticesMap = this._board.getPlayerVerticesMap()
         console.log(`Adding bonus points`)
         this._players.forEach((player) => {
@@ -116,12 +127,13 @@ export class GameEngine {
         return currentPlayer
     }
 
-    public async playNextRound() {
+    public async playNextRound(): Promise<void> {
+        if (this.isGameOver()) {
+            console.log('Game over')
+            return
+        }
         const currentPlayer = this.startNextPlayerTurn()
 
-        emitMakeMoveCommand({
-            playerId: currentPlayer.id,
-        })
         const move = await currentPlayer.makeMove({ board: this._board, scores: this.getScores() })
         emitPlayerMadeMoveEvent(move)
         const moveScores = this._board.makeMove(move)
@@ -146,7 +158,7 @@ export class GameEngine {
         console.log(`\t\tTotal: ${totalScore}`)
         currentPlayer.addScore(totalScore)
 
-        const playersNewCard = this._notPlayedCards.pop()
+        const playersNewCard = this._notPlayedYetCards.pop()
         if (playersNewCard) {
             currentPlayer.drawCard(playersNewCard)
             emitCardAddedToPlayer({

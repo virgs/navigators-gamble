@@ -15,16 +15,19 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
 
     useEffect(() => {
         gameEngine.start()
-        gameEngine.playNextRound()
-            .then(() => {
-                if (gameEngine.isGameOver()) {
-                    gameEngine.finishGame()
-                    setTimeout(() => onGameFinished())
-                }
-            })
-            .catch(e => {
-                console.error('Error', e);
-            })
+        setTimeout(() => {
+
+            gameEngine.playNextRound()
+                .then(() => {
+                    if (gameEngine.isGameOver()) {
+                        gameEngine.finish()
+                        setTimeout(() => onGameFinished())
+                    }
+                })
+                .catch(e => {
+                    console.error('Error', e);
+                })
+        }, 2000)
     }, [])
 
     const onGameFinished = () => {
