@@ -59,12 +59,7 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
                     <div className='w-100 d-flex d-md-none d-lg-flex' style={{ alignItems: 'center', justifyContent: 'left' }}>
                         {renderHiddenHandPlayers().map((aiHand, index) => <div key={`ai-hand-${index}`} style={{ width: '50%' }}>{aiHand}</div>)}
                     </div>
-                    <div className='w-100' style={{
-                        height: 'min(100svmin, 600px)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}>
+                    <div className='w-100 game-screen-board'>
                         <BoardComponent board={props.gameConfiguration.board} />
                     </div>
                     <div className='w-100 mb-2 d-md-none d-lg-block' style={{}}>

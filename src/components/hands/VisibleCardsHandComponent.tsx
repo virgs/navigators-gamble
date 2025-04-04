@@ -1,12 +1,11 @@
-import { ReactNode, use, useState } from 'react';
+import { Reorder } from 'framer-motion';
+import { ReactNode, useState } from 'react';
+import { Card } from '../../engine/card';
 import { GamePlayerCommonAttributes } from '../../engine/game-configuration/game-configuration';
+import { emitVisibleCardSelectedEvent, MakeMoveCommand, useCardAddedToPlayerListener, useVisibleHandMakeMoveCommandListener } from '../../events/events';
 import { CardComponent } from '../CardComponent';
 import { ScoreComponent } from '../ScoreComponent';
 import './VisibleCardsHandComponent.scss';
-import { Card } from '../../engine/card';
-import { emitPlayerMadeMoveEvent, emitVisibleCardSelectedEvent, useCardAddedToPlayerListener, usePlayerTurnChangedListener } from '../../events/events';
-import { motion, Reorder, useDragControls } from 'framer-motion';
-import { emit } from 'process';
 
 
 type VisibleCardsHandComponentProps = {
@@ -14,9 +13,10 @@ type VisibleCardsHandComponentProps = {
 };
 
 export const VisibleCardsHandComponent = (props: VisibleCardsHandComponentProps): ReactNode => {
+    const [makeMoveCommand, setMakeMoveCommand] = useState<MakeMoveCommand | undefined>(undefined);
     const [cards, setCards] = useState<Card[]>([]);
     const [selectedCardId, setSelectedCardId] = useState<string>('');
-    const [playerTurn, setPlayerTurn] = useState<boolean>(false);
+    // const [playerTurn, setPlayerTurn] = useState<boolean>(false);
 
 
     useCardAddedToPlayerListener((event) => {
@@ -25,30 +25,38 @@ export const VisibleCardsHandComponent = (props: VisibleCardsHandComponentProps)
         }
     })
 
-    usePlayerTurnChangedListener((event => {
+    useVisibleHandMakeMoveCommandListener((event => {
         if (event.playerId === props.player.id) {
-            setPlayerTurn(true)
+            setMakeMoveCommand(event);
+            // setPlayerTurn(true)
             setSelectedCardId('')
         } else {
-            setPlayerTurn(false)
+            setMakeMoveCommand(undefined);
+            // setPlayerTurn(false)
         }
     }))
 
     const onCardSelected = (card: Card) => {
-        if (playerTurn) {
+        if (makeMoveCommand) {
             setSelectedCardId(card.id);
-            emitVisibleCardSelectedEvent({ card: card });
+            emitVisibleCardSelectedEvent({
+                card: card,
+                id: makeMoveCommand.id,
+                playerId: props.player.id
+            });
         }
     }
 
     return <div className='px-2'>
         <ScoreComponent player={props.player} ></ScoreComponent>
-        <Reorder.Group className='d-flex p-0 m-0 align-items-start' values={cards} onReorder={setCards} axis='x'>
+        <Reorder.Group className='d-flex p-0 m-0 align-items-start row' values={cards} onReorder={setCards} axis='x'>
             {cards.map(card => {
                 return <Reorder.Item key={card.id} value={card}
-                    className='p-1 w-100 d-flex justify-content-center'
-                    dragListener={true}
-                    axis='x'
+                    style={{ padding: '2px' }}
+                    className='d-flex align-items-center justify-content-center col-2 col-md-4 col-lg'
+                    drag={false}
+                    // dragListener={true}
+                    // axis='x'
                     onPointerDown={() => onCardSelected(card)}
                     // drag // allows to move in both directions
                     dragElastic={0.2}

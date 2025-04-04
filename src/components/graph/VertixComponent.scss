@@ -5,6 +5,15 @@
     border-radius: 40%;
     transform: translate(-50%, -50%);
 
+    &.clickable {
+        cursor: pointer;
+        &:hover {
+            background-color: var(--compass-highlight-blue);
+            box-shadow: 0 0 10px var(--compass-highlight-blue);
+            transition: all 0.2s ease-in-out;
+        }
+    }
+
     &.empty {
         // border: var(--compass-highlight-red) 3px dashed;
         // background-color: var(--compass-secondary);

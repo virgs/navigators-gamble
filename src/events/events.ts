@@ -1,4 +1,5 @@
 import { createEvent } from 'react-event-hook'
+import { SerializableVertix } from '../engine/board/serializable-board'
 import { Card } from '../engine/card'
 import { Move } from '../engine/score-calculator/move'
 
@@ -11,18 +12,27 @@ export type CardAddedToPlayerEvent = {
     card: Card
 }
 
-export type MakeMoveCommand = {
-    id: string
-    playerId: string
-}
-
 export type ScoreChangedEvent = {
     playerId: string
     score: number
 }
 
+export type MakeMoveCommand = {
+    id: string
+    playerId: string
+}
+
 export type VisibleCardSelectedEvent = {
     card: Card
+    id: string
+    playerId: string
+}
+
+export type VisibleVertixSelectedEvent = {
+    moveId: string
+    playerId: string
+    card: Card
+    vertix: SerializableVertix
 }
 
 export const { usePlayerTurnChangedListener, emitPlayerTurnChanged } =
@@ -40,3 +50,6 @@ export const { useScoreChangedEventListener, emitScoreChangedEvent } =
 
 export const { useVisibleCardSelectedEventListener, emitVisibleCardSelectedEvent } =
     createEvent('visible-card-selected-event')<VisibleCardSelectedEvent>()
+export const { useVisibleVertixSelectedEventListener, emitVisibleVertixSelectedEvent } = createEvent(
+    'visible-vertix-selected-event'
+)<VisibleVertixSelectedEvent>()

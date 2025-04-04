@@ -1,3 +1,6 @@
-.game-screen {
-    transition: transform ease var(--screen-transitions);
+.game-screen-board {
+    height: min(100svmin, calc(var(--game-container-size) * 0.95));
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

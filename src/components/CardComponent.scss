@@ -6,49 +6,27 @@
     background-color: var(--compass-tertiary);
     border-radius: 12px;
     &.show {
-        animation: show_card 0.5s ease-in-out forwards;
+        animation: show_card var(--cards-animation-duration) ease-in-out forwards;
     }
     &.hide {
-        animation: hide_card 0.5s ease-in-out forwards;
-    }
-    &.rotate {
-        animation: rotate_card 0.5s ease-in-out forwards;
-    }
-    &.rotate-back {
-        animation: rotate_card_back 0.5s ease-in-out forwards;
+        animation: hide_card var(--cards-animation-duration) ease-in-out forwards;
     }
 }
 
 @keyframes show_card {
     0% {
-        transform: scale(0);
+        transform: scale(0) rotateZ(180deg);
     }
     100% {
-        transform: scale(1);
+        transform: scale(1) rotateZ(0deg);
     }
 }
 @keyframes hide_card {
     0% {
-        transform: scale(1);
+        transform: scale(1) rotateZ(0deg);
     }
     100% {
-        transform: scale(0);
-    }
-}
-@keyframes rotate_card {
-    0% {
-        transform: rotateY(0deg);
-    }
-    100% {
-        transform: rotateY(180deg);
-    }
-}
-@keyframes rotate_card_back {
-    0% {
-        transform: rotateY(180deg);
-    }
-    100% {
-        transform: rotateY(0deg);
+        transform: scale(0) rotateZ(180deg);
     }
 }
 @media (prefers-reduced-motion: reduce) {

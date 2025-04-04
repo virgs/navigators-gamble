@@ -27,7 +27,7 @@ export class GameEngine {
             directions
                 .map((direction) => Array(gameConfiguration.cardsPerDirection).fill(direction))
                 .flat()
-                .map((direction, index) => new Card(`id${index}`, direction))
+                .map((direction, index) => new Card(`card-${index}`, direction))
         )
 
         this._board = BoardSerializer.deserialize(gameConfiguration.board)

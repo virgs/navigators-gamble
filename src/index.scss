@@ -8,10 +8,8 @@
     --game-container-size: 576px;
     --card-size: clamp(50px, 100%, 90px);
     --vertix-size: calc(var(--card-size) * 0.75);
-    --screen-transitions: 1s;
 
     // palette
-
     //https://coolors.co/bb7228-d19852-fde6b2-29335c-9a031e-ffffff-000000
     /* CSS HEX */
     --copper: #bb7228ff;
@@ -29,8 +27,11 @@
     --compass-highlight-red: var(--carmine);
     --compass-white: var(--white);
     --compass-black: var(--black);
-}
 
+    // animation durations
+    --screen-transitions: 1s;
+    --cards-animation-duration: 1000ms;
+}
 body {
     margin: 0;
     display: flex;

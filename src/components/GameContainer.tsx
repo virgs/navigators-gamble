@@ -33,7 +33,9 @@ export const GameContainer = (): ReactNode => {
 
     const screen = () => {
         if (gameConfiguration && gameIsRunning) {
-            return <GameScreen gameConfiguration={gameConfiguration} onGameFinished={() => onGameFinished()}></GameScreen>
+            return <div className='w-100 h-100 d-flex justify-content-center align-items-center game-container-screen show'>
+                <GameScreen gameConfiguration={gameConfiguration} onGameFinished={() => onGameFinished()}></GameScreen>
+            </div>
         } else {
             return <SetupScreen onStartButton={(config) => onStartButton(config)}></SetupScreen>
         }
