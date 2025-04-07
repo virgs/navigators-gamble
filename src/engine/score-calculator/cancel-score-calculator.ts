@@ -19,8 +19,8 @@ export class CancelScoreCalculator implements ScoreCalculator {
 
         return linkedVerticesWithCard
             .filter((linkedVertice: LinkedVertix) => {
-                const linkedVertixDirection = parseInt(Directions[linkedVertice.vertix.direction!])
-                const moveDirection = parseInt(Directions[move.direction])
+                const linkedVertixDirection = linkedVertice.vertix.direction!
+                const moveDirection = move.direction
                 return Math.abs(linkedVertixDirection - moveDirection) === directions.length / 2
             })
             .map((linkedVertix: LinkedVertix) => ({

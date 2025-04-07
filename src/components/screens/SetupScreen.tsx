@@ -73,13 +73,14 @@ const gameConfig: GameConfiguration = {
         {
             id: 'ai-player',
             type: PlayerType.ARTIFICIAL_INTELLIGENCE,
+            minWaitTime: 2000,
             iterations: 50000,
             aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
         },
     ],
     visibleHandPlayerId: 'human-player',
     cardsPerDirection: 3,
-    cardsPerPlayer: 7,
+    cardsPerPlayer: 6,
     board: serializabledBoard,
 }
 

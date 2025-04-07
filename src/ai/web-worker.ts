@@ -12,19 +12,27 @@ const readyMessage: WebWorkerMessage = {
 }
 postMessage(readyMessage)
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
 let aiAlgorithm: AiAlgorithm
+let minWaitTime: number
 
 self.onmessage = async (event: MessageEvent<WebWorkerMessage>) => {
     try {
         switch (event.data.messageType) {
-            case MessageType.INITIALIZATION:
+            case MessageType.CONFIGURATION:
                 const initializeMessage = event.data as unknown as InitializeAiMessage
-                if (initializeMessage.aiConfiguration.aiAlgorithm === AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH) {
+                if (initializeMessage.configuration.aiAlgorithm === AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH) {
                     aiAlgorithm = new PureMonteCarloTreeSearch(initializeMessage)
+                    minWaitTime = initializeMessage.configuration.minWaitTime
                 }
                 break
             case MessageType.MOVE_REQUEST:
-                self.postMessage(await aiAlgorithm!.makeMove(event.data as unknown as MoveRequest))
+                const [, response] = await Promise.all([
+                    sleep(minWaitTime),
+                    aiAlgorithm!.makeMove(event.data as unknown as MoveRequest),
+                ])
+                self.postMessage(response)
                 break
         }
     } catch (exception) {

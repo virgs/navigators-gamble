@@ -1,8 +1,4 @@
-import {
-    emitVisibleHandMakeMoveCommand,
-    usePlayerMadeMoveEventListener,
-    useVisibleVertixSelectedEventListener,
-} from '../../events/events'
+import { emitVisibleHandMakeMoveCommand, useVisibleVertixSelectedEventListener } from '../../events/events'
 import { generateUID } from '../../math/generate-id'
 import { Card } from '../card'
 import { Directions } from '../directions'
@@ -31,14 +27,14 @@ export class HumanPlayer implements Player {
                     throw new Error(`Card with id ${event.card.id} not found in player ${this._id} cards`)
                 }
                 this._cards.splice(cardPosition, 1)
-                this._movePromises[event.moveId!]({
+                this._movePromises[event.moveId]({
                     vertixId: event.vertix.id,
                     direction: event.card.direction,
                     playerId: event.playerId,
                     cardId: event.card.id,
                     moveId: event.moveId,
                 })
-                delete this._movePromises[event.moveId!]
+                delete this._movePromises[event.moveId]
             }
         })
     }
@@ -68,7 +64,7 @@ export class HumanPlayer implements Player {
         const id = generateUID()
         emitVisibleHandMakeMoveCommand({
             playerId: this.id,
-            id: id,
+            commandId: id,
         })
         return new Promise<Move>((resolve) => {
             this._movePromises[id] = resolve

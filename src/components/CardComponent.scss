@@ -11,6 +11,11 @@
     &.hide {
         animation: hide_card var(--cards-animation-duration) ease-in-out forwards;
     }
+    &.selected {
+        background-color: var(--compass-highlight-blue);
+        box-shadow: 0 0 10px var(--compass-highlight-blue);
+        transition: all 0.2s ease-in-out;
+    }
 }
 
 @keyframes show_card {

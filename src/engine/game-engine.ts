@@ -1,17 +1,12 @@
-import {
-    emitCardAddedToPlayer,
-    emitMakeMoveCommand,
-    emitPlayerMadeMoveEvent,
-    emitPlayerTurnChanged,
-} from '../events/events'
+import { emitCardAddedToPlayer, emitNewGame, emitPlayerMadeMoveEvent, emitPlayerTurnChanged } from '../events/events'
 import { arrayShuffler } from '../math/array-shufller'
 import { Board } from './board/board'
 import { BoardSerializer } from './board/board-serializer'
 import { Card } from './card'
-import { Directions, directions } from './directions'
+import { directions } from './directions'
 import { GameConfiguration } from './game-configuration/game-configuration'
 import { PlayerType } from './game-configuration/player-type'
-import { AiPlayer, AiPlayerConfig } from './players/ai-player'
+import { AiPlayer, AiPlayerInitialization } from './players/ai-player'
 import { HumanPlayer } from './players/human-player'
 import { Player } from './players/player'
 import { ScoreType } from './score-calculator/score-type'
@@ -20,7 +15,7 @@ export class GameEngine {
     private readonly _notPlayedYetCards: Card[]
     private readonly _players: Player[]
     private readonly _board: Board
-    private lastPlayerToPlayIndex: number
+    private currentlyPlayingPlayerIndex: number
 
     public constructor(gameConfiguration: GameConfiguration) {
         this._notPlayedYetCards = arrayShuffler(
@@ -43,27 +38,26 @@ export class GameEngine {
 
         this._players = this.createPlayers(gameConfiguration)
 
-        this.lastPlayerToPlayIndex = -1
+        this.currentlyPlayingPlayerIndex = -1
     }
 
     private createPlayers(gameConfiguration: GameConfiguration): Player[] {
         return gameConfiguration.players.map((playerConfiguration, index) => {
-            const cards = Array.from(Array(gameConfiguration.cardsPerPlayer))
-                .map(() => this._notPlayedYetCards.pop()!)
-                .map((card) => {
-                    card.ownerId = playerConfiguration.id
-                    return card
-                })
+            const cards = Array.from(Array(gameConfiguration.cardsPerPlayer)).map(() => this._notPlayedYetCards.pop()!)
+            // .map((card) => {
+            //     card.ownerId = playerConfiguration.id
+            //     return card
+            // })
             if (playerConfiguration.type === PlayerType.HUMAN) {
                 return new HumanPlayer(playerConfiguration.id, cards)
             } else {
-                const aiPlayerConfig: AiPlayerConfig = {
+                const aiPlayerConfig: AiPlayerInitialization = {
                     playerId: playerConfiguration.id,
                     playersIds: gameConfiguration.players.map((player) => player.id),
                     cards: cards,
                     turnOrder: index,
                     gameConfig: gameConfiguration,
-                    aiConfiguration: playerConfiguration,
+                    configuration: playerConfiguration,
                 }
                 return new AiPlayer(aiPlayerConfig)
             }
@@ -75,10 +69,9 @@ export class GameEngine {
     }
 
     public start(): void {
+        emitNewGame()
+
         this._players.forEach((player) => {
-            console.log(`Player ${player.id} (${player.type})`)
-            console.log(`\tCards: ${player.cards.map((card) => card.direction).join(', ')}`)
-            console.log(`\tCardsOwner: ${player.cards.map((card) => card.ownerId).join(', ')}`)
             player.cards.forEach((card) => {
                 emitCardAddedToPlayer({
                     playerId: player.id,
@@ -104,6 +97,7 @@ export class GameEngine {
             player.finish()
             player.addScore(playerVerticesMap[player.id]?.length ?? 0)
         })
+        console.log(`Final score: ` + JSON.stringify(this.getScores()))
     }
 
     public getScores(): Record<string, number> {
@@ -116,14 +110,15 @@ export class GameEngine {
         )
     }
 
-    private startNextPlayerTurn(): Player {
-        this.lastPlayerToPlayIndex
-        const turnPlayerId = (this.lastPlayerToPlayIndex + 1) % this._players.length
-        const currentPlayer = this._players[turnPlayerId]
-        console.log(`\n\n================= Player ${currentPlayer.id} turn =================`)
+    private startNextTurn(): Player {
+        this.currentlyPlayingPlayerIndex = (this.currentlyPlayingPlayerIndex + 1) % this._players.length
+        const currentPlayer = this._players[this.currentlyPlayingPlayerIndex]
         emitPlayerTurnChanged({
+            turnOrder: this.currentlyPlayingPlayerIndex,
             playerId: currentPlayer.id,
         })
+        console.log(`\n\n========= Player ${currentPlayer.id} turn =========`)
+
         return currentPlayer
     }
 
@@ -132,13 +127,11 @@ export class GameEngine {
             console.log('Game over')
             return
         }
-        const currentPlayer = this.startNextPlayerTurn()
+        const currentPlayer = this.startNextTurn()
 
         const move = await currentPlayer.makeMove({ board: this._board, scores: this.getScores() })
-        emitPlayerMadeMoveEvent(move)
         const moveScores = this._board.makeMove(move)
-
-        console.log(`\tPlayer '${move.playerId}' putting card '${move.direction}' on vertix ${move.vertixId}`)
+        emitPlayerMadeMoveEvent(move)
 
         const totalScore = moveScores.reduce((acc, moveScore) => {
             console.log(`\t======== ${ScoreType[moveScore.scoreType]} ========`)
@@ -150,12 +143,12 @@ export class GameEngine {
                 //     console.log(`\t\tChanging link '${link?.id}' to ${move.playerId}`)
                 // }
             })
-            console.log(
-                `\t\t\tCombination vertices [${moveScore.vertices.length}]: ${moveScore.vertices.map((vertix) => `${vertix.id} (${vertix.direction!})`).join(', ')}`
-            )
+            // console.log(
+            //     `\t\t\tCombination vertices [${moveScore.vertices.length}]: ${moveScore.vertices.map((vertix) => `${vertix.id} (${Directions[vertix.direction!]})`).join(', ')}`
+            // )
             return acc + moveScore.points
         }, 0)
-        console.log(`\t\tTotal: ${totalScore}`)
+        console.log(`\t\tRound total: ${totalScore}`)
         currentPlayer.addScore(totalScore)
 
         const playersNewCard = this._notPlayedYetCards.pop()
@@ -165,20 +158,6 @@ export class GameEngine {
                 playerId: currentPlayer.id,
                 card: playersNewCard,
             })
-        }
-
-        this.printBoard()
-    }
-
-    private printBoard() {
-        const vertices = this._board.getVertices()
-        for (let i = 0; i < 9; i += 3) {
-            let text = ''
-            for (let j = 0; j < 3; ++j) {
-                const vertice = vertices[i + j]
-                text += `(${vertice.id}) ${vertice.direction ? Directions[vertice.direction] : '-'}\t\t\t\t`
-            }
-            console.log(text)
         }
         console.log(`Current score: ` + JSON.stringify(this.getScores()))
     }

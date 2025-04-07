@@ -1,5 +1,5 @@
 export enum MessageType {
-    INITIALIZATION,
+    CONFIGURATION,
     MOVE_REQUEST,
     MOVE_RESPONSE,
     READY,

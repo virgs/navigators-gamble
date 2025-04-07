@@ -14,13 +14,13 @@ import { ChooseMoveInput, Player } from './player'
 
 type PromiseResult = (value: Move | PromiseLike<Move>) => void
 
-export type AiPlayerConfig = {
+export type AiPlayerInitialization = {
     playerId: string
     turnOrder: number
     playersIds: string[]
     gameConfig: GameConfiguration
     cards: Card[]
-    aiConfiguration: GameAiPlayerConfiguration
+    configuration: GameAiPlayerConfiguration
 }
 
 export class AiPlayer implements Player {
@@ -32,9 +32,9 @@ export class AiPlayer implements Player {
     private readonly promisesMap: Record<string, PromiseResult>
     private readonly readyPromise: Promise<void>
 
-    public constructor(aiPlayerConfig: AiPlayerConfig) {
-        this._id = aiPlayerConfig.playerId
-        this._cards = aiPlayerConfig.cards
+    public constructor(init: AiPlayerInitialization) {
+        this._id = init.playerId
+        this._cards = init.cards
         this._score = 0
 
         this.worker = new Worker()
@@ -43,9 +43,9 @@ export class AiPlayer implements Player {
         this.readyPromise = new Promise<void>((resolve) => {
             this.worker.onmessage = () => {
                 const message: InitializeAiMessage = {
-                    messageType: MessageType.INITIALIZATION,
+                    messageType: MessageType.CONFIGURATION,
                     id: generateUID(),
-                    ...aiPlayerConfig,
+                    ...init,
                 }
                 this.worker.postMessage(message)
                 this.createWorkerHooks()

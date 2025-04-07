@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { GameConfiguration } from '../../engine/game-configuration/game-configuration';
 import { GameEngine } from '../../engine/game-engine';
+import { usePlayerMadeMoveEventListener } from '../../events/events';
 import { BoardComponent } from '../BoardComponent';
 import { HeaderComponent } from '../HeaderComponent';
 import { HiddenCardsHandComponent } from '../hands/HiddenCardsHandComponent';
@@ -8,27 +9,31 @@ import { VisibleCardsHandComponent } from '../hands/VisibleCardsHandComponent';
 import './GameScreen.scss';
 
 
-
 export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGameFinished: () => void }): ReactNode => {
     const gameEngine = new GameEngine(props.gameConfiguration)
     const [classes] = useState<string[]>(['game-screen', 'w-100', 'h-100', 'row', 'g-0'])
 
+    const iterate = () => {
+        gameEngine.playNextRound()
+            .then(() => {
+                if (gameEngine.isGameOver()) {
+                    gameEngine.finish()
+                    setTimeout(() => onGameFinished())
+                }
+            })
+            .catch(e => {
+                console.error('Error', e);
+            })
+    }
+
     useEffect(() => {
         gameEngine.start()
-        setTimeout(() => {
-
-            gameEngine.playNextRound()
-                .then(() => {
-                    if (gameEngine.isGameOver()) {
-                        gameEngine.finish()
-                        setTimeout(() => onGameFinished())
-                    }
-                })
-                .catch(e => {
-                    console.error('Error', e);
-                })
-        }, 2000)
+        setTimeout(() => iterate(), 2000)
     }, [])
+
+    usePlayerMadeMoveEventListener(() => {
+        iterate()
+    })
 
     const onGameFinished = () => {
         setTimeout(() => props.onGameFinished(), 1000)
@@ -52,7 +57,7 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
     return (
         <>
             <div className={classes.join(' ')}>
-                <div className='col-12 col-md-8 col-lg-12 d-flex h-100' style={{ flexWrap: 'wrap', alignContent: 'normal' }}>
+                <div className='col-12 col-md-8 col-lg-12 d-flex h-100' style={{ flexWrap: 'wrap', alignContent: 'normal', alignItems: 'center' }}>
                     <div onClick={() => onGameFinished()} className='w-100 d-md-none d-lg-block' >
                         <HeaderComponent></HeaderComponent>
                     </div>
@@ -65,7 +70,6 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
                     <div className='w-100 mb-2 d-md-none d-lg-block' style={{}}>
                         {renderVisibleHandPlayer()}
                     </div>
-
                 </div>
                 <div className='col-4 d-none d-md-flex d-lg-none h-100' style={{ flexWrap: 'wrap', alignContent: 'normal' }}>
                     <div className='w-100' onClick={() => onGameFinished()} >

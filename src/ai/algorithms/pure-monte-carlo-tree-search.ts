@@ -21,7 +21,7 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
 
     constructor(initMessage: InitializeAiMessage) {
         this.gameConfig = initMessage.gameConfig
-        this.iterations = initMessage.aiConfiguration.iterations
+        this.iterations = initMessage.configuration.iterations
         this.playerId = initMessage.playerId
         this.playersIds = initMessage.playersIds
         this.playerTurnOrder = initMessage.turnOrder

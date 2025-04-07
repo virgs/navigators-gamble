@@ -4,6 +4,7 @@ import { Card } from '../engine/card'
 import { Move } from '../engine/score-calculator/move'
 
 export type PlayerTurnChangeEvent = {
+    turnOrder: number
     playerId: string
 }
 
@@ -18,7 +19,7 @@ export type ScoreChangedEvent = {
 }
 
 export type MakeMoveCommand = {
-    id: string
+    commandId: string
     playerId: string
 }
 
@@ -35,19 +36,20 @@ export type VisibleVertixSelectedEvent = {
     vertix: SerializableVertix
 }
 
+export const { useNewGameListener, emitNewGame } = createEvent('new-game')()
 export const { usePlayerTurnChangedListener, emitPlayerTurnChanged } =
     createEvent('player-turn-changed')<PlayerTurnChangeEvent>()
 
 export const { useCardAddedToPlayerListener, emitCardAddedToPlayer } =
     createEvent('card-added-to-player')<CardAddedToPlayerEvent>()
-export const { useVisibleHandMakeMoveCommandListener, emitVisibleHandMakeMoveCommand } = createEvent(
-    'visible-hand-make-move-command'
-)<MakeMoveCommand>()
 
 export const { usePlayerMadeMoveEventListener, emitPlayerMadeMoveEvent } = createEvent('player-made-move-event')<Move>()
 export const { useScoreChangedEventListener, emitScoreChangedEvent } =
     createEvent('score-changed-event')<ScoreChangedEvent>()
 
+export const { useVisibleHandMakeMoveCommandListener, emitVisibleHandMakeMoveCommand } = createEvent(
+    'visible-hand-make-move-command'
+)<MakeMoveCommand>()
 export const { useVisibleCardSelectedEventListener, emitVisibleCardSelectedEvent } =
     createEvent('visible-card-selected-event')<VisibleCardSelectedEvent>()
 export const { useVisibleVertixSelectedEventListener, emitVisibleVertixSelectedEvent } = createEvent(

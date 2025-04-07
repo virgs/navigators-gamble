@@ -1,4 +1,4 @@
-import { AiPlayerConfig } from '../../engine/players/ai-player'
+import { AiPlayerInitialization } from '../../engine/players/ai-player'
 import { WebWorkerMessage } from './message'
 
-export type InitializeAiMessage = AiPlayerConfig & WebWorkerMessage
+export type InitializeAiMessage = AiPlayerInitialization & WebWorkerMessage

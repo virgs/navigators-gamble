@@ -19,10 +19,7 @@ export const isNextClockWise: DirectionsComparer = (
     first: Directions, // NORTH 0
     second: Directions // NORTH_EAST 1
 ): boolean /* true */ => {
-    const firstAsNumber = parseInt(Directions[first])
-    const secondAsNumber = parseInt(Directions[second])
-
-    return firstAsNumber === (secondAsNumber - 1 + directions.length) % directions.length
+    return first === (second - 1 + directions.length) % directions.length
 }
 
 export const isPreviousClockWise: DirectionsComparer = (first: Directions, second: Directions): boolean => {

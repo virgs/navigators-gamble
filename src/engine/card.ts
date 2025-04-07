@@ -3,13 +3,12 @@ import { Directions } from './directions'
 export class Card {
     private readonly _id: string
     private readonly _direction: Directions
-    private _ownerId?: string | undefined
     private hidden: boolean
 
-    public constructor(id: string, direction: Directions) {
+    public constructor(id: string, direction: Directions, hidden: boolean = true) {
         this._id = id
         this._direction = direction
-        this.hidden = true
+        this.hidden = hidden
     }
 
     public get direction(): Directions {
@@ -22,13 +21,6 @@ export class Card {
 
     public get covered(): boolean {
         return this.hidden
-    }
-
-    public get ownerId(): string | undefined {
-        return this._ownerId
-    }
-    public set ownerId(value: string | undefined) {
-        this._ownerId = value
     }
 
     public reveal() {

@@ -3,8 +3,12 @@ import { GameAiPureMonteCarloTreeSearchPlayerConfiguration } from './game-ai-pur
 import { GameHumanPlayerConfiguration } from './game-human-player-configuration'
 import { PlayerType } from './player-type'
 
+export type GameAiPlayerCommonAttributes = {
+    minWaitTime: number
+}
+
 export type GameAiPlayerConfiguration =
-    GameAiPureMonteCarloTreeSearchPlayerConfiguration /* | GameAiMinimaxPlayerConfiguration //ant others... */
+    GameAiPureMonteCarloTreeSearchPlayerConfiguration /* | GameAiMinimaxPlayerConfiguration //and others... */
 
 export type GamePlayerCommonAttributes = {
     id: string
