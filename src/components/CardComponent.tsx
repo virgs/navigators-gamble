@@ -9,7 +9,7 @@ import './CardComponent.scss';
 
 // https://remove-bg.io/upload
 
-type CardComponentProps = {
+export type CardComponentProps = {
     card: Card
     selected: boolean
     ownerTurnOrder?: number
@@ -32,6 +32,13 @@ export const CardComponent = (props: CardComponentProps): ReactNode => {
             setCardBoxClasses(cardBoxClasses.filter(className => className !== 'selected'))
         }
     }, [props.selected])
+
+    useEffect(() => {
+        setStyle(style => ({
+            ...style,
+            borderColor: props.ownerTurnOrder !== undefined ? colors[props.ownerTurnOrder] : 'var(--compass-highlight-red)'
+        }))
+    }, [props.ownerTurnOrder])
 
     useEffect(() => {
         if ([Directions.NORTH, Directions.NORTH_EAST, Directions.NORTH_WEST].includes(props.card.direction)) {

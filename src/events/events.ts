@@ -2,6 +2,7 @@ import { createEvent } from 'react-event-hook'
 import { SerializableVertix } from '../engine/board/serializable-board'
 import { Card } from '../engine/card'
 import { Move } from '../engine/score-calculator/move'
+import { MoveScore } from '../engine/score-calculator/move-score'
 
 export type PlayerTurnChangeEvent = {
     turnOrder: number
@@ -11,11 +12,6 @@ export type PlayerTurnChangeEvent = {
 export type CardAddedToPlayerEvent = {
     playerId: string
     card: Card
-}
-
-export type ScoreChangedEvent = {
-    playerId: string
-    score: number
 }
 
 export type MakeMoveCommand = {
@@ -43,9 +39,16 @@ export const { usePlayerTurnChangedListener, emitPlayerTurnChanged } =
 export const { useCardAddedToPlayerListener, emitCardAddedToPlayer } =
     createEvent('card-added-to-player')<CardAddedToPlayerEvent>()
 
-export const { usePlayerMadeMoveEventListener, emitPlayerMadeMoveEvent } = createEvent('player-made-move-event')<Move>()
-export const { useScoreChangedEventListener, emitScoreChangedEvent } =
-    createEvent('score-changed-event')<ScoreChangedEvent>()
+export const { usePlayerMadeMoveEventListener, emitPlayerMadeMoveEvent } = createEvent('player-made-move-event')<
+    Move & { scores: MoveScore[] }
+>()
+
+export const { useScoreAnimationCommandListener, emitScoreAnimationCommand } =
+    createEvent('score-animation-command')<MoveScore>()
+
+export const { useEndOfScoreAnimationsEventListener, emitEndOfScoreAnimationsEvent } = createEvent(
+    'end-of-score-animations-event'
+)()
 
 export const { useVisibleHandMakeMoveCommandListener, emitVisibleHandMakeMoveCommand } = createEvent(
     'visible-hand-make-move-command'

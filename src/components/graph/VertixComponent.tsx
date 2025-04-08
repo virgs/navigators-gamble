@@ -1,8 +1,8 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { SerializableVertix } from '../../engine/board/serializable-board';
 import { Card } from '../../engine/card';
 import { emitVisibleVertixSelectedEvent, usePlayerMadeMoveEventListener, usePlayerTurnChangedListener, useVisibleCardSelectedEventListener, VisibleCardSelectedEvent } from '../../events/events';
-import { CardComponent } from '../CardComponent';
+import { CardComponent, CardComponentProps } from '../CardComponent';
 import './VertixComponent.scss';
 
 type VertixProps = {
@@ -10,55 +10,80 @@ type VertixProps = {
 };
 
 export const VertixComponent = (props: VertixProps): ReactNode => {
-    const [clickable, setClickable] = useState<VisibleCardSelectedEvent | undefined>(undefined);
-    const [cardComponent, setCardComponent] = useState<ReactNode | undefined>(undefined);
     const [classes, setClasses] = useState<string[]>(['vertix', 'empty']);
-    const [currentlyPlayerOrder, setCurrentlyPlayerOrder] = useState<number>(0)
+    const [cardConfiguration, setCardConfiguration] = useState<CardComponentProps | undefined>(undefined);
+    const [currentlyPlayerTurnOrder, setCurrentlyPlayerOrder] = useState<number>(0)
+    const [selectedCard, setSelectedCard] = useState<VisibleCardSelectedEvent | undefined>(undefined);
+
     usePlayerTurnChangedListener(event => {
         setCurrentlyPlayerOrder(event.turnOrder)
     })
 
     useVisibleCardSelectedEventListener((event) => {
-        if (!cardComponent) {
-            setClickable(event);
+        if (!cardConfiguration) {
+            setSelectedCard(event);
             setClasses(list => list.concat('clickable'));
         } else {
-            setClickable(undefined);
+            setSelectedCard(undefined);
             setClasses(list => list.filter(item => item !== 'clickable'));
         }
     });
 
-    const style: React.CSSProperties = {
-        top: `${props.vertix.position.y * 100}%`,
-        left: `${props.vertix.position.x * 100}%`,
-        cursor: clickable ? 'pointer' : 'unset'
-    };
+    usePlayerMadeMoveEventListener((event) => {
+        setSelectedCard(undefined);
+        if (event.vertixId === props.vertix.id) { //card is placed
+            setClasses(list => list
+                .filter(item => item !== 'clickable')
+                .filter(item => item !== 'empty'));
+            const card = new Card(event.cardId!, event.direction!, false);
+            setCardConfiguration({
+                card: card,
+                selected: false,
+                ownerTurnOrder: currentlyPlayerTurnOrder
+            })
+        } else { //vertix scored
+            if (cardConfiguration) {
+                event.scores.forEach(score => {
+                    if (score.vertices.some(vertix => vertix.id === props.vertix.id)) {
+                        setClasses(list => list
+                            .filter(item => item !== 'clickable')
+                            .filter(item => item !== 'empty')
+                            .concat('score'));
+                        setCardConfiguration({
+                            card: cardConfiguration.card,
+                            selected: false,
+                            ownerTurnOrder: currentlyPlayerTurnOrder
+                        })
+                    }
+                })
+            }
+
+        }
+    });
 
     const onPointerDown = () => {
-        if (clickable) {
+        if (selectedCard) {
             emitVisibleVertixSelectedEvent({
                 vertix: props.vertix,
-                card: clickable.card,
-                moveId: clickable.id,
-                playerId: clickable.playerId,
+                card: selectedCard.card,
+                moveId: selectedCard.id,
+                playerId: selectedCard.playerId,
             });
         }
     }
 
-    usePlayerMadeMoveEventListener((event) => {
-        if (event.vertixId === props.vertix.id) {
-            const card = new Card(event.cardId!, event.direction!, false);
-            setClasses(list => list.filter(item => item !== 'clickable').filter(item => item !== 'empty'));
-            setCardComponent(<CardComponent selected={false} card={card} ownerTurnOrder={currentlyPlayerOrder}></CardComponent>);
-        }
-        setClickable(undefined);
-    });
-
+    const style: React.CSSProperties = {
+        top: `${props.vertix.position.y * 100}%`,
+        left: `${props.vertix.position.x * 100}%`,
+        cursor: selectedCard ? 'pointer' : 'unset'
+    };
     return (
         <div className={classes.join(' ')} data-id={props.vertix.id}
             style={style}
             onPointerDown={onPointerDown}>
-            {cardComponent ?? <>X</>}
+            {cardConfiguration ? <CardComponent selected={cardConfiguration.selected}
+                card={cardConfiguration.card}
+                ownerTurnOrder={cardConfiguration.ownerTurnOrder}></CardComponent> : <>X</>}
         </div>
     )
 }

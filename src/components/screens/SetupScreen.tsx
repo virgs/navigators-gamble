@@ -80,7 +80,7 @@ const gameConfig: GameConfiguration = {
     ],
     visibleHandPlayerId: 'human-player',
     cardsPerDirection: 3,
-    cardsPerPlayer: 6,
+    cardsPerPlayer: 4,
     board: serializabledBoard,
 }
 

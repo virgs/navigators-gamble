@@ -1,5 +1,5 @@
 import { Reorder } from 'framer-motion';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Card } from '../../engine/card';
 import { GamePlayerCommonAttributes } from '../../engine/game-configuration/game-configuration';
 import { Move } from '../../engine/score-calculator/move';
@@ -16,6 +16,12 @@ export const HiddenCardsHandComponent = (props: HiddenCardsHandComponentProps): 
     const [cards, setCards] = useState<Card[]>([]);
 
     useNewGameListener(() => setCards([]))
+
+
+    useEffect(() => {
+        console.log('HiddenCardsHandComponent', props.player.id);
+    }, []);
+
 
     usePlayerMadeMoveEventListener((event: Move) => {
         setCards(cards.filter(card => card.id !== event.cardId))

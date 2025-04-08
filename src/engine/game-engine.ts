@@ -3,12 +3,13 @@ import { arrayShuffler } from '../math/array-shufller'
 import { Board } from './board/board'
 import { BoardSerializer } from './board/board-serializer'
 import { Card } from './card'
-import { directions } from './directions'
+import { Directions, directions } from './directions'
 import { GameConfiguration } from './game-configuration/game-configuration'
 import { PlayerType } from './game-configuration/player-type'
 import { AiPlayer, AiPlayerInitialization } from './players/ai-player'
 import { HumanPlayer } from './players/human-player'
 import { Player } from './players/player'
+import { MoveScore } from './score-calculator/move-score'
 import { ScoreType } from './score-calculator/score-type'
 
 export class GameEngine {
@@ -117,7 +118,6 @@ export class GameEngine {
             turnOrder: this.currentlyPlayingPlayerIndex,
             playerId: currentPlayer.id,
         })
-        console.log(`\n\n========= Player ${currentPlayer.id} turn =========`)
 
         return currentPlayer
     }
@@ -128,14 +128,15 @@ export class GameEngine {
             return
         }
         const currentPlayer = this.startNextTurn()
+        console.log(`\n\n========= Player ${currentPlayer.id} turn =========`)
 
         const move = await currentPlayer.makeMove({ board: this._board, scores: this.getScores() })
-        const moveScores = this._board.makeMove(move)
-        emitPlayerMadeMoveEvent(move)
+        const moveScores: MoveScore[] = this._board.makeMove(move)
+        emitPlayerMadeMoveEvent({ ...move, scores: moveScores })
 
         const totalScore = moveScores.reduce((acc, moveScore) => {
             console.log(`\t======== ${ScoreType[moveScore.scoreType]} ========`)
-            moveScore.vertices.forEach((vertix, index) => {
+            moveScore.vertices.forEach((vertix) => {
                 vertix.ownerId = move.playerId
 
                 // if (index > 0) {
@@ -143,9 +144,9 @@ export class GameEngine {
                 //     console.log(`\t\tChanging link '${link?.id}' to ${move.playerId}`)
                 // }
             })
-            // console.log(
-            //     `\t\t\tCombination vertices [${moveScore.vertices.length}]: ${moveScore.vertices.map((vertix) => `${vertix.id} (${Directions[vertix.direction!]})`).join(', ')}`
-            // )
+            console.log(
+                `\t\t\tCombination vertices [${moveScore.vertices.length}]: ${moveScore.vertices.map((vertix) => `${vertix.id} (${Directions[vertix.direction!]})`).join(', ')}`
+            )
             return acc + moveScore.points
         }, 0)
         console.log(`\t\tRound total: ${totalScore}`)
