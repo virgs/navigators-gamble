@@ -1,7 +1,7 @@
 import { ReactNode, useState } from 'react';
 import { SerializableVertix } from '../../engine/board/serializable-board';
 import { Card } from '../../engine/card';
-import { emitVisibleVertixSelectedEvent, usePlayerMadeMoveEventListener, usePlayerTurnChangedListener, useVisibleCardSelectedEventListener, VisibleCardSelectedEvent } from '../../events/events';
+import { emitVisibleVertixSelectedEvent, useBeginVerticesAnimationsCommandListener, useFinishVerticesAnimationsCommandListener, usePlayerMadeMoveEventListener, usePlayerTurnChangedListener, useVisibleCardSelectedEventListener, VisibleCardSelectedEvent } from '../../events/events';
 import { CardComponent, CardComponentProps } from '../CardComponent';
 import './VertixComponent.scss';
 
@@ -14,6 +14,7 @@ export const VertixComponent = (props: VertixProps): ReactNode => {
     const [cardConfiguration, setCardConfiguration] = useState<CardComponentProps | undefined>(undefined);
     const [currentlyPlayerTurnOrder, setCurrentlyPlayerOrder] = useState<number>(0)
     const [selectedCard, setSelectedCard] = useState<VisibleCardSelectedEvent | undefined>(undefined);
+
 
     usePlayerTurnChangedListener(event => {
         setCurrentlyPlayerOrder(event.turnOrder)
@@ -39,27 +40,27 @@ export const VertixComponent = (props: VertixProps): ReactNode => {
             setCardConfiguration({
                 card: card,
                 selected: false,
-                ownerTurnOrder: currentlyPlayerTurnOrder
+                ownerTurnOrder: undefined
             })
-        } else { //vertix scored
-            if (cardConfiguration) {
-                event.scores.forEach(score => {
-                    if (score.vertices.some(vertix => vertix.id === props.vertix.id)) {
-                        setClasses(list => list
-                            .filter(item => item !== 'clickable')
-                            .filter(item => item !== 'empty')
-                            .concat('score'));
-                        setCardConfiguration({
-                            card: cardConfiguration.card,
-                            selected: false,
-                            ownerTurnOrder: currentlyPlayerTurnOrder
-                        })
-                    }
-                })
-            }
-
         }
     });
+
+    useBeginVerticesAnimationsCommandListener(event => { //vertix scored
+        if (cardConfiguration && event.score.vertices.find(item => item.id === props.vertix.id)) {
+            setClasses(list => list
+                .filter(item => item !== 'clickable')
+                .filter(item => item !== 'empty')
+                .concat('scoring'));
+            setCardConfiguration({
+                card: cardConfiguration.card,
+                selected: false,
+                ownerTurnOrder: currentlyPlayerTurnOrder
+            })
+        }
+    });
+
+    useFinishVerticesAnimationsCommandListener(() => setClasses(list => list
+        .filter(item => item !== 'scoring')))
 
     const onPointerDown = () => {
         if (selectedCard) {

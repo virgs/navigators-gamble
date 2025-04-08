@@ -1,7 +1,9 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { SerializableVertix } from '../../engine/board/serializable-board';
+import { useFinishVerticesAnimationsCommandListener, useLinkAnimationCommandListener } from '../../events/events';
 import { getAngle, getDistance } from '../../math/point';
 import "./LinkComponent.scss";
+import { colors } from '../../constants/colors';
 
 export type LinkComponentProps = {
     first: SerializableVertix,
@@ -9,19 +11,30 @@ export type LinkComponentProps = {
 };
 
 export const LinkComponent = (props: LinkComponentProps): ReactNode => {
+    const [classes, setClasses] = useState<string[]>(['link']);
     const length = getDistance(props.first.position, props.second.position)
     const inclination = getAngle(props.first.position, props.second.position)
-    const clipPathBeginPart = 'calc(var(--vertix-size) / 2)'
-    const clipPathEndPart = 'calc(100% - (var(--vertix-size) / 2))'
+    const [color, setColor] = useState<string>('var(--compass-highlight-red)')
+
+    useLinkAnimationCommandListener(payload => {
+        if ((payload.first.id === props.first.id && payload.second.id === props.second.id) ||
+            (payload.second.id === props.first.id && payload.first.id === props.second.id)) {
+            setColor(colors[payload.playerTurnOrder])
+            // const cardColor: string = payload.playerId !== undefined ? colors[payload.playerTurnOrder] : 'var(--compass-highlight-red)'
+
+            setClasses(list => list.concat('scoring'));
+        }
+    })
 
     return <div
         data-link-id={`{${props.first.id}-${props.second.id}}`}
-        className='link'
+        className={classes.join(' ')}
         style={{
             top: `${props.first.position.y * 100}%`,
             left: `${props.first.position.x * 100}%`,
             width: `calc(${length} * 100%)`,
             transform: `rotate(${inclination}rad) translateY(-50%)`,
+            borderTopColor: color,
             // clipPath: `polygon(${clipPathBeginPart} 0, ${clipPathBeginPart} 100%, ${clipPathEndPart} 100%, ${clipPathEndPart} 0)`
         }}></div>
 }

@@ -3,6 +3,7 @@
     width: var(--vertix-size);
     height: var(--vertix-size);
     border-radius: 40%;
+    transition: transform 0.2s ease-in-out;
     transform: translate(-50%, -50%);
 
     &.clickable {
@@ -14,8 +15,8 @@
         }
     }
 
-    &.score {
-        animation: score-animation 0.5s ease-in-out;
+    &.scoring {
+        transform: scale(1.25) translate(-37.5%, -37.5%);
     }
 
     &.empty {
@@ -31,18 +32,5 @@
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-}
-
-@keyframes score-animation {
-    0% {
-        transform: scale(1) translate(-50%, -50%);
-    }
-    50% {
-        transform: scale(1.25) translate(-50%, -50%);
-    }
-    100% {
-        transform: scale(1) translate(-50%, -50%);
-        box-shadow: 0 0 10px var(--compass-highlight-blue);
     }
 }

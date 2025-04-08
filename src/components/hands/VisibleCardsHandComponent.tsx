@@ -18,10 +18,6 @@ export const VisibleCardsHandComponent = (props: VisibleCardsHandComponentProps)
     const [cards, setCards] = useState<Card[]>([]);
     const [selectedCardId, setSelectedCardId] = useState<string>('');
 
-    useEffect(() => {
-        console.log('VisibleCardsHandComponent', props.player.id);
-    }, []);
-
     useNewGameListener(() => setCards([]))
 
     usePlayerMadeMoveEventListener((event: Move) => {
@@ -30,6 +26,7 @@ export const VisibleCardsHandComponent = (props: VisibleCardsHandComponentProps)
 
     useCardAddedToPlayerListener((event) => {
         if (event.playerId === props.player.id) {
+            event.card.reveal()
             setCards((prevCards) => [...prevCards, event.card]);
         }
     })

@@ -1,4 +1,3 @@
-import { useOrientation } from '@uidotdev/usehooks';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { GameConfiguration } from '../../engine/game-configuration/game-configuration';
 import { GameEngine } from '../../engine/game-engine';
@@ -8,24 +7,27 @@ import { HeaderComponent } from '../HeaderComponent';
 import { HiddenCardsHandComponent } from '../hands/HiddenCardsHandComponent';
 import { VisibleCardsHandComponent } from '../hands/VisibleCardsHandComponent';
 import './GameScreen.scss';
-
+import { ScoreAnimationCoordinator } from './ScoreAnimationCoordinator';
 
 export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGameFinished: () => void }): ReactNode => {
-    const gameEngine = new GameEngine(props.gameConfiguration)
-    const orientation = useOrientation();
+    const gameEngine = useRef<GameEngine>(undefined);
+    const scoreAnimationCoordinator = useRef<ScoreAnimationCoordinator>(undefined);
     const [classes] = useState<string[]>(['game-screen', 'w-100', 'h-100', 'row', 'g-0'])
 
-    useEffect(() => {
-        console.log('orientation', orientation);
-    }, [orientation]);
+    if (gameEngine.current === undefined) {
+        gameEngine.current = new GameEngine(props.gameConfiguration)
+    }
 
+    if (scoreAnimationCoordinator.current === undefined) {
+        scoreAnimationCoordinator.current = new ScoreAnimationCoordinator(props.gameConfiguration);
+    }
 
     const iterate = () => {
-        gameEngine.playNextRound()
+        gameEngine.current!.playNextRound()
             .then(() => {
-                if (gameEngine.isGameOver()) {
-                    gameEngine.finish()
-                    setTimeout(() => onGameFinished())
+                if (gameEngine.current?.isGameOver()) {
+                    gameEngine.current?.finish()
+                    setTimeout(() => onGameFinished(), 2000)
                 }
             })
             .catch(e => {
@@ -34,8 +36,11 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
     }
 
     useEffect(() => {
-        gameEngine.start()
+        gameEngine.current!.start()
         setTimeout(() => iterate(), 2000)
+        return () => {
+            gameEngine.current = undefined
+        }
     }, [])
 
     useEndOfScoreAnimationsEventListener(() => {
@@ -46,12 +51,9 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
         setTimeout(() => props.onGameFinished(), 5000)
     }
 
-
-    console.log('GameScreen', props.gameConfiguration.players.map(player => player.id).join(', '));
-
     const visibleHandPlayer = props.gameConfiguration.players
         .find(player => player.id === props.gameConfiguration.visibleHandPlayerId)
-    const visiblePlayerComponent = useRef<ReactNode>(visibleHandPlayer ? <VisibleCardsHandComponent player={visibleHandPlayer} /> : <></>)
+    const visiblePlayerComponent = visibleHandPlayer ? <VisibleCardsHandComponent player={visibleHandPlayer} /> : <></>
 
     const hiddenPlayers: ReactNode[] = props.gameConfiguration.players
         .filter(player => player.id !== props.gameConfiguration.visibleHandPlayerId)
@@ -60,29 +62,29 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
     return (
         <>
             <div className={classes.join(' ')}>
-                <div className='col-12 col-md-8 col-lg-12 d-flex h-100' style={{ flexWrap: 'wrap', alignContent: 'normal', alignItems: 'center' }}>
+                <div className='col-12 col-md-8 col-lg-12 d-flex h-100 align-items-center' style={{ flexWrap: 'wrap', alignContent: 'normal' }}>
                     <div onClick={() => onGameFinished()} className='w-100 d-md-none d-lg-block' >
                         <HeaderComponent></HeaderComponent>
                     </div>
-                    <div className='w-100 d-flex d-md-none d-lg-flex' style={{ alignItems: 'center', justifyContent: 'left' }}>
+                    <div className='w-100 d-flex d-md-none d-lg-flex align-items-center' style={{ justifyContent: 'left' }}>
                         {hiddenPlayers.map((aiHand, index) => <div key={`ai-hand-${index}`} style={{ width: '50%' }}>{aiHand}</div>)}
                     </div>
                     <div className='w-100 game-screen-board'>
                         <BoardComponent board={props.gameConfiguration.board} />
                     </div>
                     <div className='w-100 mb-2 d-md-none d-lg-block' style={{}}>
-                        {visiblePlayerComponent.current}
+                        {visiblePlayerComponent}
                     </div>
                 </div>
                 <div className='col-4 d-none d-md-flex d-lg-none h-100' style={{ flexWrap: 'wrap', alignContent: 'normal' }}>
                     <div className='w-100' onClick={() => onGameFinished()} >
                         <HeaderComponent></HeaderComponent>
                     </div>
-                    <div className='w-100 d-flex' style={{ alignItems: 'center', justifyContent: 'space-left' }}>
+                    <div className='w-100 d-flex align-items-center' style={{ justifyContent: 'space-left' }}>
                         {hiddenPlayers}
                     </div>
-                    <div className='w-100 mb-2' style={{}}>
-                        {/* {visiblePlayerComponent.current} */}
+                    <div className='w-100 mb-2'>
+                        {visiblePlayerComponent}
                     </div>
                 </div>
             </div>

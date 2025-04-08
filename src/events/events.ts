@@ -1,6 +1,7 @@
 import { createEvent } from 'react-event-hook'
 import { SerializableVertix } from '../engine/board/serializable-board'
 import { Card } from '../engine/card'
+import { Vertix } from '../engine/graph/vertix'
 import { Move } from '../engine/score-calculator/move'
 import { MoveScore } from '../engine/score-calculator/move-score'
 
@@ -32,6 +33,16 @@ export type VisibleVertixSelectedEvent = {
     vertix: SerializableVertix
 }
 
+export type PlayerMadeMoveEvent = Move & {
+    scores: MoveScore[]
+    playerTurn: number
+}
+
+export type VerticesAnimationCommand = {
+    playerId: string
+    score: MoveScore
+}
+
 export const { useNewGameListener, emitNewGame } = createEvent('new-game')()
 export const { usePlayerTurnChangedListener, emitPlayerTurnChanged } =
     createEvent('player-turn-changed')<PlayerTurnChangeEvent>()
@@ -39,16 +50,8 @@ export const { usePlayerTurnChangedListener, emitPlayerTurnChanged } =
 export const { useCardAddedToPlayerListener, emitCardAddedToPlayer } =
     createEvent('card-added-to-player')<CardAddedToPlayerEvent>()
 
-export const { usePlayerMadeMoveEventListener, emitPlayerMadeMoveEvent } = createEvent('player-made-move-event')<
-    Move & { scores: MoveScore[] }
->()
-
-export const { useScoreAnimationCommandListener, emitScoreAnimationCommand } =
-    createEvent('score-animation-command')<MoveScore>()
-
-export const { useEndOfScoreAnimationsEventListener, emitEndOfScoreAnimationsEvent } = createEvent(
-    'end-of-score-animations-event'
-)()
+export const { usePlayerMadeMoveEventListener, emitPlayerMadeMoveEvent } =
+    createEvent('player-made-move-event')<PlayerMadeMoveEvent>()
 
 export const { useVisibleHandMakeMoveCommandListener, emitVisibleHandMakeMoveCommand } = createEvent(
     'visible-hand-make-move-command'
@@ -58,3 +61,24 @@ export const { useVisibleCardSelectedEventListener, emitVisibleCardSelectedEvent
 export const { useVisibleVertixSelectedEventListener, emitVisibleVertixSelectedEvent } = createEvent(
     'visible-vertix-selected-event'
 )<VisibleVertixSelectedEvent>()
+
+// score animations
+export const { useBeginVerticesAnimationsCommandListener, emitBeginVerticesAnimationsCommand } = createEvent(
+    'begin-vertices-animations-command'
+)<VerticesAnimationCommand>()
+
+export const { useLinkAnimationCommandListener, emitLinkAnimationCommand } = createEvent('link-animation-command')<{
+    playerTurnOrder: number
+    playerId: string
+    first: Vertix
+    second: Vertix
+    score: MoveScore
+}>()
+
+export const { useEndOfScoreAnimationsEventListener, emitEndOfScoreAnimationsEvent } = createEvent(
+    'end-of-score-animations-event'
+)()
+
+export const { useFinishVerticesAnimationsCommandListener, emitFinishVerticesAnimationsCommand } = createEvent(
+    'finish-vertices-animations-command'
+)()

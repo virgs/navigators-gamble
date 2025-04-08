@@ -6,4 +6,9 @@
     border-width: 1px;
     border-color: var(--compass-highlight-red) transparent transparent transparent;
     border-radius: 200% / 100px 100px 0 0;
+
+    &.scoring {
+        border-width: 3px;
+        border-style: solid;
+    }
 }

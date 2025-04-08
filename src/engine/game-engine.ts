@@ -45,10 +45,6 @@ export class GameEngine {
     private createPlayers(gameConfiguration: GameConfiguration): Player[] {
         return gameConfiguration.players.map((playerConfiguration, index) => {
             const cards = Array.from(Array(gameConfiguration.cardsPerPlayer)).map(() => this._notPlayedYetCards.pop()!)
-            // .map((card) => {
-            //     card.ownerId = playerConfiguration.id
-            //     return card
-            // })
             if (playerConfiguration.type === PlayerType.HUMAN) {
                 return new HumanPlayer(playerConfiguration.id, cards)
             } else {
@@ -132,24 +128,17 @@ export class GameEngine {
 
         const move = await currentPlayer.makeMove({ board: this._board, scores: this.getScores() })
         const moveScores: MoveScore[] = this._board.makeMove(move)
-        emitPlayerMadeMoveEvent({ ...move, scores: moveScores })
+        emitPlayerMadeMoveEvent({ ...move, scores: moveScores, playerTurn: this.currentlyPlayingPlayerIndex })
 
         const totalScore = moveScores.reduce((acc, moveScore) => {
+            moveScore.vertices.forEach((vertix) => (vertix.ownerId = move.playerId))
             console.log(`\t======== ${ScoreType[moveScore.scoreType]} ========`)
-            moveScore.vertices.forEach((vertix) => {
-                vertix.ownerId = move.playerId
-
-                // if (index > 0) {
-                //     const link = vertix.getLinkTo(moveScore.vertices[index - 1])
-                //     console.log(`\t\tChanging link '${link?.id}' to ${move.playerId}`)
-                // }
-            })
             console.log(
                 `\t\t\tCombination vertices [${moveScore.vertices.length}]: ${moveScore.vertices.map((vertix) => `${vertix.id} (${Directions[vertix.direction!]})`).join(', ')}`
             )
             return acc + moveScore.points
         }, 0)
-        console.log(`\t\tRound total: ${totalScore}`)
+        // console.log(`\t\tRound total: ${totalScore}`)
         currentPlayer.addScore(totalScore)
 
         const playersNewCard = this._notPlayedYetCards.pop()
@@ -160,6 +149,6 @@ export class GameEngine {
                 card: playersNewCard,
             })
         }
-        console.log(`Current score: ` + JSON.stringify(this.getScores()))
+        // console.log(`Current score: ` + JSON.stringify(this.getScores()))
     }
 }

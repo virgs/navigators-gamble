@@ -16,15 +16,16 @@ export class HumanPlayer implements Player {
         this._id = id
         this._cards = cards
         this._score = 0
-        this._cards.forEach((card) => card.reveal())
-        this._cards.sort((a, b) => a.direction - b.direction)
+        // this._cards.sort((a, b) => a.direction - b.direction)
         this._movePromises = {}
 
         useVisibleVertixSelectedEventListener((event) => {
             if (event.playerId === this._id) {
                 const cardPosition = this._cards.findIndex((card) => card.id === event.card.id)
                 if (cardPosition === -1) {
-                    throw new Error(`Card with id ${event.card.id} not found in player ${this._id} cards`)
+                    throw new Error(
+                        `Card with id ${event.card.id} not found in player ${this._id} cards: cards: ${this._cards.map((card) => card.id).join(', ')}`
+                    )
                 }
                 this._cards.splice(cardPosition, 1)
                 this._movePromises[event.moveId]({
@@ -72,8 +73,6 @@ export class HumanPlayer implements Player {
     }
 
     public drawCard(card: Card): void {
-        console.log(`Player ${this.id} got card: ${Directions[card.direction]}`)
-        card.reveal()
         this._cards.push(card)
     }
 }
