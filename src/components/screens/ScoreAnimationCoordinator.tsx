@@ -4,8 +4,8 @@ import { MoveScore } from '../../engine/score-calculator/move-score';
 import { emitBeginVerticesAnimationsCommand, emitEndOfScoreAnimationsEvent, emitFinishVerticesAnimationsCommand, emitLinkAnimationCommand, usePlayerMadeMoveEventListener } from '../../events/events';
 
 export class ScoreAnimationCoordinator {
-    private static readonly intervalBetweenAnimations = 2000;
-    private static readonly intervalBetweenLinksAnimations = 500;
+    private static readonly intervalBetweenAnimations = 1000;
+    private static readonly intervalBetweenLinksAnimations = 250;
     private readonly players: GamePlayerConfiguration[];
 
     public constructor(configuration: GameConfiguration) {

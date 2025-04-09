@@ -1,7 +1,7 @@
 .vertix {
     position: absolute;
-    width: var(--vertix-size);
-    height: var(--vertix-size);
+    width: calc(var(--vertix-size) * 0.9);
+    height: calc(var(--vertix-size) * 0.9);
     border-radius: 40%;
     transition: transform 0.2s ease-in-out;
     transform: translate(-50%, -50%);
@@ -16,7 +16,7 @@
     }
 
     &.scoring {
-        transform: scale(1.25) translate(-37.5%, -37.5%);
+        transform: scale(1.15) translate(-37.5%, -37.5%);
     }
 
     &.empty {
@@ -27,7 +27,7 @@
         font-family: 'Pirata One', system-ui;
         font-weight: lighter;
         font-style: normal;
-        font-size: 3em;
+        font-size: 2.5em;
         color: var(--compass-highlight-red);
         display: flex;
         align-items: center;

@@ -1,9 +1,8 @@
 import { Reorder } from 'framer-motion';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { Card } from '../../engine/card';
 import { GamePlayerCommonAttributes } from '../../engine/game-configuration/game-configuration';
-import { Move } from '../../engine/score-calculator/move';
-import { emitVisibleCardSelectedEvent, MakeMoveCommand, useCardAddedToPlayerListener, useNewGameListener, usePlayerMadeMoveEventListener, useVisibleHandMakeMoveCommandListener } from '../../events/events';
+import { emitVisibleCardSelectedEvent, MakeMoveCommand, useCardAddedToPlayerListener, useNewGameListener, useVisibleHandMakeMoveCommandListener, useVisibleVertixSelectedEventListener, VisibleVertixSelectedEvent } from '../../events/events';
 import { CardComponent } from '../CardComponent';
 import { ScoreComponent } from '../ScoreComponent';
 import './VisibleCardsHandComponent.scss';
@@ -21,9 +20,10 @@ export const VisibleCardsHandComponent = (props: VisibleCardsHandComponentProps)
 
     useNewGameListener(() => setCards([]))
 
-    usePlayerMadeMoveEventListener((event: Move) => {
-        setCards(cards.filter(card => card.id !== event.cardId))
+    useVisibleVertixSelectedEventListener((event: VisibleVertixSelectedEvent) => {
+        setCards(cards.filter(card => card.id !== event.card.id))
         setSelectedCardId('');
+        setMakeMoveCommand(undefined);
     })
 
     useCardAddedToPlayerListener((event) => {
@@ -57,12 +57,12 @@ export const VisibleCardsHandComponent = (props: VisibleCardsHandComponentProps)
 
     return <div className='px-2'>
         <ScoreComponent turnOrder={props.turnOrder} player={props.player} ></ScoreComponent>
-        <Reorder.Group className='d-flex p-0 m-0 align-items-start row' values={cards} onReorder={setCards} axis='x'>
+        <Reorder.Group className='d-flex p-0 m-0 align-items-start h-100' values={cards} onReorder={setCards} axis='x'>
             {cards.map(card => {
                 return <Reorder.Item key={card.id} value={card}
                     style={{ padding: '2px', cursor: 'pointer' }}
                     whileHover={{ scale: 1.05 }}
-                    className='d-flex align-items-center justify-content-center col-2 col-md-4 col-lg'
+                    className='d-flex align-items-center justify-content-center w-100'
                     drag={false}
                     onPointerDown={() => onCardSelected(card)}
                     dragElastic={0.2}

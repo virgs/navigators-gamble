@@ -11,48 +11,48 @@ const serializabledBoard: SerializabledBoard = {
     vertices: [
         {
             id: 'v1',
-            position: { x: .15, y: .15 },
-            linkedVertices: ['v2', 'v4'],
+            position: { x: .3, y: .3 },
+            linkedVertices: ['v2', 'v3', 'v4'],
         },
         {
             id: 'v2',
-            position: { x: .5, y: 0 },
-            linkedVertices: ['v3', 'v9'],
+            position: { x: .5, y: .1 },
+            linkedVertices: ['v3', 'v5'],
         },
         {
             id: 'v3',
-            position: { x: .85, y: .15 },
-            linkedVertices: [],
+            position: { x: .7, y: .3 },
+            linkedVertices: ['v9'],
         },
         {
             id: 'v4',
-            position: { x: 0, y: .5 },
-            linkedVertices: ['v3', 'v7'],
+            position: { x: .1, y: .5 },
+            linkedVertices: ['v7'],
         },
         {
             id: 'v5',
             position: { x: .5, y: .5 },
-            linkedVertices: ['v2', 'v4', 'v6', 'v8'],
+            linkedVertices: ['v4', 'v6', 'v8'],
         },
         {
             id: 'v6',
-            position: { x: 1, y: .5 },
-            linkedVertices: ['v3', 'v7'],
+            position: { x: .9, y: .5 },
+            linkedVertices: ['v3'],
         },
         {
             id: 'v7',
-            position: { x: .15, y: .85 },
-            linkedVertices: [],
+            position: { x: .3, y: .7 },
+            linkedVertices: ['v1'],
         },
         {
             id: 'v8',
-            position: { x: .5, y: 1 },
-            linkedVertices: ['v7', 'v1'],
+            position: { x: .5, y: .9 },
+            linkedVertices: ['v7'],
         },
         {
             id: 'v9',
-            position: { x: .85, y: .85 },
-            linkedVertices: ['v8', 'v6'],
+            position: { x: .7, y: .7 },
+            linkedVertices: ['v8', 'v6', 'v7'],
         },
     ],
 }
@@ -69,8 +69,8 @@ const gameConfig: GameConfiguration = {
         {
             id: 'ai-player',
             type: PlayerType.ARTIFICIAL_INTELLIGENCE,
-            minWaitTime: 2000,
-            iterations: 50000,
+            minWaitTime: 1500,
+            iterationsPerAlternative: 100, //1000 - hard
             aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
         },
         {

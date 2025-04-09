@@ -86,14 +86,19 @@ export class GameEngine {
         return this._board.getEmptyVertices().length <= 0
     }
 
-    public finish(): void {
+    public calculateEndGameBonusPoints(): void {
         const playerVerticesMap = this._board.getPlayerVerticesMap()
         console.log(`Adding bonus points`)
         this._players.forEach((player) => {
-            player.finish()
             player.addScore(playerVerticesMap[player.id]?.length ?? 0)
         })
         console.log(`Final score: ` + JSON.stringify(this.getScores()))
+    }
+
+    public finish(): void {
+        this._players.forEach((player) => {
+            player.finish()
+        })
     }
 
     public getScores(): Record<string, number> {

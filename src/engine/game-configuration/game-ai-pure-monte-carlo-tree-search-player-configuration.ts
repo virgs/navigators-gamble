@@ -5,5 +5,5 @@ import { PlayerType } from './player-type'
 export type GameAiPureMonteCarloTreeSearchPlayerConfiguration = {
     type: PlayerType.ARTIFICIAL_INTELLIGENCE
     aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH
-    iterations: number
+    iterationsPerAlternative: number
 } & GameAiPlayerCommonAttributes

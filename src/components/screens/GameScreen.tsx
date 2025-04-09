@@ -27,18 +27,19 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
         gameEngine.current!.start()
         setTimeout(() => iterate(), 1000)
         return () => {
-            console.log('GameScreen unmounted');
             gameEngine.current?.finish()
             gameEngine.current = undefined
+            console.log('GameScreen unmounted');
         }
     }, [])
 
     const iterate = async () => {
-        await gameEngine.current!.playNextRound()
         if (gameEngine.current!.isGameOver()) {
-            gameEngine.current!.finish()
             console.log('Game finished');
+            gameEngine.current!.calculateEndGameBonusPoints()
             setTimeout(() => onGameFinished(), 10000)
+        } else {
+            await gameEngine.current!.playNextRound()
         }
     }
 
@@ -66,21 +67,22 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
     return (
         <>
             <div className={classes.join(' ')}>
-                <div className='col-12 col-md-8 col-lg-12 d-flex h-100 align-items-center' style={{ flexWrap: 'wrap', alignContent: 'normal' }}>
-                    <div onClick={() => onGameFinished()} className='w-100 d-md-none d-lg-block' >
+                <div className='col-12 col-sm-6 col-md-12 d-flex h-100 align-items-center justify-content-center'
+                    style={{ flexWrap: 'wrap', alignContent: 'normal', overflow: 'hidden' }}>
+                    <div onClick={() => onGameFinished()} className='w-100 d-sm-none d-md-block' >
                         <HeaderComponent></HeaderComponent>
                     </div>
-                    <div className='w-100 d-flex d-md-none d-lg-flex align-items-center' style={{ justifyContent: 'left' }}>
-                        {hiddenPlayers.map((aiHand, index) => <div key={`ai-hand-${index}`} style={{ width: '50%' }}>{aiHand}</div>)}
+                    <div className='w-100 d-flex d-sm-none d-md-flex align-items-center' style={{ justifyContent: 'left' }}>
+                        {hiddenPlayers.map((aiHand, index) => <div key={`ai-hand-${index}`} className='w-100'>{aiHand}</div>)}
                     </div>
-                    <div className='w-100 game-screen-board'>
+                    <div className='game-screen-board'>
                         <BoardComponent board={props.gameConfiguration.board} />
                     </div>
-                    <div className='w-100 mb-2 d-md-none d-lg-block' style={{}}>
+                    <div className='w-100 mb-2 d-sm-none d-md-block' style={{}}>
                         {visiblePlayerComponent}
                     </div>
                 </div>
-                <div className='col-4 d-none d-md-flex d-lg-none h-100' style={{ flexWrap: 'wrap', alignContent: 'normal' }}>
+                <div className='col-6 d-none d-sm-flex d-md-none h-100' style={{ flexWrap: 'wrap', alignContent: 'normal' }}>
                     <div className='w-100' onClick={() => onGameFinished()} >
                         <HeaderComponent></HeaderComponent>
                     </div>

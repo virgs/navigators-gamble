@@ -16,12 +16,12 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
     private readonly playerId: string
     private readonly playersIds: string[]
     private readonly playerTurnOrder: number
-    private readonly iterations: number
+    private readonly iterationsPerAlternative: number
     private readonly gameCards: Directions[]
 
     constructor(initMessage: InitializeAiMessage) {
         this.gameConfig = initMessage.gameConfig
-        this.iterations = initMessage.configuration.iterations
+        this.iterationsPerAlternative = initMessage.configuration.iterationsPerAlternative
         this.playerId = initMessage.playerId
         this.playersIds = initMessage.playersIds
         this.playerTurnOrder = initMessage.turnOrder
@@ -33,13 +33,10 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
         const possibleMoves = this.findNextMoveAlternatives(this.playerId, moveRequest.playerCards, board)
 
         let bestMove: Move & { score: number } = { ...possibleMoves[0], score: Number.NEGATIVE_INFINITY }
-        //TODO: calculate number of moves left and take that into consideration so the iterations can reflect more precisely the number of iterations
-        const iterationsPerMove = Math.ceil(this.iterations / possibleMoves.length)
-
         for (const move of possibleMoves) {
             let totalScore = 0
 
-            for (let i = 0; i < iterationsPerMove; i++) {
+            for (let i = 0; i < this.iterationsPerAlternative; i++) {
                 const boardCopy = board.clone()
                 totalScore += this.simulateRandomGame(move, moveRequest, boardCopy)
             }

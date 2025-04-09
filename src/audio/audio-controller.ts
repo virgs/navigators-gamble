@@ -34,33 +34,38 @@ export class AudioController {
         return AudioController.instance
     }
 
-    playBackgroundSound(): void {
-        if (this.audioContext.state === 'suspended') {
-            this.audioContext.resume()
+    public static playBackgroundSound(): void {
+        const instance = AudioController.getInstance()
+        if (instance.audioContext.state === 'suspended') {
+            // instance.resume()
         }
-        if (this.muted) {
-            this.backgroundAudio.pause()
+        if (instance.muted) {
+            instance.backgroundAudio.pause()
             return
         }
-        if (this.audioContext.state === 'running') {
-            this.backgroundAudio.play()
+        if (instance.audioContext.state === 'running') {
+            instance.backgroundAudio.play()
         }
     }
-    public setMuted(muted: boolean): void {
-        this.muted = muted
+    public static setMuted(muted: boolean): void {
+        const instance = AudioController.getInstance()
+
+        instance.muted = muted
         if (muted) {
-            this.backgroundAudio.pause()
+            instance.backgroundAudio.pause()
         } else {
-            this.backgroundAudio.play()
+            instance.backgroundAudio.play()
         }
     }
 
     public static playScoreSound(): void {
-        if (AudioController.getInstance().muted) {
+        const instance = AudioController.getInstance()
+
+        if (instance.muted) {
             return
         }
-        if (AudioController.getInstance().audioContext) {
-            const scoreAudios = AudioController.getInstance().scoreAudios
+        if (instance.audioContext) {
+            const scoreAudios = instance.scoreAudios
             scoreAudios[Math.floor(Math.random() * scoreAudios.length)].play()
         }
     }

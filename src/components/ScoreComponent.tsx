@@ -22,5 +22,8 @@ export const ScoreComponent = (props: { player: GamePlayerCommonAttributes, turn
     usePlayerTurnChangedListener(payload => {
         setTurn(payload.playerId === props.player.id);
     })
-    return <div className='score' style={{ color: color }}><span style={{ color: turn ? color : 'transparent' }}>➤ </span>Score: {score}</div>;
+    return <div className='score' style={{ color: color }}>
+        <span style={{ color: turn ? color : 'transparent' }}>➤ </span>
+        Score: {score}
+    </div>;
 };
