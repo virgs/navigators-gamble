@@ -1,8 +1,8 @@
 import { ReactNode, useState } from 'react';
+import { colors } from '../constants/colors';
 import { GamePlayerCommonAttributes } from '../engine/game-configuration/game-configuration';
 import { useFinishVerticesAnimationsCommandListener, usePlayerTurnChangedListener } from '../events/events';
 import './ScoreComponent.scss';
-import { colors } from '../constants/colors';
 
 
 

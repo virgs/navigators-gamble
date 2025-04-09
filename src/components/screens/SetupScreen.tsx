@@ -32,7 +32,7 @@ const serializabledBoard: SerializabledBoard = {
         {
             id: 'v5',
             position: { x: .5, y: .5 },
-            linkedVertices: ['v4', 'v6', 'v8'],
+            linkedVertices: ['v8'],
         },
         {
             id: 'v6',
@@ -67,15 +67,15 @@ const gameConfig: GameConfiguration = {
         //     aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
         // },
         {
+            id: 'human-player',
+            type: PlayerType.HUMAN
+        },
+        {
             id: 'ai-player',
             type: PlayerType.ARTIFICIAL_INTELLIGENCE,
             minWaitTime: 1500,
-            iterationsPerAlternative: 100, //1000 - hard
+            iterationsPerAlternative: 0, //1000 - hard
             aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
-        },
-        {
-            id: 'human-player',
-            type: PlayerType.HUMAN
         },
     ],
     visibleHandPlayerId: 'human-player',

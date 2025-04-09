@@ -82,3 +82,16 @@ export const { useEndOfScoreAnimationsEventListener, emitEndOfScoreAnimationsEve
 export const { useFinishVerticesAnimationsCommandListener, emitFinishVerticesAnimationsCommand } = createEvent(
     'finish-vertices-animations-command'
 )<{ points: number; playerId: string }>()
+
+export type EndGameBonusPointsEvent = {
+    vertices: Vertix[]
+    playerId: string
+    playerTurnOrder: number
+}
+
+// end game bonus points
+export const { useEndGameBonusPointsEventListener, emitEndGameBonusPointsEvent } =
+    createEvent('end-game-bonus-points-event')<EndGameBonusPointsEvent[]>()
+
+export const { useEndOfBonusPointsEventListener, emitEndOfBonusPointsEvent } =
+    createEvent('end-of-bonus-points-event')()

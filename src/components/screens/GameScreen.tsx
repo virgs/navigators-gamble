@@ -1,13 +1,13 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { GameConfiguration } from '../../engine/game-configuration/game-configuration';
 import { GameEngine } from '../../engine/game-engine';
-import { useEndOfScoreAnimationsEventListener } from '../../events/events';
+import { useEndOfBonusPointsEventListener, useEndOfScoreAnimationsEventListener } from '../../events/events';
 import { BoardComponent } from '../BoardComponent';
 import { HeaderComponent } from '../HeaderComponent';
 import { HiddenCardsHandComponent } from '../hands/HiddenCardsHandComponent';
 import { VisibleCardsHandComponent } from '../hands/VisibleCardsHandComponent';
-import { ScoreAnimationCoordinator } from './ScoreAnimationCoordinator';
 import './GameScreen.scss';
+import { ScoreAnimationCoordinator } from './ScoreAnimationCoordinator';
 
 export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGameFinished: () => void }): ReactNode => {
     const gameEngine = useRef<GameEngine>(undefined);
@@ -37,11 +37,15 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
         if (gameEngine.current!.isGameOver()) {
             console.log('Game finished');
             gameEngine.current!.calculateEndGameBonusPoints()
-            setTimeout(() => onGameFinished(), 10000)
         } else {
             await gameEngine.current!.playNextRound()
         }
     }
+
+    useEndOfBonusPointsEventListener(() => {
+        console.log('End of bonus points');
+        setTimeout(() => onGameFinished(), 10000)
+    })
 
     useEndOfScoreAnimationsEventListener(() => {
         iterate()
@@ -59,10 +63,10 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
     const hiddenPlayers: ReactNode[] = props.gameConfiguration.players
         .map((player, index) => {
             if (player.id === props.gameConfiguration.visibleHandPlayerId) {
-                return <></>
+                return null
             }
             return <HiddenCardsHandComponent key={player.id} turnOrder={index} player={player}></HiddenCardsHandComponent>;
-        });
+        }).filter((player) => player !== null);
 
     return (
         <>
@@ -97,4 +101,5 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
         </>
     )
 }
+
 

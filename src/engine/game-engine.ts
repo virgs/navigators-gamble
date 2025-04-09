@@ -1,4 +1,11 @@
-import { emitCardAddedToPlayer, emitNewGame, emitPlayerMadeMoveEvent, emitPlayerTurnChanged } from '../events/events'
+import {
+    emitCardAddedToPlayer,
+    emitEndGameBonusPointsEvent,
+    emitNewGame,
+    emitPlayerMadeMoveEvent,
+    emitPlayerTurnChanged,
+    EndGameBonusPointsEvent,
+} from '../events/events'
 import { arrayShuffler } from '../math/array-shufller'
 import { Board } from './board/board'
 import { BoardSerializer } from './board/board-serializer'
@@ -89,9 +96,17 @@ export class GameEngine {
     public calculateEndGameBonusPoints(): void {
         const playerVerticesMap = this._board.getPlayerVerticesMap()
         console.log(`Adding bonus points`)
-        this._players.forEach((player) => {
-            player.addScore(playerVerticesMap[player.id]?.length ?? 0)
+        const endBonusPayload: EndGameBonusPointsEvent[] = []
+        this._players.forEach((player, index) => {
+            const score = playerVerticesMap[player.id]?.length ?? 0
+            player.addScore(score)
+            endBonusPayload.push({
+                playerId: player.id,
+                playerTurnOrder: index,
+                vertices: playerVerticesMap[player.id] ?? [],
+            })
         })
+        emitEndGameBonusPointsEvent(endBonusPayload)
         console.log(`Final score: ` + JSON.stringify(this.getScores()))
     }
 

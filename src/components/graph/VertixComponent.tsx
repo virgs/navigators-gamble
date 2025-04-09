@@ -4,6 +4,7 @@ import { Card } from '../../engine/card';
 import { emitVisibleVertixSelectedEvent, useBeginVerticesAnimationsCommandListener, useFinishVerticesAnimationsCommandListener, usePlayerMadeMoveEventListener, usePlayerTurnChangedListener, useVisibleCardSelectedEventListener, VisibleCardSelectedEvent } from '../../events/events';
 import { CardComponent, CardComponentProps } from '../CardComponent';
 import './VertixComponent.scss';
+import { ScoreType } from '../../engine/score-calculator/score-type';
 
 type VertixProps = {
     vertix: SerializableVertix;
@@ -18,6 +19,8 @@ export const VertixComponent = (props: VertixProps): ReactNode => {
 
     usePlayerTurnChangedListener(event => {
         setCurrentlyPlayerOrder(event.turnOrder)
+        setClasses(list => list
+            .filter(item => item !== 'scoring'))
     })
 
     useVisibleCardSelectedEventListener((event) => {
@@ -51,16 +54,19 @@ export const VertixComponent = (props: VertixProps): ReactNode => {
                 .filter(item => item !== 'clickable')
                 .filter(item => item !== 'empty')
                 .concat('scoring'));
-            setCardConfiguration({
-                card: cardConfiguration.card,
-                selected: false,
-                ownerTurnOrder: currentlyPlayerTurnOrder
-            })
+            if (event.score.scoreType !== ScoreType.BONUS) {
+                setCardConfiguration({
+                    card: cardConfiguration.card,
+                    selected: false,
+                    ownerTurnOrder: currentlyPlayerTurnOrder
+                })
+            }
+        } else {
+            setClasses(list => list
+                .filter(item => item !== 'scoring'))
         }
     });
 
-    useFinishVerticesAnimationsCommandListener(() => setClasses(list => list
-        .filter(item => item !== 'scoring')))
 
     const onPointerDown = () => {
         if (selectedCard) {

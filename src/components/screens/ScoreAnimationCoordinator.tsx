@@ -1,7 +1,8 @@
 import { GameConfiguration, GamePlayerConfiguration } from '../../engine/game-configuration/game-configuration';
 import { Move } from '../../engine/score-calculator/move';
 import { MoveScore } from '../../engine/score-calculator/move-score';
-import { emitBeginVerticesAnimationsCommand, emitEndOfScoreAnimationsEvent, emitFinishVerticesAnimationsCommand, emitLinkAnimationCommand, usePlayerMadeMoveEventListener } from '../../events/events';
+import { ScoreType } from '../../engine/score-calculator/score-type';
+import { emitBeginVerticesAnimationsCommand, emitEndOfBonusPointsEvent, emitEndOfScoreAnimationsEvent, emitFinishVerticesAnimationsCommand, emitLinkAnimationCommand, EndGameBonusPointsEvent, useEndGameBonusPointsEventListener, usePlayerMadeMoveEventListener } from '../../events/events';
 
 export class ScoreAnimationCoordinator {
     private static readonly intervalBetweenAnimations = 1000;
@@ -16,14 +17,36 @@ export class ScoreAnimationCoordinator {
             }, ScoreAnimationCoordinator.intervalBetweenAnimations);
         });
 
+        useEndGameBonusPointsEventListener(payload => {
+            this.startEndGameBonusPointsAnimation(payload);
+        });
+
+    }
+    private startEndGameBonusPointsAnimation(payload: EndGameBonusPointsEvent[]) {
+        const currentBonus = payload.shift();
+        console.log("bonus", currentBonus)
+        if (!currentBonus) {
+            emitEndOfBonusPointsEvent();
+            return;
+        }
+
+        setTimeout(() => {
+            emitBeginVerticesAnimationsCommand({
+                playerId: currentBonus.playerId,
+                score: { vertices: currentBonus.vertices, points: currentBonus.vertices.length, scoreType: ScoreType.BONUS }
+            });
+            emitFinishVerticesAnimationsCommand({ playerId: currentBonus.playerId, points: currentBonus.vertices.length });
+            this.startEndGameBonusPointsAnimation(payload);
+        }, ScoreAnimationCoordinator.intervalBetweenAnimations);
+
     }
 
     private startScoreAnimation(payload: Move & { scores: MoveScore[]; }) {
-        if (payload.scores.length === 0) {
+        const currentScore = payload.scores.shift();
+        if (!currentScore) {
             emitEndOfScoreAnimationsEvent();
             return;
         }
-        const currentScore = payload.scores[0];
         emitBeginVerticesAnimationsCommand({ playerId: payload.playerId, score: currentScore });
 
         for (let i = 1; i < currentScore.vertices.length; i++) {
