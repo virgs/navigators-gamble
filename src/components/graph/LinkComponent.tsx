@@ -20,10 +20,12 @@ export const LinkComponent = (props: LinkComponentProps): ReactNode => {
         if ((payload.first.id === props.first.id && payload.second.id === props.second.id) ||
             (payload.second.id === props.first.id && payload.first.id === props.second.id)) {
             setColor(colors[payload.playerTurnOrder])
-            // const cardColor: string = payload.playerId !== undefined ? colors[payload.playerTurnOrder] : 'var(--compass-highlight-red)'
-
-            setClasses(list => list.concat('scoring'));
+            setClasses(list => list.concat(payload.score.scoreType.toLowerCase()).concat('scoring'));
         }
+    })
+
+    useFinishVerticesAnimationsCommandListener(() => {
+        setClasses(list => list.filter(item => item !== 'scoring'));
     })
 
     return <div
@@ -35,6 +37,5 @@ export const LinkComponent = (props: LinkComponentProps): ReactNode => {
             width: `calc(${length} * 100%)`,
             transform: `rotate(${inclination}rad) translateY(-50%)`,
             borderTopColor: color,
-            // clipPath: `polygon(${clipPathBeginPart} 0, ${clipPathBeginPart} 100%, ${clipPathEndPart} 100%, ${clipPathEndPart} 0)`
         }}></div>
 }

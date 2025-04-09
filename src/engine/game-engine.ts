@@ -3,14 +3,13 @@ import { arrayShuffler } from '../math/array-shufller'
 import { Board } from './board/board'
 import { BoardSerializer } from './board/board-serializer'
 import { Card } from './card'
-import { Directions, directions } from './directions'
+import { directions } from './directions'
 import { GameConfiguration } from './game-configuration/game-configuration'
 import { PlayerType } from './game-configuration/player-type'
 import { AiPlayer, AiPlayerInitialization } from './players/ai-player'
 import { HumanPlayer } from './players/human-player'
 import { Player } from './players/player'
 import { MoveScore } from './score-calculator/move-score'
-import { ScoreType } from './score-calculator/score-type'
 
 export class GameEngine {
     private readonly _notPlayedYetCards: Card[]
@@ -120,25 +119,23 @@ export class GameEngine {
 
     public async playNextRound(): Promise<void> {
         if (this.isGameOver()) {
-            console.log('Game over')
+            console.log('Game over. No more moves to play')
             return
         }
         const currentPlayer = this.startNextTurn()
-        console.log(`\n\n========= Player ${currentPlayer.id} turn =========`)
 
         const move = await currentPlayer.makeMove({ board: this._board, scores: this.getScores() })
         const moveScores: MoveScore[] = this._board.makeMove(move)
-        emitPlayerMadeMoveEvent({ ...move, scores: moveScores, playerTurn: this.currentlyPlayingPlayerIndex })
+        emitPlayerMadeMoveEvent({
+            ...move,
+            scores: moveScores,
+            playerTurn: this.currentlyPlayingPlayerIndex,
+        })
 
         const totalScore = moveScores.reduce((acc, moveScore) => {
             moveScore.vertices.forEach((vertix) => (vertix.ownerId = move.playerId))
-            console.log(`\t======== ${ScoreType[moveScore.scoreType]} ========`)
-            console.log(
-                `\t\t\tCombination vertices [${moveScore.vertices.length}]: ${moveScore.vertices.map((vertix) => `${vertix.id} (${Directions[vertix.direction!]})`).join(', ')}`
-            )
             return acc + moveScore.points
         }, 0)
-        // console.log(`\t\tRound total: ${totalScore}`)
         currentPlayer.addScore(totalScore)
 
         const playersNewCard = this._notPlayedYetCards.pop()
@@ -149,6 +146,5 @@ export class GameEngine {
                 card: playersNewCard,
             })
         }
-        // console.log(`Current score: ` + JSON.stringify(this.getScores()))
     }
 }

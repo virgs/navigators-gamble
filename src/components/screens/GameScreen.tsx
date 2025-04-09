@@ -6,8 +6,8 @@ import { BoardComponent } from '../BoardComponent';
 import { HeaderComponent } from '../HeaderComponent';
 import { HiddenCardsHandComponent } from '../hands/HiddenCardsHandComponent';
 import { VisibleCardsHandComponent } from '../hands/VisibleCardsHandComponent';
-import './GameScreen.scss';
 import { ScoreAnimationCoordinator } from './ScoreAnimationCoordinator';
+import './GameScreen.scss';
 
 export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGameFinished: () => void }): ReactNode => {
     const gameEngine = useRef<GameEngine>(undefined);
@@ -15,6 +15,7 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
     const [classes] = useState<string[]>(['game-screen', 'w-100', 'h-100', 'row', 'g-0'])
 
     if (gameEngine.current === undefined) {
+        console.log('GameScreen mounted');
         gameEngine.current = new GameEngine(props.gameConfiguration)
     }
 
@@ -27,7 +28,7 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
             .then(() => {
                 if (gameEngine.current?.isGameOver()) {
                     gameEngine.current?.finish()
-                    setTimeout(() => onGameFinished(), 2000)
+                    setTimeout(() => onGameFinished(), 10000)
                 }
             })
             .catch(e => {
@@ -37,8 +38,10 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
 
     useEffect(() => {
         gameEngine.current!.start()
-        setTimeout(() => iterate(), 2000)
+        setTimeout(() => iterate(), 1000)
         return () => {
+            console.log('GameScreen unmounted');
+            gameEngine.current?.finish()
             gameEngine.current = undefined
         }
     }, [])
@@ -48,16 +51,21 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
     })
 
     const onGameFinished = () => {
-        setTimeout(() => props.onGameFinished(), 5000)
+        setTimeout(() => props.onGameFinished(), 0)
     }
 
-    const visibleHandPlayer = props.gameConfiguration.players
-        .find(player => player.id === props.gameConfiguration.visibleHandPlayerId)
-    const visiblePlayerComponent = visibleHandPlayer ? <VisibleCardsHandComponent player={visibleHandPlayer} /> : <></>
+    const visibleHandPlayerIndex = props.gameConfiguration.players
+        .findIndex(player => player.id === props.gameConfiguration.visibleHandPlayerId)
+    const visiblePlayerComponent = visibleHandPlayerIndex !== -1 ? <VisibleCardsHandComponent turnOrder={visibleHandPlayerIndex}
+        player={props.gameConfiguration.players[visibleHandPlayerIndex]} /> : <></>
 
     const hiddenPlayers: ReactNode[] = props.gameConfiguration.players
-        .filter(player => player.id !== props.gameConfiguration.visibleHandPlayerId)
-        .map((player) => <HiddenCardsHandComponent key={player.id} player={player}></HiddenCardsHandComponent>);
+        .map((player, index) => {
+            if (player.id === props.gameConfiguration.visibleHandPlayerId) {
+                return <></>
+            }
+            return <HiddenCardsHandComponent key={player.id} turnOrder={index} player={player}></HiddenCardsHandComponent>;
+        });
 
     return (
         <>

@@ -29,6 +29,7 @@ export class HumanPlayer implements Player {
                 }
                 this._cards.splice(cardPosition, 1)
                 this._movePromises[event.moveId]({
+                    cardIndex: cardPosition,
                     vertixId: event.vertix.id,
                     direction: event.card.direction,
                     playerId: event.playerId,

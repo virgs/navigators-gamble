@@ -11,6 +11,7 @@ import './VisibleCardsHandComponent.scss';
 
 type VisibleCardsHandComponentProps = {
     player: GamePlayerCommonAttributes;
+    turnOrder: number
 };
 
 export const VisibleCardsHandComponent = (props: VisibleCardsHandComponentProps): ReactNode => {
@@ -51,8 +52,10 @@ export const VisibleCardsHandComponent = (props: VisibleCardsHandComponentProps)
         }
     }
 
+    props.player
+
     return <div className='px-2'>
-        <ScoreComponent player={props.player} ></ScoreComponent>
+        <ScoreComponent turnOrder={props.turnOrder} player={props.player} ></ScoreComponent>
         <Reorder.Group className='d-flex p-0 m-0 align-items-start row' values={cards} onReorder={setCards} axis='x'>
             {cards.map(card => {
                 return <Reorder.Item key={card.id} value={card}

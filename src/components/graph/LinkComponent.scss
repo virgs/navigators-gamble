@@ -6,9 +6,23 @@
     border-width: 1px;
     border-color: var(--compass-highlight-red) transparent transparent transparent;
     border-radius: 200% / 100px 100px 0 0;
+    transition: all 0.2s ease-in-out;
+
+    &.cancel {
+        border-width: 3px;
+        border-style: groove;
+    }
+    &.pair {
+        border-width: 3px;
+        border-style: dotted;
+    }
+    &.sequence {
+        border-width: 5px;
+        border-style: double;
+    }
 
     &.scoring {
-        border-width: 3px;
+        border-width: 8px;
         border-style: solid;
     }
 }

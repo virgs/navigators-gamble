@@ -1,23 +1,25 @@
 import { ReactNode, useState } from 'react';
 import { GamePlayerCommonAttributes } from '../engine/game-configuration/game-configuration';
-import { useLinkAnimationCommandListener, usePlayerTurnChangedListener, } from '../events/events';
+import { useFinishVerticesAnimationsCommandListener, usePlayerTurnChangedListener } from '../events/events';
 import './ScoreComponent.scss';
+import { colors } from '../constants/colors';
 
 
 
 // →→➡︎➜➤➧➨➨➨➤➡︎
-export const ScoreComponent = (props: { player: GamePlayerCommonAttributes }): ReactNode => {
+export const ScoreComponent = (props: { player: GamePlayerCommonAttributes, turnOrder: number }): ReactNode => {
+    const color: string = props.turnOrder !== undefined ? colors[props.turnOrder] : 'var(--compass-highlight-red)'
+
     const [score, setScore] = useState<number>(0);
     const [turn, setTurn] = useState<Boolean>(false);
 
-    useLinkAnimationCommandListener(payload => {
-        if (payload.playerId === props.player.id) {
-            setScore(score + 1); //TODO fix this
-        }
-    })
+    useFinishVerticesAnimationsCommandListener(payload => {
+
+        setScore(score + payload.points);
+    });
 
     usePlayerTurnChangedListener(payload => {
         setTurn(payload.playerId === props.player.id);
     })
-    return <div className='score'><span style={{ color: turn ? 'unset' : 'transparent' }}>➤ </span>Score: {score}</div>;
+    return <div className='score' style={{ color: color }}><span style={{ color: turn ? color : 'transparent' }}>➤ </span>Score: {score}</div>;
 };

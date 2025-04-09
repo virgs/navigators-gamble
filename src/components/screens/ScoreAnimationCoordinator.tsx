@@ -4,7 +4,7 @@ import { MoveScore } from '../../engine/score-calculator/move-score';
 import { usePlayerMadeMoveEventListener, emitEndOfScoreAnimationsEvent, emitBeginVerticesAnimationsCommand, emitLinkAnimationCommand, emitFinishVerticesAnimationsCommand } from '../../events/events';
 
 export class ScoreAnimationCoordinator {
-    private static readonly intervalBetweenAnimations = 2500;
+    private static readonly intervalBetweenAnimations = 2000;
     private static readonly intervalBetweenLinksAnimations = 500;
     private readonly players: GamePlayerConfiguration[];
 
@@ -40,7 +40,7 @@ export class ScoreAnimationCoordinator {
                 //last link animation
                 if (i === currentScore.vertices.length - 1) {
                     setTimeout(() => {
-                        emitFinishVerticesAnimationsCommand();
+                        emitFinishVerticesAnimationsCommand({ points: currentScore.points });
                         this.startScoreAnimation({
                             ...payload,
                             scores: payload.scores.slice(1)
