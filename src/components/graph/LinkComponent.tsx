@@ -4,6 +4,7 @@ import { useFinishVerticesAnimationsCommandListener, useLinkAnimationCommandList
 import { getAngle, getDistance } from '../../math/point';
 import "./LinkComponent.scss";
 import { colors } from '../../constants/colors';
+import { AudioController } from '../../audio/audio-controller';
 
 export type LinkComponentProps = {
     first: SerializableVertix,
@@ -21,6 +22,7 @@ export const LinkComponent = (props: LinkComponentProps): ReactNode => {
             (payload.second.id === props.first.id && payload.first.id === props.second.id)) {
             setColor(colors[payload.playerTurnOrder])
             setClasses(list => list.concat(payload.score.scoreType.toLowerCase()).concat('scoring'));
+            AudioController.playScoreSound()
         }
     })
 

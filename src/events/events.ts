@@ -81,4 +81,4 @@ export const { useEndOfScoreAnimationsEventListener, emitEndOfScoreAnimationsEve
 
 export const { useFinishVerticesAnimationsCommandListener, emitFinishVerticesAnimationsCommand } = createEvent(
     'finish-vertices-animations-command'
-)<{ points: number }>()
+)<{ points: number; playerId: string }>()

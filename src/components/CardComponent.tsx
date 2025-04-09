@@ -21,7 +21,6 @@ export const CardComponent = (props: CardComponentProps): ReactNode => {
     const [contentStyle, setStyle] = useState<React.CSSProperties>({
         alignItems: 'center',
         justifyContent: 'center',
-        cursor: 'pointer',
         borderColor: cardColor
     })
 
@@ -65,10 +64,6 @@ export const CardComponent = (props: CardComponentProps): ReactNode => {
     }
 
     return <div data-card-id={props.card.id} className={cardBoxClasses.join(' ')} >
-        <div className='card-corner' style={{ top: 0, left: 0, backgroundColor: cardColor }} />
-        <div className='card-corner' style={{ top: 0, right: 0, backgroundColor: cardColor }} />
-        <div className='card-corner' style={{ bottom: 0, left: 0, backgroundColor: cardColor }} />
-        <div className='card-corner' style={{ bottom: 0, right: 0, backgroundColor: cardColor }} />
         <div className='needle-image' data-needle-direction={Directions[props.card.direction].toString().toLowerCase()} style={{
             backgroundImage: `url(${needleImage})`,
             transform: `translate(-50%, -50%) rotate(${directionToAngle(props.card.direction)}deg) `

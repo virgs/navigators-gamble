@@ -26,11 +26,11 @@ export const VertixComponent = (props: VertixProps): ReactNode => {
             setClasses(list => list.concat('clickable'));
         } else {
             setSelectedCard(undefined);
-            setClasses(list => list.filter(item => item !== 'clickable'));
         }
     });
 
     usePlayerMadeMoveEventListener((event) => {
+        setClasses(list => list.filter(item => item !== 'clickable'));
         setSelectedCard(undefined);
         if (event.vertixId === props.vertix.id) { //card is placed
             setClasses(list => list

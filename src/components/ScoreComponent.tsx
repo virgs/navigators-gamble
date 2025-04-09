@@ -14,8 +14,9 @@ export const ScoreComponent = (props: { player: GamePlayerCommonAttributes, turn
     const [turn, setTurn] = useState<Boolean>(false);
 
     useFinishVerticesAnimationsCommandListener(payload => {
-
-        setScore(score + payload.points);
+        if (payload.playerId === props.player.id) {
+            setScore(score + payload.points);
+        }
     });
 
     usePlayerTurnChangedListener(payload => {

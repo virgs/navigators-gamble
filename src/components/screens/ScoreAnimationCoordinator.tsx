@@ -1,7 +1,7 @@
-import { GamePlayerConfiguration, GameConfiguration } from '../../engine/game-configuration/game-configuration';
+import { GameConfiguration, GamePlayerConfiguration } from '../../engine/game-configuration/game-configuration';
 import { Move } from '../../engine/score-calculator/move';
 import { MoveScore } from '../../engine/score-calculator/move-score';
-import { usePlayerMadeMoveEventListener, emitEndOfScoreAnimationsEvent, emitBeginVerticesAnimationsCommand, emitLinkAnimationCommand, emitFinishVerticesAnimationsCommand } from '../../events/events';
+import { emitBeginVerticesAnimationsCommand, emitEndOfScoreAnimationsEvent, emitFinishVerticesAnimationsCommand, emitLinkAnimationCommand, usePlayerMadeMoveEventListener } from '../../events/events';
 
 export class ScoreAnimationCoordinator {
     private static readonly intervalBetweenAnimations = 2000;
@@ -10,7 +10,6 @@ export class ScoreAnimationCoordinator {
 
     public constructor(configuration: GameConfiguration) {
         this.players = configuration.players;
-        console.log(this.players);
         usePlayerMadeMoveEventListener(payload => {
             setTimeout(() => {
                 this.startScoreAnimation(payload);
@@ -40,7 +39,7 @@ export class ScoreAnimationCoordinator {
                 //last link animation
                 if (i === currentScore.vertices.length - 1) {
                     setTimeout(() => {
-                        emitFinishVerticesAnimationsCommand({ points: currentScore.points });
+                        emitFinishVerticesAnimationsCommand({ playerId: payload.playerId, points: currentScore.points });
                         this.startScoreAnimation({
                             ...payload,
                             scores: payload.scores.slice(1)

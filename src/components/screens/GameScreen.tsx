@@ -23,19 +23,6 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
         scoreAnimationCoordinator.current = new ScoreAnimationCoordinator(props.gameConfiguration);
     }
 
-    const iterate = () => {
-        gameEngine.current!.playNextRound()
-            .then(() => {
-                if (gameEngine.current?.isGameOver()) {
-                    gameEngine.current?.finish()
-                    setTimeout(() => onGameFinished(), 10000)
-                }
-            })
-            .catch(e => {
-                console.error('Error', e);
-            })
-    }
-
     useEffect(() => {
         gameEngine.current!.start()
         setTimeout(() => iterate(), 1000)
@@ -45,6 +32,15 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
             gameEngine.current = undefined
         }
     }, [])
+
+    const iterate = async () => {
+        await gameEngine.current!.playNextRound()
+        if (gameEngine.current!.isGameOver()) {
+            gameEngine.current!.finish()
+            console.log('Game finished');
+            setTimeout(() => onGameFinished(), 10000)
+        }
+    }
 
     useEndOfScoreAnimationsEventListener(() => {
         iterate()

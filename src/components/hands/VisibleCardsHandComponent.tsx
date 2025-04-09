@@ -23,6 +23,7 @@ export const VisibleCardsHandComponent = (props: VisibleCardsHandComponentProps)
 
     usePlayerMadeMoveEventListener((event: Move) => {
         setCards(cards.filter(card => card.id !== event.cardId))
+        setSelectedCardId('');
     })
 
     useCardAddedToPlayerListener((event) => {
@@ -59,7 +60,8 @@ export const VisibleCardsHandComponent = (props: VisibleCardsHandComponentProps)
         <Reorder.Group className='d-flex p-0 m-0 align-items-start row' values={cards} onReorder={setCards} axis='x'>
             {cards.map(card => {
                 return <Reorder.Item key={card.id} value={card}
-                    style={{ padding: '2px' }}
+                    style={{ padding: '2px', cursor: 'pointer' }}
+                    whileHover={{ scale: 1.05 }}
                     className='d-flex align-items-center justify-content-center col-2 col-md-4 col-lg'
                     drag={false}
                     onPointerDown={() => onCardSelected(card)}

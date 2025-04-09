@@ -12,8 +12,7 @@
         animation: hide_card var(--cards-animation-duration) ease-in-out forwards;
     }
     &.selected {
-        background-color: var(--compass-highlight-blue);
-        box-shadow: 0 0 10px var(--compass-highlight-blue);
+        box-shadow: 0 0 15px var(--compass-highlight-red);
         transition: all 0.2s ease-in-out;
     }
 }
@@ -73,6 +72,7 @@
     left: 0;
     bottom: 0;
     right: 0;
+    padding: 2px;
     border-radius: 12px;
     display: flex;
     color: var(--compass-highlight-red);
@@ -83,21 +83,12 @@
 
 .abbreviation {
     display: flex;
-    // line-height: normal;
     line-height: 15px;
 
     font-family: 'Pirata One', system-ui;
     font-weight: lighter;
     font-style: normal;
     font-size: large;
-}
-
-.card-corner {
-    position: absolute;
-    width: 10%;
-    height: 10%;
-    border-radius: 10px;
-    background-color: var(--compass-primary);
 }
 
 [data-needle-direction='north'] {
