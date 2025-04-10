@@ -5,6 +5,7 @@ import { GameConfiguration } from '../engine/game-configuration/game-configurati
 import { GameScreen } from './screens/GameScreen';
 import { SetupScreen } from './screens/SetupScreen';
 import './GameContainer.scss';
+import LevelEditor from '../levels/LevelEditor';
 
 
 export const GameContainer = (): ReactNode => {
@@ -37,6 +38,7 @@ export const GameContainer = (): ReactNode => {
                 <GameScreen gameConfiguration={gameConfiguration} onGameFinished={() => onGameFinished()}></GameScreen>
             </div>
         } else {
+            // return <LevelEditor></LevelEditor>
             return <SetupScreen onStartButton={(config) => onStartButton(config)}></SetupScreen>
         }
     }

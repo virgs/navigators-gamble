@@ -5,8 +5,8 @@ import { ScoreType } from '../../engine/score-calculator/score-type';
 import { emitBeginVerticesAnimationsCommand, emitEndOfBonusPointsEvent, emitEndOfScoreAnimationsEvent, emitFinishVerticesAnimationsCommand, emitLinkAnimationCommand, EndGameBonusPointsEvent, useEndGameBonusPointsEventListener, usePlayerMadeMoveEventListener } from '../../events/events';
 
 export class ScoreAnimationCoordinator {
-    private static readonly intervalBetweenAnimations = 1000;
-    private static readonly intervalBetweenLinksAnimations = 250;
+    private static readonly intervalBetweenAnimations = 1500;
+    private static readonly intervalBetweenLinksAnimations = 300;
     private readonly players: GamePlayerConfiguration[];
 
     public constructor(configuration: GameConfiguration) {
@@ -24,7 +24,6 @@ export class ScoreAnimationCoordinator {
     }
     private startEndGameBonusPointsAnimation(payload: EndGameBonusPointsEvent[]) {
         const currentBonus = payload.shift();
-        console.log("bonus", currentBonus)
         if (!currentBonus) {
             emitEndOfBonusPointsEvent();
             return;
@@ -43,6 +42,7 @@ export class ScoreAnimationCoordinator {
 
     private startScoreAnimation(payload: Move & { scores: MoveScore[]; }) {
         const currentScore = payload.scores.shift();
+
         if (!currentScore) {
             emitEndOfScoreAnimationsEvent();
             return;
@@ -65,7 +65,7 @@ export class ScoreAnimationCoordinator {
                         emitFinishVerticesAnimationsCommand({ playerId: payload.playerId, points: currentScore.points });
                         this.startScoreAnimation({
                             ...payload,
-                            scores: payload.scores.slice(1)
+                            scores: payload.scores
                         });
                     }, ScoreAnimationCoordinator.intervalBetweenAnimations);
 
