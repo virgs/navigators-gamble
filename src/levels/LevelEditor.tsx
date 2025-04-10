@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Stage, Layer, Circle, Line, Text, Group } from "react-konva";
 import { AiAlgorithmType } from "../ai/algorithms/ai-algorithm-type";
 import { PlayerType } from "../engine/game-configuration/player-type";
+import { generateUID } from "../math/generate-id";
 
 interface Vertex {
     id: string;
@@ -12,7 +13,7 @@ interface Vertex {
 
 const MAX_VERTICES = 40;
 
-export default function LevelEditor() {
+export default function LevelEditor(props: { onExit: () => void }) {
     const [vertices, setVertices] = useState<Vertex[]>([]);
     const [selected, setSelected] = useState<string | null>(null);
     const [cardsPerPlayer, setCardsPerPlayer] = useState(4);
@@ -21,7 +22,7 @@ export default function LevelEditor() {
 
     const addVertex = (x: number, y: number) => {
         if (vertices.length >= MAX_VERTICES) return;
-        const id = `v${vertices.length + 1}`;
+        const id = `v${generateUID()}`;
         setVertices([...vertices, { id, x, y, links: [] }]);
     };
 
@@ -46,14 +47,6 @@ export default function LevelEditor() {
                             : [...vertix.links, id2],
                     };
                 }
-                // if (vertix.id === id2) {
-                //     return {
-                //         ...vertix,
-                //         links: vertix.links.includes(id1)
-                //             ? vertix.links.filter((l) => l !== id1)
-                //             : [...vertix.links, id1],
-                //     };
-                // }
                 return vertix;
             })
         );
@@ -150,6 +143,9 @@ export default function LevelEditor() {
                     />
                 </div>
                 <div>
+                    <button onClick={() => props.onExit()} className="bg-blue-600 text-white px-4 py-2 rounded">
+                        EXIT
+                    </button>
                     <button onClick={exportLevel} className="bg-blue-600 text-white px-4 py-2 rounded">
                         Export JSON
                     </button>

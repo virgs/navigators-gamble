@@ -16,7 +16,8 @@
     }
 
     &.scoring {
-        transform: scale(1.15) translate(-37.5%, -37.5%);
+        box-shadow: 0 0 10px var(--compass-primary);
+        transform: scale(1.25) translate(-37.5%, -37.5%);
     }
 
     &.empty {

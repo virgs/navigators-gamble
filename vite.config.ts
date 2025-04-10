@@ -6,9 +6,13 @@ import { qrcode } from 'vite-plugin-qrcode'
 // https://vite.dev/config/
 export default defineConfig({
     plugins: [react(), qrcode()],
+    assetsInclude: ['**/*.midi'],
     resolve: {
         alias: {
             '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
         },
+    },
+    optimizeDeps: {
+        exclude: [],
     },
 })

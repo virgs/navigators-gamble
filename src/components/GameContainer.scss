@@ -59,9 +59,6 @@
     &.show {
         animation: game-screeen-show var(--screen-transitions) ease-in-out forwards;
     }
-    &.hide {
-        animation: game-screeen-hide var(--screen-transitions) ease-in-out forwards;
-    }
 }
 
 @keyframes game-screeen-show {
@@ -72,11 +69,47 @@
         transform: translateX(0);
     }
 }
-@keyframes game-screeen-hide {
+
+.level-editor {
+    transition: transform ease var(--screen-transitions);
+    &.show {
+        animation: level-editor-show var(--screen-transitions) ease-in-out forwards;
+    }
+}
+
+@keyframes level-editor-show {
     0% {
-        transform: scale(1);
+        transform: translateX(-100%);
     }
     100% {
-        transform: scale(0);
+        transform: translateX(0);
+    }
+}
+
+.setup-screen {
+    transition: transform ease var(--screen-transitions);
+    &.show-from-left {
+        animation: setup-screen-show-from-left var(--screen-transitions) ease-in-out forwards;
+    }
+    &.show-from-right {
+        animation: setup-screen-show-from-right var(--screen-transitions) ease-in-out forwards;
+    }
+}
+
+@keyframes setup-screen-show-from-left {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes setup-screen-show-from-right {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0);
     }
 }

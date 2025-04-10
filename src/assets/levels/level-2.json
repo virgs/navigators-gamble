@@ -1,0 +1,124 @@
+{
+  "players": [
+    {
+      "id": "human-player",
+      "type": 0
+    },
+    {
+      "id": "ai-player",
+      "type": 1,
+      "minWaitTime": 1500,
+      "iterationsPerAlternative": 300,
+      "aiAlgorithm": 0
+    }
+  ],
+  "visibleHandPlayerId": "human-player",
+  "cardsPerPlayer": 4,
+  "cardsPerDirection": 3,
+  "board": {
+    "vertices": [
+      {
+        "id": "v1",
+        "position": {
+          "x": 0.095,
+          "y": 0.102
+        },
+        "linkedVertices": [
+          "v4"
+        ]
+      },
+      {
+        "id": "v2",
+        "position": {
+          "x": 0.373,
+          "y": 0.092
+        },
+        "linkedVertices": [
+          "v1"
+        ]
+      },
+      {
+        "id": "v3",
+        "position": {
+          "x": 0.38,
+          "y": 0.328
+        },
+        "linkedVertices": [
+          "v2"
+        ]
+      },
+      {
+        "id": "v4",
+        "position": {
+          "x": 0.122,
+          "y": 0.328
+        },
+        "linkedVertices": [
+          "v3"
+        ]
+      },
+      {
+        "id": "v5",
+        "position": {
+          "x": 0.602,
+          "y": 0.527
+        },
+        "linkedVertices": [
+          "v6",
+          "v3"
+        ]
+      },
+      {
+        "id": "v6",
+        "position": {
+          "x": 0.893,
+          "y": 0.517
+        },
+        "linkedVertices": [
+          "v7"
+        ]
+      },
+      {
+        "id": "v7",
+        "position": {
+          "x": 0.915,
+          "y": 0.77
+        },
+        "linkedVertices": [
+          "v8"
+        ]
+      },
+      {
+        "id": "v8",
+        "position": {
+          "x": 0.62,
+          "y": 0.782
+        },
+        "linkedVertices": [
+          "v5"
+        ]
+      },
+      {
+        "id": "v9",
+        "position": {
+          "x": 0.122,
+          "y": 0.59
+        },
+        "linkedVertices": [
+          "v3"
+        ]
+      },
+      {
+        "id": "v10",
+        "position": {
+          "x": 0.303,
+          "y": 0.717
+        },
+        "linkedVertices": [
+          "v5",
+          "v9"
+        ]
+      }
+    ]
+  }
+}

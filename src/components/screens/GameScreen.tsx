@@ -9,7 +9,12 @@ import { VisibleCardsHandComponent } from '../hands/VisibleCardsHandComponent';
 import './GameScreen.scss';
 import { ScoreAnimationCoordinator } from './ScoreAnimationCoordinator';
 
-export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGameFinished: () => void }): ReactNode => {
+export type GameFinished = {
+    scores: Record<string, number>;
+    finished: boolean;
+}
+
+export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGameFinished: (result: GameFinished) => void }): ReactNode => {
     const gameEngine = useRef<GameEngine>(undefined);
     const scoreAnimationCoordinator = useRef<ScoreAnimationCoordinator>(undefined);
     const [classes] = useState<string[]>(['game-screen', 'w-100', 'h-100', 'row', 'g-0'])
@@ -44,15 +49,18 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
 
     useEndOfBonusPointsEventListener(() => {
         console.log('End of bonus points');
-        setTimeout(() => onGameFinished(), 10000)
+        setTimeout(() => onGameFinished({
+            scores: gameEngine.current!.getScores(),
+            finished: true
+        }), 10000)
     })
 
     useEndOfScoreAnimationsEventListener(() => {
         iterate()
     })
 
-    const onGameFinished = () => {
-        setTimeout(() => props.onGameFinished(), 0)
+    const onGameFinished = (result: GameFinished) => {
+        setTimeout(() => props.onGameFinished(result), 0)
     }
 
     const visibleHandPlayerIndex = props.gameConfiguration.players
@@ -73,8 +81,12 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
             <div className={classes.join(' ')}>
                 <div className='col-12 col-sm-6 col-md-12 d-flex h-100 align-items-center justify-content-center'
                     style={{ flexWrap: 'wrap', alignContent: 'normal', overflow: 'hidden' }}>
-                    <div onClick={() => onGameFinished()} className='w-100 d-sm-none d-md-block' >
-                        <HeaderComponent></HeaderComponent>
+                    <div className='w-100 d-sm-none d-md-block' >
+                        <HeaderComponent gameConfiguration={props.gameConfiguration} onQuit={() => onGameFinished({
+                            scores: {},
+                            finished: false
+                        })}></HeaderComponent>
+
                     </div>
                     <div className='w-100 d-flex d-sm-none d-md-flex align-items-center' style={{ justifyContent: 'left' }}>
                         {hiddenPlayers.map((aiHand, index) => <div key={`ai-hand-${index}`} className='w-100'>{aiHand}</div>)}
@@ -82,13 +94,16 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
                     <div className='game-screen-board'>
                         <BoardComponent board={props.gameConfiguration.board} />
                     </div>
-                    <div className='w-100 mb-2 d-sm-none d-md-block' style={{}}>
+                    <div className='w-100 mb-2 d-sm-none d-md-block'>
                         {visiblePlayerComponent}
                     </div>
                 </div>
                 <div className='col-6 d-none d-sm-flex d-md-none h-100' style={{ flexWrap: 'wrap', alignContent: 'normal' }}>
-                    <div className='w-100' onClick={() => onGameFinished()} >
-                        <HeaderComponent></HeaderComponent>
+                    <div className='w-100'>
+                        <HeaderComponent gameConfiguration={props.gameConfiguration} onQuit={() => onGameFinished({
+                            scores: {},
+                            finished: false
+                        })}></HeaderComponent>
                     </div>
                     <div className='w-100 d-flex align-items-center' style={{ justifyContent: 'space-left' }}>
                         {hiddenPlayers}

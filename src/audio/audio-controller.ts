@@ -1,3 +1,4 @@
+import background from '../assets/sfx/background-music.mp3' //base 64
 import score1 from '../assets/sfx/retro-coin-1.mp3'
 import score2 from '../assets/sfx/retro-coin-2.mp3'
 import score3 from '../assets/sfx/retro-coin-3.mp3'
@@ -9,15 +10,14 @@ export class AudioController {
     private muted: boolean = false
     private readonly audioContext: AudioContext
     private readonly scoreAudios: HTMLAudioElement[] = []
-    private readonly backgroundAudio: HTMLAudioElement = new Audio(
-        '/assets/sfx/dread-pirate-roberts-sea-shanty-dance-edm-soundtrack-153022.mp3'
-    )
+    private readonly backgroundAudio: HTMLAudioElement = new Audio(background)
 
     private constructor() {
         this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
-        this.backgroundAudio.loop = true
-        this.backgroundAudio.volume = 0.5
         this.backgroundAudio.play()
+        // this.backgroundAudio.loop = true
+        // this.backgroundAudio.volume = 0.5
+        // this.backgroundAudio.play()
 
         scoreAudioPath.forEach((path) => {
             const audio = new Audio(path)
@@ -25,6 +25,10 @@ export class AudioController {
             audio.load()
             this.scoreAudios.push(audio)
         })
+    }
+
+    public static start() {
+        AudioController.getInstance()
     }
 
     public static getInstance(): AudioController {
@@ -40,11 +44,11 @@ export class AudioController {
             // instance.resume()
         }
         if (instance.muted) {
-            instance.backgroundAudio.pause()
+            // instance.backgroundAudio.pause()
             return
         }
         if (instance.audioContext.state === 'running') {
-            instance.backgroundAudio.play()
+            // instance.backgroundAudio.play()
         }
     }
     public static setMuted(muted: boolean): void {
@@ -52,9 +56,9 @@ export class AudioController {
 
         instance.muted = muted
         if (muted) {
-            instance.backgroundAudio.pause()
+            // instance.backgroundAudio.pause()
         } else {
-            instance.backgroundAudio.play()
+            // instance.backgroundAudio.play()
         }
     }
 

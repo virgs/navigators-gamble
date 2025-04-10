@@ -1,0 +1,187 @@
+{
+  "players": [
+    {
+      "id": "human-player",
+      "type": 0
+    },
+    {
+      "id": "ai-player",
+      "type": 1,
+      "minWaitTime": 1500,
+      "iterationsPerAlternative": 300,
+      "aiAlgorithm": 0
+    }
+  ],
+  "visibleHandPlayerId": "human-player",
+  "cardsPerPlayer": 6,
+  "cardsPerDirection": 4,
+  "board": {
+    "vertices": [
+      {
+        "id": "vx7up",
+        "position": {
+          "x": 0.047,
+          "y": 0.117
+        },
+        "linkedVertices": []
+      },
+      {
+        "id": "vxqth",
+        "position": {
+          "x": 0.033,
+          "y": 0.387
+        },
+        "linkedVertices": []
+      },
+      {
+        "id": "vxk4h",
+        "position": {
+          "x": 0.03,
+          "y": 0.617
+        },
+        "linkedVertices": [
+          "vxqth"
+        ]
+      },
+      {
+        "id": "vxksm",
+        "position": {
+          "x": 0.027,
+          "y": 0.868
+        },
+        "linkedVertices": []
+      },
+      {
+        "id": "vx3z7",
+        "position": {
+          "x": 0.373,
+          "y": 0.862
+        },
+        "linkedVertices": []
+      },
+      {
+        "id": "vxw4z",
+        "position": {
+          "x": 0.672,
+          "y": 0.847
+        },
+        "linkedVertices": []
+      },
+      {
+        "id": "vx3vk",
+        "position": {
+          "x": 0.943,
+          "y": 0.84
+        },
+        "linkedVertices": []
+      },
+      {
+        "id": "vxwoo",
+        "position": {
+          "x": 0.883,
+          "y": 0.603
+        },
+        "linkedVertices": [
+          "vx075"
+        ]
+      },
+      {
+        "id": "vx075",
+        "position": {
+          "x": 0.89,
+          "y": 0.342
+        },
+        "linkedVertices": []
+      },
+      {
+        "id": "vx2za",
+        "position": {
+          "x": 0.868,
+          "y": 0.087
+        },
+        "linkedVertices": []
+      },
+      {
+        "id": "vxd6e",
+        "position": {
+          "x": 0.645,
+          "y": 0.088
+        },
+        "linkedVertices": []
+      },
+      {
+        "id": "vx5at",
+        "position": {
+          "x": 0.31,
+          "y": 0.107
+        },
+        "linkedVertices": []
+      },
+      {
+        "id": "vxg7t",
+        "position": {
+          "x": 0.303,
+          "y": 0.363
+        },
+        "linkedVertices": [
+          "vx5at",
+          "vx7up",
+          "vxqth"
+        ]
+      },
+      {
+        "id": "vxike",
+        "position": {
+          "x": 0.302,
+          "y": 0.593
+        },
+        "linkedVertices": [
+          "vxksm",
+          "vx3z7",
+          "vxk4h"
+        ]
+      },
+      {
+        "id": "vxbxd",
+        "position": {
+          "x": 0.653,
+          "y": 0.598
+        },
+        "linkedVertices": [
+          "vxw4z",
+          "vx3vk",
+          "vxwoo"
+        ]
+      },
+      {
+        "id": "vx016",
+        "position": {
+          "x": 0.67,
+          "y": 0.338
+        },
+        "linkedVertices": [
+          "vxd6e",
+          "vx075",
+          "vx2za"
+        ]
+      },
+      {
+        "id": "vxkv6",
+        "position": {
+          "x": 0.497,
+          "y": 0.438
+        },
+        "linkedVertices": [
+          "vxg7t",
+          "vxike",
+          "vxbxd",
+          "vx016",
+          "vx5at",
+          "vxd6e",
+          "vx3z7",
+          "vxw4z"
+        ]
+      }
+    ]
+  }
+}
