@@ -15,7 +15,7 @@ postMessage(readyMessage)
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 let aiAlgorithm: AiAlgorithm
-const minWaitTime: number = 1000
+const minWaitTime: number = 0
 
 self.onmessage = async (event: MessageEvent<WebWorkerMessage>) => {
     try {

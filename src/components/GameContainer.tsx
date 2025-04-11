@@ -45,7 +45,7 @@ export const GameContainer = (): ReactNode => {
             </div>
         } else {
             if (process.env.NODE_ENV === 'development' && levelEditor) {
-                return <div className='level-editor show'>
+                return <div className='level-editor show mx-2'>
                     <LevelEditor
                         configuration={gameConfiguration}
                         onExit={(config: GameConfiguration) => {

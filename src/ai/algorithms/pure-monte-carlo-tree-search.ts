@@ -5,6 +5,7 @@ import { GameConfiguration } from '../../engine/game-configuration/game-configur
 import { Vertix } from '../../engine/graph/vertix'
 import { Move } from '../../engine/score-calculator/move'
 import { MoveScore } from '../../engine/score-calculator/move-score'
+import { arrayShuffler } from '../../math/array-shufller'
 import { InitializeAiMessage } from '../messages/initialize-ai-message'
 import { MessageType } from '../messages/message-type'
 import { MoveRequest } from '../messages/move-request'
@@ -30,21 +31,33 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
 
     public async makeMove(moveRequest: MoveRequest): Promise<MoveResponse> {
         const board = BoardSerializer.deserialize(moveRequest.board)
-        const possibleMoves = this.findNextMoveAlternatives(this.playerId, moveRequest.playerCards, board)
+        const possibleMoves = arrayShuffler(
+            this.findNextMoveAlternatives(this.playerId, moveRequest.playerCards, board)
+        )
 
-        let bestMove: Move & { score: number } = { ...possibleMoves[0], score: Number.NEGATIVE_INFINITY }
-        for (const move of possibleMoves) {
-            let totalScore = 0
-
-            for (let i = 0; i < this.iterationsPerAlternative; i++) {
-                const boardCopy = board.clone()
-                totalScore += this.simulateRandomGame(move, moveRequest, boardCopy)
-            }
-
-            if (totalScore > bestMove.score) {
-                bestMove = { ...move, score: totalScore }
+        const moveResults = new Map<number, Move & { score: number }>()
+        for (let i = 0; i < this.iterationsPerAlternative; i++) {
+            const boardCopy = board.clone()
+            const possibleMove = possibleMoves[i % possibleMoves.length]
+            const moveScore = this.simulateRandomGame(possibleMove, moveRequest, boardCopy)
+            if (moveResults.has(i)) {
+                moveResults.set(i, { ...possibleMove, score: moveResults.get(i)!.score + moveScore })
+            } else {
+                moveResults.set(i, { ...possibleMove, score: moveScore })
             }
         }
+        const bestMove = [...moveResults.values()].reduce(
+            (acc, move) => {
+                if (move.score > acc.score) {
+                    return move
+                }
+                return acc
+            },
+            {
+                ...possibleMoves[0],
+                score: Number.NEGATIVE_INFINITY,
+            }
+        )
 
         return {
             messageType: MessageType.MOVE_RESPONSE,

@@ -89,7 +89,6 @@ export class GameEngine {
 
     public calculateEndGameBonusPoints(): void {
         const playerVerticesMap = this._board.getPlayerVerticesMap()
-        console.log(`Adding bonus points`)
         const endBonusPayload: EndGameBonusPointsEvent[] = []
         this._players.forEach((player, index) => {
             const score = playerVerticesMap[player.id]?.length ?? 0

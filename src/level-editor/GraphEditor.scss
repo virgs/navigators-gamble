@@ -1,3 +1,12 @@
 .grapheditor-container {
-  padding: 1rem;
+    padding: 1rem;
+    justify-items: center;
+    align-items: center;
+}
+
+.grapheditor-container canvas {
+    background-color: var(--compass-tertiary) !important;
+    border: 3px solid var(--compass-secondary) !important;
+    box-shadow: 3px 3px 3px var(--compass-primary) !important;
+    padding: 10px !important;
 }

@@ -175,8 +175,7 @@ export default function GraphEditor(props: GraphEditorProps) {
         setStageDragInit(undefined);
       }}
       onClick={(e) => handleClick(e.evt)}
-      className="border border-gray-300 my-2"
-      style={{ backgroundColor: 'var(--compass-tertiary)', justifyItems: 'center', alignItems: 'center' }}
+      className="grapheditor-container"
     >
       <Layer>
         {/* Grid lines */}
@@ -184,8 +183,8 @@ export default function GraphEditor(props: GraphEditorProps) {
           const pos = (props.canvasSize / (props.gridLines - 1)) * i;
           return (
             <React.Fragment key={i}>
-              <Line key={`h-${i}`} points={[0, pos, props.canvasSize, pos]} stroke="gray" opacity={0.5} strokeWidth={1} />
-              <Line key={`v-${i}`} points={[pos, 0, pos, props.canvasSize]} stroke="gray" opacity={0.5} strokeWidth={1} />
+              <Line key={`h-${i}`} points={[0, pos, props.canvasSize, pos]} stroke="var(--compass-primary)" opacity={0.5} strokeWidth={1} />
+              <Line key={`v-${i}`} points={[pos, 0, pos, props.canvasSize]} stroke="var(--compass-primary)" opacity={0.5} strokeWidth={1} />
             </React.Fragment>
           );
         })}
@@ -229,7 +228,7 @@ export default function GraphEditor(props: GraphEditorProps) {
                 sceneFunc={(ctx, shape) => {
                   ctx.beginPath();
                   ctx.moveTo(v.x, v.y);
-                  const direction = rotate90degreesCCW(multiplyByScalar(normalize(subtract(target, v)), cellSize));
+                  const direction = rotate90degreesCCW(multiplyByScalar(normalize(subtract(target, v)), cellSize / 2));
                   const middle = multiplyByScalar(add(target, v), .5);
                   const anchor = add(middle, direction);
 
