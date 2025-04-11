@@ -14,10 +14,9 @@ export class AudioController {
 
     private constructor() {
         this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
-        this.backgroundAudio.play()
-        // this.backgroundAudio.loop = true
-        // this.backgroundAudio.volume = 0.5
         // this.backgroundAudio.play()
+        this.backgroundAudio.loop = true
+        this.backgroundAudio.volume = 0.5
 
         scoreAudioPath.forEach((path) => {
             const audio = new Audio(path)

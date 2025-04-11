@@ -5,10 +5,11 @@ import './scss/styles.scss'
 import './index.scss'
 
 // Import all of Bootstrap's JS
-import * as bootstrap from 'bootstrap'
+// import * as bootstrap from 'bootstrap'
 
-// import 'bootswatch/dist/morph/bootstrap.min.css'
-import 'bootswatch/dist/sandstone/bootstrap.min.css'
+document.addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+});
 
 createRoot(document.getElementById('root')!).render(
     // <StrictMode>

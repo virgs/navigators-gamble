@@ -14,7 +14,6 @@
     "dependencies": {
         "@uidotdev/usehooks": "^2.4.1",
         "bootstrap": "^5.3.3",
-        "bootswatch": "^5.3.3",
         "classnames": "^2.5.1",
         "framer-motion": "^12.6.3",
         "react": "^19.0.0",
