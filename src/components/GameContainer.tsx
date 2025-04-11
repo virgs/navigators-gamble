@@ -3,10 +3,10 @@ import { ReactNode, useState } from 'react';
 import backgroundImage from '../assets/resized-background.jpg';
 import { AudioController } from '../audio/audio-controller';
 import { GameConfiguration } from '../engine/game-configuration/game-configuration';
-import LevelEditor from '../levels/LevelEditor';
-import './GameContainer.scss';
+import LevelEditor from '../level-editor/LevelEditor';
 import { GameFinished, GameScreen } from './screens/GameScreen';
 import { SetupScreen } from './screens/SetupScreen';
+import './GameContainer.scss';
 
 
 export const GameContainer = (): ReactNode => {
@@ -46,10 +46,13 @@ export const GameContainer = (): ReactNode => {
         } else {
             if (process.env.NODE_ENV === 'development' && levelEditor) {
                 return <div className='level-editor show'>
-                    <LevelEditor onExit={() => {
-                        setSetupScreenClasses(['show-from-right'])
-                        return setLevelEditor(false);
-                    }}></LevelEditor>
+                    <LevelEditor
+                        configuration={gameConfiguration}
+                        onExit={(config: GameConfiguration) => {
+                            onStartButton(config)
+                            setSetupScreenClasses(['show-from-right'])
+                            return setLevelEditor(false);
+                        }}></LevelEditor>
                 </div>
             }
             return <div className={['setup-screen', 'h-100'].concat(...setupScreenClasses).join(' ')}>

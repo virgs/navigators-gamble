@@ -4,6 +4,8 @@ import App from './App.tsx'
 import './scss/styles.scss'
 import './index.scss'
 
+import "bootstrap-icons/font/bootstrap-icons.css";
+
 // Import all of Bootstrap's JS
 // import * as bootstrap from 'bootstrap'
 
