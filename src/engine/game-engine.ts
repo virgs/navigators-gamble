@@ -34,12 +34,9 @@ export class GameEngine {
 
         this._board = BoardSerializer.deserialize(gameConfiguration.board)
 
-        if (
-            this._board.getVertices().length >=
-            this._notPlayedYetCards.length - gameConfiguration.players.length * gameConfiguration.cardsPerPlayer
-        ) {
+        if (this._board.getVertices().length >= gameConfiguration.cardsPerDirection * directions.length) {
             throw Error(
-                `Board has too many vertix to game configuration '${this._board.getVertices().length}'. Max allowed '${this._notPlayedYetCards.length - gameConfiguration.players.length * gameConfiguration.cardsPerPlayer}'`
+                `Board has too many vertix to game configuration '${this._board.getVertices().length}'. Max allowed '${this._notPlayedYetCards.length - gameConfiguration.players.length * gameConfiguration.initialCardsPerPlayer}'`
             )
         }
 
@@ -50,7 +47,9 @@ export class GameEngine {
 
     private createPlayers(gameConfiguration: GameConfiguration): Player[] {
         return gameConfiguration.players.map((playerConfiguration, index) => {
-            const cards = Array.from(Array(gameConfiguration.cardsPerPlayer)).map(() => this._notPlayedYetCards.pop()!)
+            const cards = Array.from(Array(gameConfiguration.initialCardsPerPlayer)).map(
+                () => this._notPlayedYetCards.pop()!
+            )
             if (playerConfiguration.type === PlayerType.HUMAN) {
                 return new HumanPlayer(playerConfiguration.id, cards)
             } else {
@@ -85,11 +84,6 @@ export class GameEngine {
     }
 
     public isGameOver(): boolean {
-        if (this._notPlayedYetCards.length <= 0) {
-            console.log('No more cards to play')
-            return true
-        }
-
         return this._board.getEmptyVertices().length <= 0
     }
 

@@ -3,9 +3,7 @@ import { GameAiPureMonteCarloTreeSearchPlayerConfiguration } from './game-ai-pur
 import { GameHumanPlayerConfiguration } from './game-human-player-configuration'
 import { PlayerType } from './player-type'
 
-export type GameAiPlayerCommonAttributes = {
-    minWaitTime: number
-}
+export type GameAiPlayerCommonAttributes = {}
 
 export type GameAiPlayerConfiguration =
     GameAiPureMonteCarloTreeSearchPlayerConfiguration /* | GameAiMinimaxPlayerConfiguration //and others... */
@@ -23,6 +21,6 @@ export type GameConfiguration = {
     players: GamePlayerConfiguration[]
     visibleHandPlayerId?: string
     cardsPerDirection: number
-    cardsPerPlayer: number
+    initialCardsPerPlayer: number
     board: SerializabledBoard
 }

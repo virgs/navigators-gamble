@@ -69,7 +69,7 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
             const moveScores = board.makeMove(move)
 
             if (turn === this.playerTurnOrder) {
-                playerHand = this.updateCardsAfterMove(playerHand, move.direction, availableCards.pop()!)
+                playerHand = this.updateCardsAfterMove(playerHand, move.direction, availableCards.pop())
             }
 
             //TODO terminate the while earlier in case of a expressive score difference
@@ -89,9 +89,9 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
         return this.calculateFinalScore(scores, board.getPlayerVerticesMap())
     }
 
-    private updateCardsAfterMove(playerHand: Directions[], played: Directions, newCard: Directions): Directions[] {
+    private updateCardsAfterMove(playerHand: Directions[], played: Directions, newCard?: Directions): Directions[] {
         const cardToBeRemovedIndex = playerHand.indexOf(played)
-        return playerHand.map((card, index) => (cardToBeRemovedIndex === index ? newCard : card))
+        return playerHand.filter((_, index) => index !== cardToBeRemovedIndex).concat(newCard ?? [])
     }
 
     private calculateScore(moveScores: MoveScore[], playerId: string): number {

@@ -15,7 +15,7 @@ postMessage(readyMessage)
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 let aiAlgorithm: AiAlgorithm
-let minWaitTime: number
+const minWaitTime: number = 1000
 
 self.onmessage = async (event: MessageEvent<WebWorkerMessage>) => {
     try {
@@ -24,7 +24,6 @@ self.onmessage = async (event: MessageEvent<WebWorkerMessage>) => {
                 const initializeMessage = event.data as unknown as InitializeAiMessage
                 if (initializeMessage.configuration.aiAlgorithm === AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH) {
                     aiAlgorithm = new PureMonteCarloTreeSearch(initializeMessage)
-                    minWaitTime = initializeMessage.configuration.minWaitTime
                 }
                 break
             case MessageType.MOVE_REQUEST:

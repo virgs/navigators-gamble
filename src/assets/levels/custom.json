@@ -7,14 +7,13 @@
         {
             "id": "ai-player",
             "type": 1,
-            "minWaitTime": 1500,
             "iterationsPerAlternative": 0,
             "aiAlgorithm": 0
         }
     ],
     "visibleHandPlayerId": "human-player",
-    "cardsPerDirection": 3,
-    "cardsPerPlayer": 4,
+    "cardsPerDirection": 2,
+    "initialCardsPerPlayer": 6,
     "board": {
         "vertices": [
             {

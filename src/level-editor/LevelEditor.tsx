@@ -1,26 +1,57 @@
-import React, { ReactElement, use, useEffect, useRef, useState } from "react";
+import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { AiAlgorithmType } from "../ai/algorithms/ai-algorithm-type";
 import { SerializableVertix } from "../engine/board/serializable-board";
 import { GameConfiguration } from "../engine/game-configuration/game-configuration";
 import { PlayerType } from "../engine/game-configuration/player-type";
+import { arrayShuffler } from "../math/array-shufller";
 import GraphEditor from "./GraphEditor";
-import "./LevelEditor.scss"
+import "./LevelEditor.scss";
+import { directions } from "../engine/directions";
 
 const CANVAS_SIZE = 500;
-const GRID_LINES = 7;
+const GRID_LINES = 8;
+
+
+const exportLevel = (config: GameConfiguration) => {
+    const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${name}.json`;
+    a.click();
+};
+
+function generateRandomVertices() {
+    const space = 1 / GRID_LINES;
+    const allVertices = [...Array(GRID_LINES)].map((_: any, x: number) => {
+        return [...Array(GRID_LINES)].map((_: any, y: number) => {
+            const vertix: SerializableVertix = {
+                id: `${x}-${y}`,
+                position: {
+                    x: space * x,
+                    y: space * y,
+                },
+                linkedVertices: [],
+            };
+            return vertix;
+        });
+    }).flat();
+    const numOfVertices = Math.floor(Math.random() * 20) + 6;
+    return arrayShuffler(allVertices).filter((_, i) => i < numOfVertices);
+}
+
 
 export default function LevelEditor(props: { onExit: (configuration: GameConfiguration) => void, configuration?: GameConfiguration }) {
     const inputFile = useRef(null)
 
     const [vertices, setVertices] = useState<SerializableVertix[]>([]);
-    const [cardsPerPlayer, setCardsPerPlayer] = useState(4);
+    const [initialinitialCardsPerPlayer, setInitialinitialCardsPerPlayer] = useState(4);
     const [cardsPerDirection, setCardsPerDirection] = useState(3);
     const [name, setName] = useState<string>("");
     const [iterations, setIterations] = useState(300);
     const [graphEditor, setGraphEditor] = useState<ReactElement>()
 
-    const onButtonClick = () => {
-        // `current` points to the mounted file input element
+    const onLoadLevel = () => {
         //@ts-expect-error
         inputFile.current?.click();
     };
@@ -29,31 +60,24 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
         if (props.configuration) {
             parseConfiguration(props.configuration);
         }
-        setGraphEditor(<GraphEditor
-            vertices={props.configuration?.board.vertices ?? vertices}
-            onChange={(newVertices) => setVertices(newVertices)}
-            gridLines={GRID_LINES}
-            canvasSize={CANVAS_SIZE}
-        ></GraphEditor>)
+        resetGraphEditor(props.configuration?.board.vertices ?? []);
     }, []);
 
     const parseConfiguration = (config: GameConfiguration) => {
         setName(config.levelName ?? "Level name");
-        setCardsPerPlayer(config.cardsPerPlayer);
+        setInitialinitialCardsPerPlayer(config.initialCardsPerPlayer);
         setCardsPerDirection(config.cardsPerDirection);
         setIterations(config.players.find(player => player.type === PlayerType.ARTIFICIAL_INTELLIGENCE)?.iterationsPerAlternative ?? 0);
         setVertices(config.board.vertices);
         return config;
     }
 
-
     const importLevel = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
         const reader = new FileReader();
         reader.onload = () => {
-            const fileContent = JSON.parse(reader.result as string) as GameConfiguration;
-            const json = parseConfiguration(fileContent);
+            const json = parseConfiguration(JSON.parse(reader.result as string) as GameConfiguration);
 
             setGraphEditor(<GraphEditor
                 vertices={json.board.vertices}
@@ -76,13 +100,12 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
                 {
                     id: 'ai-player',
                     type: PlayerType.ARTIFICIAL_INTELLIGENCE,
-                    minWaitTime: 1500,
                     iterationsPerAlternative: iterations,
                     aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
                 },
             ],
             visibleHandPlayerId: 'human-player',
-            cardsPerPlayer,
+            initialCardsPerPlayer: initialinitialCardsPerPlayer,
             cardsPerDirection,
             board: {
                 vertices: vertices,
@@ -90,15 +113,54 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
         };
     }
 
-    const exportLevel = () => {
+    const resetGraphEditor = (vertices: SerializableVertix[]) => {
+        setGraphEditor(<GraphEditor
+            vertices={vertices}
+            onChange={(newVertices) => setVertices(newVertices)}
+            gridLines={GRID_LINES}
+            canvasSize={CANVAS_SIZE}
+        ></GraphEditor>)
+    }
 
-        const blob = new Blob([JSON.stringify(parseToConfiguration(), null, 2)], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "level.json";
-        a.click();
+    const onAutoGenerateButton = () => {
+        const vertices = generateRandomVertices();
+
+        setCardsPerDirection(Math.floor(Math.random() * 4) + 2);
+        setInitialinitialCardsPerPlayer(Math.floor(Math.random() * 5) + 2);
+        setIterations(Math.floor(Math.random() * 1000) + 100);
+        setVertices(vertices);
+        resetGraphEditor(vertices);
     };
+
+    const onClearButton = () => {
+        setVertices([]);
+        setName("");
+        setInitialinitialCardsPerPlayer(4);
+        setCardsPerDirection(3);
+        setIterations(300);
+        resetGraphEditor([]);
+    };
+
+    const isValid = () => {
+        console.log("Validating level...");
+        if (vertices.length >= cardsPerDirection * directions.length) {
+            console.log("Too many vertices");
+            return false
+        }
+        if (vertices.length < 6) {
+            console.log("Not enough vertices");
+            return false
+        }
+        if (!name) {
+            console.log("No name");
+            return false
+        }
+        if (vertices.every(origin => origin.linkedVertices.length > 0 || vertices.some(target => target.linkedVertices.includes(origin.id)))) {
+            console.log("Every vertix is linked");
+            return true
+        }
+        return false;
+    }
 
     return (
         <div className="p-4 space-y-4" style={{
@@ -107,24 +169,43 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
         }}>
             <h1 className="title">Level Editor</h1>
             <div className="row justify-content-between">
-                <div className="col-10 mb-2">
-                    <button onClick={onButtonClick} type="button" className="btn btn-info px-4">
+                <div className="col-auto" style={{ textAlign: 'end' }}>
+                    <button onClick={() => onAutoGenerateButton()} type="button" className="btn btn-secondary px-4">
+                        Generate
+                        <i className="bi bi-magic ms-2"></i>
+                    </button>
+                </div>
+
+                <div className="col-auto mb-2">
+                    <button onClick={onLoadLevel} type="button" className="btn btn-info px-4">
                         Load
                         <i className="bi bi-cloud-arrow-up ms-2"></i>
                         <input type='file' id='file' ref={inputFile} style={{ display: 'none' }} accept="application/json"
                             onChange={importLevel} />
                     </button>
                 </div>
-                <div className="col-2 align-self-start" style={{ textAlign: 'end' }}>
-                    <button onClick={() => props.onExit(parseToConfiguration())} type="button" className="btn btn-danger px-4">
-                        Exit
-                        <i className="bi bi-house ms-2"></i>
+                <div className="col-auto" style={{ textAlign: 'end' }}>
+                    <button type="button" className="btn btn-danger px-4">
+                        Evaluate
+                        <i className="bi bi-lightning-fill ms-2"></i>
+                    </button>
+                </div>
+                <div className="col-auto" style={{ textAlign: 'end' }}>
+                    <button onClick={() => onClearButton()} type="button" className="btn btn-danger px-4">
+                        Clear
+                        <i className="bi bi-eraser ms-2"></i>
+                    </button>
+                </div>
+                <div className="col-auto" style={{ textAlign: 'end' }}>
+                    <button disabled={!isValid()} onClick={() => props.onExit(parseToConfiguration())} type="button" className="btn btn-secondary px-4">
+                        Test
+                        <i className="bi bi-play ms-2"></i>
                     </button>
                 </div>
                 <div className="col-4">
-                    <label htmlFor="cardsPerPlayer" className="form-label">Cards per player: {cardsPerPlayer}</label>
-                    <input type="range" className="form-range" min="2" max="7" step="1" id="cardsPerPlayer" value={cardsPerPlayer}
-                        onChange={(e) => setCardsPerPlayer(Number(e.target.value))} />
+                    <label htmlFor="initialCardsPerPlayer" className="form-label">Initial cards per player: {initialinitialCardsPerPlayer}</label>
+                    <input type="range" className="form-range" min="2" max="7" step="1" id="initialCardsPerPlayer" value={initialinitialCardsPerPlayer}
+                        onChange={(e) => setInitialinitialCardsPerPlayer(Number(e.target.value))} />
                 </div>
                 <div className="col-4">
                     <label htmlFor="cardsPerDirection" className="form-label">Cards per direction: {cardsPerDirection}</label>
@@ -141,7 +222,7 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
                     <div className="input-group mb-3">
                         <input type="text" value={name} onChange={evt => setName(evt.target.value)} className="form-control" placeholder="Level name" aria-label="Level name"
                             aria-describedby="basic-addon2" />
-                        <button id="basic-addon2" disabled={name.length === 0} onClick={exportLevel} type="button" className="btn btn-primary px-4">
+                        <button id="basic-addon2" disabled={!isValid()} onClick={() => exportLevel(parseToConfiguration())} type="button" className="btn btn-primary px-4">
                             Save
                             <i className="bi bi-floppy ms-2"></i>
                         </button>
@@ -153,3 +234,4 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
     );
 
 }
+
