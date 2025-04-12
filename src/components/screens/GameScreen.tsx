@@ -94,7 +94,7 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
                     <div className='game-screen-board'>
                         <BoardComponent board={props.gameConfiguration.board} />
                     </div>
-                    <div className='w-100 mb-2 d-sm-none d-md-block'>
+                    <div className='w-100 mb-5 d-sm-none d-md-block'>
                         {visiblePlayerComponent}
                     </div>
                 </div>

@@ -1,20 +1,21 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { AiAlgorithmType } from "../ai/algorithms/ai-algorithm-type";
 import { SerializableVertix } from "../engine/board/serializable-board";
+import { directions } from "../engine/directions";
 import { GameConfiguration } from "../engine/game-configuration/game-configuration";
 import { PlayerType } from "../engine/game-configuration/player-type";
+import { LevelEvaluator } from "../engine/level-evaluator/level-evaluator";
 import { arrayShuffler } from "../math/array-shufller";
 import GraphEditor from "./GraphEditor";
 import "./LevelEditor.scss";
-import { directions } from "../engine/directions";
-import { LevelEvaluator } from "../engine/level-evaluator/level-evaluator";
 
-const CANVAS_SIZE = 500;
+const CANVAS_SIZE = 400;
 const GRID_LINES = 8;
 
 const aiLimits = {
     min: 0,
-    max: 500,
+    max: 100,
+    step: 10
 };
 const cardsPerDirectionLimits = {
     min: 2,
@@ -59,10 +60,10 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
     const inputFile = useRef(null)
 
     const [vertices, setVertices] = useState<SerializableVertix[]>([]);
-    const [initialCardsPerPlayer, setInitialCardsPerPlayer] = useState(4);
-    const [cardsPerDirection, setCardsPerDirection] = useState(3);
+    const [initialCardsPerPlayer, setInitialCardsPerPlayer] = useState(initialCardsPerPlayerLimits.min);
+    const [cardsPerDirection, setCardsPerDirection] = useState(cardsPerDirectionLimits.min);
     const [name, setName] = useState<string>("");
-    const [iterations, setIterations] = useState(500);
+    const [iterations, setIterations] = useState(aiLimits.min);
     const [graphEditor, setGraphEditor] = useState<ReactElement>()
 
     const onLoadLevel = () => {
@@ -149,25 +150,30 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
         resetGraphEditor([]);
     };
 
+    const numberOfLinksOfAVertix = (vertex: SerializableVertix) => {
+        const links = vertex.linkedVertices.length;
+        const comingLinks = vertices.filter(v => v.linkedVertices.includes(vertex.id)).length;
+        return links + comingLinks;
+    }
+
     const isValid = () => {
         if (vertices.length >= cardsPerDirection * directions.length) {
             console.log("Too many vertices");
             return false
         }
         if (vertices.length < 6) {
-            console.log("Not enough vertices");
+            // console.log("Not enough vertices");
             return false
         }
         if (!name) {
             console.log("Name is required");
             return false
         }
-        if (vertices.every(origin => origin.linkedVertices.length > 0 || vertices.some(target => target.linkedVertices.includes(origin.id)))) {
-            return true
-        } else {
-            console.log("Not all vertices are connected");
+        if (vertices.some(vertix => numberOfLinksOfAVertix(vertix) < 2)) {
+            console.log("Some vertices have less than 2 links");
+            return false
         }
-        return false;
+        return true;
     }
 
     return (
@@ -195,7 +201,7 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
                 <div className="col-auto" style={{ textAlign: 'end' }}>
                     <button disabled={!isValid()} onClick={async () => {
                         console.log("Evaluating level...");
-                        const result = await new LevelEvaluator(parseToConfiguration()).evalue(100)
+                        const result = await new LevelEvaluator(parseToConfiguration(), (aiLimits.max - aiLimits.min / 2)).evalue(100)
                         console.log("Level evaluation result: ", result);
                     }} type="button" className="btn btn-danger px-4">
                         Evaluate
@@ -209,7 +215,7 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
                     </button>
                 </div>
                 <div className="col-auto" style={{ textAlign: 'end' }}>
-                    <button disabled={!isValid()} onClick={() => props.onExit(parseToConfiguration())} type="button" className="btn btn-secondary px-4">
+                    <button disabled={!isValid()} onClick={() => props.onExit(parseToConfiguration())} type="button" className="btn btn-warning px-4">
                         Test
                         <i className="bi bi-play ms-2"></i>
                     </button>
@@ -226,7 +232,7 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
                 </div>
                 <div className="col-4">
                     <label htmlFor="iterationsPerAlternative" className="form-label">AI level: {iterations}</label>
-                    <input type="range" className="form-range" min={aiLimits.min} max={aiLimits.max} step="100" id="iterationsPerAlternative"
+                    <input type="range" className="form-range" min={aiLimits.min} max={aiLimits.max} step={aiLimits.step} id="iterationsPerAlternative"
                         value={iterations}
                         onChange={(e) => setIterations(Number(e.target.value))} />
                 </div>

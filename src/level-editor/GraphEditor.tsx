@@ -105,6 +105,7 @@ export default function GraphEditor(props: GraphEditorProps) {
   };
 
   const handleClick = (e: MouseEvent) => {
+    console.log("Click", e.button);
     if (e.button === 0) {
       const pointer = {
         x: e.layerX,
@@ -151,6 +152,7 @@ export default function GraphEditor(props: GraphEditorProps) {
       width={props.canvasSize}
       height={props.canvasSize}
       onContextMenu={(e) => e.evt.preventDefault()}
+      perfectDrawEnabled={false}
       onMouseDown={(e) => {
         if (e.evt.button === 2) {
           setSelectedEdge(null);
@@ -225,6 +227,7 @@ export default function GraphEditor(props: GraphEditorProps) {
           return (
             <React.Fragment key={`${v.id}-${l}`}>
               <Shape
+                perfectDrawEnabled={false}
                 sceneFunc={(ctx, shape) => {
                   ctx.beginPath();
                   ctx.moveTo(v.x, v.y);
@@ -237,12 +240,13 @@ export default function GraphEditor(props: GraphEditorProps) {
                     anchor.x, anchor.y,
                     target.x, target.y
                   );
-                  ctx.strokeShape(shape);
+                  ctx.fillStrokeShape(shape);
                 }}
                 strokeWidth={6}
                 closed
                 stroke={isSelected() ? "#4444FF" : "#00004F"}
                 onContextMenu={handleEdgeContextMenu}
+                // onMouseDown={handleEdgeContextMenu}
                 onClick={handleEdgeClick}
               />
             </React.Fragment>
@@ -275,7 +279,6 @@ export default function GraphEditor(props: GraphEditorProps) {
               onDragEnd={(e) => {
                 const snapped = snapToGrid(e.target.x(), e.target.y());
                 e.target.position(snapped); // Force visual update
-
                 setVertices((prev) => prev.map((vv) => vv.id === v.id ? { ...vv, ...snapped } : vv));
               }} />
 

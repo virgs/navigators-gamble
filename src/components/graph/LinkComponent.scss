@@ -1,33 +1,47 @@
 .link {
-    position: absolute;
-    height: 15px;
     transform-origin: center left;
-    border-style: dashed;
-    border-width: 1px;
-    border-color: var(--compass-highlight-red) transparent transparent transparent;
-    filter: opacity(0.5);
-    border-radius: 200% / 100px 100px 0 0;
-    transition: all 0.2s ease-in-out;
+    stroke-width: 1px;
+    opacity: 0.5;
+    transition:
+        stroke-width 0.1s ease-in-out,
+        opacity 0.1s ease-in-out,
+        stroke-dasharray 2s ease-in-out;
+
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 5, 5;
+    fill: none;
+
+    &.show {
+        animation: dash 5s linear alternate infinite;
+    }
 
     &.cancel {
+        opacity: 0.75;
         filter: opacity(0.8);
-        border-width: 3px;
-        border-style: groove;
+        stroke-width: 3px;
+        stroke-dasharray: 10, 10, 1;
     }
     &.pair {
-        filter: opacity(0.9);
-        border-width: 3px;
-        border-style: dotted;
+        opacity: 0.75;
+        stroke-width: 3px;
+        stroke-dasharray: 10;
     }
     &.sequence {
-        filter: opacity(1);
-        border-width: 5px;
-        border-style: double;
+        opacity: 1;
+        stroke-width: 5px;
+        stroke-dasharray: none;
     }
 
     &.scoring {
-        filter: opacity(1);
-        border-width: 10px;
-        border-style: solid;
+        opacity: 1;
+        stroke-dasharray: none;
+        stroke-width: 10px;
+    }
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: 30;
     }
 }
