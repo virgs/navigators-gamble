@@ -4,9 +4,6 @@ import { GamePlayerCommonAttributes } from '../engine/game-configuration/game-co
 import { useFinishVerticesAnimationsCommandListener, usePlayerTurnChangedListener } from '../events/events';
 import './ScoreComponent.scss';
 
-
-
-// →→➡︎➜➤➧➨➨➨➤➡︎
 export const ScoreComponent = (props: { player: GamePlayerCommonAttributes, turnOrder: number }): ReactNode => {
     const color: string = props.turnOrder !== undefined ? colors[props.turnOrder] : 'var(--compass-highlight-red)'
 
@@ -22,8 +19,10 @@ export const ScoreComponent = (props: { player: GamePlayerCommonAttributes, turn
     usePlayerTurnChangedListener(payload => {
         setTurn(payload.playerId === props.player.id);
     })
-    return <div className='score' style={{ color: color }}>
-        <span style={{ color: turn ? color : 'transparent' }}>➤ </span>
-        Score: {score}
+
+    return <div className='score d-flex align-items-center' style={{ color: color, fontSize: '1.75rem' }}>
+        <i className="bi bi-coin mx-2" style={{}}></i>
+        {score}
+        <span className='ms-1 turn-arrow' style={{ color: turn ? color : 'transparent' }}>⬅︎</span>
     </div>;
 };

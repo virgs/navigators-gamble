@@ -79,9 +79,9 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
     return (
         <>
             <div className={classes.join(' ')}>
-                <div className='col-12 col-sm-6 col-md-12 d-flex h-100 align-items-center justify-content-center'
+                <div className='col-12 col-sm-6 col-md-12 d-flex h-100 align-content-between justify-content-center'
                     style={{ flexWrap: 'wrap', alignContent: 'normal', overflow: 'hidden' }}>
-                    <div className='w-100 d-sm-none d-md-block' >
+                    <div className='w-100 d-sm-none d-md-flex' >
                         <HeaderComponent gameConfiguration={props.gameConfiguration} onQuit={() => onGameFinished({
                             scores: {},
                             finished: false

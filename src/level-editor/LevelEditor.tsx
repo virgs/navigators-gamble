@@ -14,7 +14,7 @@ const GRID_LINES = 8;
 
 const aiLimits = {
     min: 0,
-    max: 100,
+    max: 200,
     step: 10
 };
 const cardsPerDirectionLimits = {
@@ -217,6 +217,7 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
                     }} type="button" className="btn btn-danger px-4">
                         Evaluate
                         <i className="bi bi-lightning-fill ms-2"></i>
+                        {/* <i class="bi bi-speedometer"></i> */}
                     </button>
                 </div>
                 <div className="col-auto" style={{ textAlign: 'end' }}>

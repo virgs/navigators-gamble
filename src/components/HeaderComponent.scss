@@ -1,0 +1,39 @@
+.header {
+    background-color: var(--bs-primary);
+    height: 40px;
+    width: 100%;
+    align-items: center;
+    line-height: normal;
+    color: white;
+
+    & .button {
+        background-color: transparent;
+        box-shadow:
+            inset 1px 1px white,
+            inset -1px -1px white;
+        color: white;
+        padding: 2px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        border-radius: 4px;
+
+        &:hover,
+        &:active {
+            box-shadow:
+                inset 2px 2px white,
+                inset -2px -2px white;
+        }
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--bs-secondary-light);
+        }
+    }
+
+    & .level-name {
+        font-size: 20px;
+        color: var(--bs-secondary-text);
+        margin-left: 10px;
+    }
+}

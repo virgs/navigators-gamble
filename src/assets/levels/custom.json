@@ -11,6 +11,7 @@
             "aiAlgorithm": 0
         }
     ],
+    "levelName": "Custom Level",
     "visibleHandPlayerId": "human-player",
     "cardsPerDirection": 2,
     "initialCardsPerPlayer": 6,

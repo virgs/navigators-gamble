@@ -11,6 +11,7 @@
       "aiAlgorithm": 0
     }
   ],
+  "levelName": "Level 1",
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 4,
   "cardsPerDirection": 3,

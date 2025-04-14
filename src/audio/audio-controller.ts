@@ -7,14 +7,14 @@ import score4 from '../assets/sfx/retro-coin-4.mp3'
 const scoreAudioPath: string[] = [score1, score2, score3, score4]
 export class AudioController {
     private static instance: AudioController
-    private muted: boolean = false
     private readonly audioContext: AudioContext
     private readonly scoreAudios: HTMLAudioElement[] = []
     private readonly backgroundAudio: HTMLAudioElement = new Audio(background)
+    private _muted: boolean = false
 
     private constructor() {
         this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
-        // this.backgroundAudio.play()
+        this.backgroundAudio.play()
         this.backgroundAudio.loop = true
         this.backgroundAudio.volume = 0.5
 
@@ -37,34 +37,30 @@ export class AudioController {
         return AudioController.instance
     }
 
-    public static playBackgroundSound(): void {
+    public static toggleMute() {
         const instance = AudioController.getInstance()
-        if (instance.audioContext.state === 'suspended') {
-            // instance.resume()
-        }
-        if (instance.muted) {
-            // instance.backgroundAudio.pause()
-            return
-        }
-        if (instance.audioContext.state === 'running') {
-            // instance.backgroundAudio.play()
-        }
+        this.setMuted(!instance._muted)
     }
+
     public static setMuted(muted: boolean): void {
         const instance = AudioController.getInstance()
-
-        instance.muted = muted
+        instance._muted = muted
         if (muted) {
-            // instance.backgroundAudio.pause()
+            instance.backgroundAudio.pause()
         } else {
-            // instance.backgroundAudio.play()
+            instance.backgroundAudio.play()
         }
+    }
+
+    public static isMuted(): boolean {
+        const instance = AudioController.getInstance()
+        return instance._muted
     }
 
     public static playScoreSound(): void {
         const instance = AudioController.getInstance()
 
-        if (instance.muted) {
+        if (instance._muted) {
             return
         }
         if (instance.audioContext) {
