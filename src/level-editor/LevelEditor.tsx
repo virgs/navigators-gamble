@@ -20,11 +20,19 @@ const aiLimits = {
 const cardsPerDirectionLimits = {
     min: 2,
     max: 5,
+    step: 1
 };
 const initialCardsPerPlayerLimits = {
     min: 2,
     max: 7,
+    step: 1
 };
+
+const createRandomValueFromLimits = (limits: { min: number, max: number, step: number }) => {
+    const diff = limits.max - limits.min;
+    const randomValue = Math.floor(Math.random() * (diff / limits.step)) * limits.step + limits.min;
+    return randomValue;
+}
 
 
 const exportLevel = (config: GameConfiguration) => {
@@ -134,9 +142,10 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
     const onAutoGenerateButton = () => {
         const vertices = generateRandomVertices();
 
-        setCardsPerDirection(Math.floor(Math.random() * (cardsPerDirectionLimits.max - cardsPerDirectionLimits.min)) + cardsPerDirectionLimits.min);
-        setInitialCardsPerPlayer(Math.floor(Math.random() * (initialCardsPerPlayerLimits.max - initialCardsPerPlayerLimits.min)) + initialCardsPerPlayerLimits.min);
-        setIterations(Math.floor(Math.random() * (aiLimits.max - aiLimits.min)) + aiLimits.min);
+        setCardsPerDirection(createRandomValueFromLimits(cardsPerDirectionLimits));
+        setInitialCardsPerPlayer(createRandomValueFromLimits(initialCardsPerPlayerLimits));
+        setIterations(createRandomValueFromLimits(aiLimits));
+        setName(`Level ${Math.floor(Math.random() * 1000).toFixed(0).padStart(4, '0')}`);
         setVertices(vertices);
         resetGraphEditor(vertices);
     };
@@ -144,9 +153,10 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
     const onClearButton = () => {
         setVertices([]);
         setName("");
-        setInitialCardsPerPlayer(4);
-        setCardsPerDirection(3);
-        setIterations(300);
+        setCardsPerDirection(createRandomValueFromLimits(cardsPerDirectionLimits));
+        setInitialCardsPerPlayer(createRandomValueFromLimits(initialCardsPerPlayerLimits));
+        setIterations(createRandomValueFromLimits(aiLimits));
+        setName(`Level ${Math.floor(Math.random() * 1000).toFixed(0).padStart(4, '0')}`);
         resetGraphEditor([]);
     };
 
@@ -193,7 +203,8 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
                 <div className="col-auto mb-2">
                     <button onClick={onLoadLevel} type="button" className="btn btn-info px-4">
                         Load
-                        <i className="bi bi-cloud-arrow-up ms-2"></i>
+                        {/* <i className="bi bi-cloud-arrow-up ms-2"></i> */}
+                        <i className="bi bi-folder2-open ms-2"></i>
                         <input type='file' id='file' ref={inputFile} style={{ display: 'none' }} accept="application/json"
                             onChange={importLevel} />
                     </button>

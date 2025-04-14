@@ -1,6 +1,7 @@
 .link {
-    transform-origin: center left;
     stroke-width: 1px;
+
+    transform-origin: center left;
     opacity: 0.5;
     transition:
         stroke-width 0.1s ease-in-out,
@@ -16,14 +17,10 @@
         animation: dash 5s linear alternate infinite;
     }
 
-    &.cancel {
-        opacity: 0.75;
-        filter: opacity(0.8);
-        stroke-width: 3px;
-        stroke-dasharray: 10, 10, 1;
-    }
+    &.cancel,
     &.pair {
         opacity: 0.75;
+        filter: opacity(0.8);
         stroke-width: 3px;
         stroke-dasharray: 10;
     }
@@ -36,12 +33,57 @@
     &.scoring {
         opacity: 1;
         stroke-dasharray: none;
-        stroke-width: 10px;
+        stroke-width: 8px;
     }
 }
 
 @keyframes dash {
     to {
         stroke-dashoffset: 30;
+    }
+}
+
+.circle-pair {
+    r: 5px;
+    animation: circle-pair 2s ease-in-out alternate infinite;
+    transition: r 0.1s ease-in-out;
+    &.scoring {
+        animation: none;
+        r: 8px;
+    }
+}
+
+@keyframes circle-pair {
+    0% {
+        r: 5px;
+    }
+    100% {
+        r: 8px;
+    }
+}
+
+.cancel-cross {
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 5px;
+    stroke-linecap: round;
+    transform-origin: center center;
+    transform-box: fill-box;
+    transition: transform 0.1s ease-in-out;
+    animation: cancel-cross 2s ease-in-out infinite;
+    &.scoring {
+        animation: none;
+        transform: scale(1.25);
+        stroke-dasharray: none;
+        scale: 1.5;
+    }
+}
+
+@keyframes cancel-cross {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(90deg);
     }
 }

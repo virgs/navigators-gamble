@@ -2,15 +2,17 @@
     position: absolute;
     width: calc(var(--vertix-size) * 0.9);
     height: calc(var(--vertix-size) * 0.9);
-    border-radius: 40%;
+    // border-radius: 40%;
     transition: transform 0.2s ease-in-out;
     transform: translate(-50%, -50%);
 
     &.clickable {
         cursor: pointer;
         &:hover {
-            background-color: var(--compass-highlight-blue);
-            box-shadow: 0 0 10px var(--compass-highlight-blue);
+            // background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='black' stroke-width='4' stroke-dasharray='10' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+            border: 1px dashed var(--compass-highlight-blue);
+            // background-color: var(--compass-highlight-blue);
+            // box-shadow: 0 0 10px var(--compass-highlight-blue);
             transition: all 0.2s ease-in-out;
         }
     }

@@ -1,7 +1,8 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { AudioController } from '../../audio/audio-controller';
 import { colors } from '../../constants/colors';
 import { SerializableVertix } from '../../engine/board/serializable-board';
+import { ScoreType } from '../../engine/score-calculator/score-type';
 import { useFinishVerticesAnimationsCommandListener, useLinkAnimationCommandListener } from '../../events/events';
 import { add, multiplyByScalar, normalize, Point, rotate90degreesCCW, subtract } from '../../math/point';
 import "./LinkComponent.scss";
@@ -12,69 +13,115 @@ export type LinkComponentProps = {
     boardWidth: number,
 };
 
+const SQRT_2_HALF = Math.SQRT2 * .5;
+const BOARD_SCALE = .05;
+
 export const LinkComponent = (props: LinkComponentProps): ReactNode => {
-    const calculatePath = (first: Point, second: Point, width: number): string => {
-        const origin = multiplyByScalar(first, width);
-        const target = multiplyByScalar(second, width);
-
-        const direction = rotate90degreesCCW(multiplyByScalar(normalize(subtract(target, origin)), props.boardWidth * .05));
-        const middle = multiplyByScalar(add(target, origin), .5);
-        const anchor = add(middle, direction);
-
-        const result = `M ${origin.x} ${origin.y} C ${anchor
-            .x} ${anchor.y}, ${anchor
-                .x} ${anchor.y}, ${target.x} ${target.y}`
-        console.log(props.boardWidth, result)
-        return result
-
-    }
-    const calculateMiddle = (first: Point, second: Point, width: number): Point => {
-        const origin = multiplyByScalar(first, width);
-        const target = multiplyByScalar(second, width);
-
-        const direction = rotate90degreesCCW(multiplyByScalar(normalize(subtract(target, origin)), props.boardWidth * .05));
-        const middle = multiplyByScalar(add(target, origin), .5);
-        const anchor = add(middle, multiplyByScalar(direction, .8));
-        return anchor
-    }
-
-    const [classes, setClasses] = useState<string[]>(['link show']);
+    const [scoring, setScoring] = useState<string>('');
+    const [scoreType, setScoreType] = useState<ScoreType | undefined>(undefined)
     const [color, setColor] = useState<string>('var(--compass-highlight-red)')
-    const [middle, setMiddle] = useState<Point>(calculateMiddle(props.first.position, props.second.position, props.boardWidth));
-    const [path, setPath] = useState<string>(calculatePath(props.first.position, props.second.position, props.boardWidth));
-
-    useEffect(() => {
-        const newPath = calculatePath(props.first.position, props.second.position, props.boardWidth);
-        if (newPath !== path) {
-            setPath(newPath);
-        }
-        const newMiddle = calculateMiddle(props.first.position, props.second.position, props.boardWidth);
-        if (newMiddle.x !== middle.x || newMiddle.y !== middle.y) {
-            setMiddle(newMiddle);
-        }
-    }, [props.first.position, props.second.position, props.boardWidth]);
 
     useLinkAnimationCommandListener(payload => {
         if ((payload.first.id === props.first.id && payload.second.id === props.second.id) ||
             (payload.second.id === props.first.id && payload.first.id === props.second.id)) {
+            setScoreType(payload.score.scoreType);
             setColor(colors[payload.playerTurnOrder])
-            setClasses(list => list.concat(payload.score.scoreType.toLowerCase()).concat('scoring'));
+            setScoring('scoring');
             AudioController.playScoreSound()
         }
     })
 
     useFinishVerticesAnimationsCommandListener(() => {
-        setClasses(list => list.filter(item => item !== 'scoring'));
+        if (scoring === 'scoring') {
+            setScoring('');
+        }
     })
+
+    const drawBezierCurve = (middle: Point, normal: Point): ReactNode => {
+        const first = props.first.position
+        const second = props.second.position
+        const width = props.boardWidth
+        const origin = multiplyByScalar(first, width);
+        const target = multiplyByScalar(second, width);
+        const bezierAnchor = add(middle, multiplyByScalar(normal, props.boardWidth * BOARD_SCALE));
+        const bezierPath = `M ${origin.x} ${origin.y} \
+            C ${bezierAnchor.x} ${bezierAnchor.y}, \
+            ${bezierAnchor.x} ${bezierAnchor.y}, \
+            ${target.x} ${target.y}`;
+
+        let classes: string = 'link show '.concat(scoring)
+        if (scoreType === ScoreType.SEQUENCE) {
+            classes += ' sequence'
+        } else if (scoreType === ScoreType.PAIR) {
+            classes += ' pair'
+        } else if (scoreType === ScoreType.CANCEL) {
+            classes += ' cancel'
+        }
+
+        return <path
+            d={bezierPath}
+            stroke={color}
+            className={classes} />;
+    }
+
+
+    const drawPairCircle = (middleOnCurve: Point): ReactNode => {
+        return <circle fill={color} stroke={color} className={'circle-pair '.concat(scoring)}
+            cx={middleOnCurve.x} cy={middleOnCurve.y} />;
+    }
+
+    const drawCancelCross = (middleOnCurve: Point, normal: Point): ReactNode => {
+        const antiNormal = multiplyByScalar(normal, -1)
+        const perpendicular = rotate90degreesCCW(normal)
+        const antiPerpendicular = multiplyByScalar(perpendicular, -1)
+        const firstLine = {
+            origin: add(middleOnCurve, multiplyByScalar(normal, 10)),
+            target: add(middleOnCurve, multiplyByScalar(antiNormal, 10))
+        }
+        const secondLine = {
+            origin: add(middleOnCurve, multiplyByScalar(perpendicular, 10)),
+            target: add(middleOnCurve, multiplyByScalar(antiPerpendicular, 10))
+        }
+        return <g className={'cancel-cross '.concat(scoring)} stroke={color}>
+            <line x1={firstLine.origin.x} y1={firstLine.origin.y} x2={firstLine.target.x} y2={firstLine.target.y} />
+            <line x1={secondLine.origin.x} y1={secondLine.origin.y} x2={secondLine.target.x} y2={secondLine.target.y} />
+        </g>
+    }
+
+
+    const render = (): ReactNode[] => {
+        const components = []
+
+        const first = props.first.position
+        const second = props.second.position
+        const width = props.boardWidth
+        const origin = multiplyByScalar(first, width);
+        const target = multiplyByScalar(second, width);
+        const difference = subtract(target, origin);
+        const middle = add(origin, multiplyByScalar(difference, .5));
+        const normal = rotate90degreesCCW(normalize(difference));
+        const middleOnCurve = add(middle, multiplyByScalar(normal, props.boardWidth * BOARD_SCALE * (SQRT_2_HALF + .05)));
+
+        components.push(drawBezierCurve(middle, normal))
+        if (scoreType === ScoreType.PAIR) {
+            const circle = drawPairCircle(middleOnCurve)
+            components.push(circle)
+        } else if (scoreType === ScoreType.CANCEL) {
+            components.push(drawCancelCross(middleOnCurve, normal))
+        }
+        return components
+
+    }
 
     return <>
         {props.boardWidth !== undefined && <>
-            <path
-                d={path}
-                stroke={color}
-                className={classes.join(' ')}
-            />
-            <circle cx={middle.x} cy={middle.y} r="5" /></>
+            {render().map((component, index) => {
+                return <g key={index}>
+                    {component}
+                </g>
+            }
+            )}
+        </>
         }
 
     </>

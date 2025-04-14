@@ -31,19 +31,24 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
 
     public async makeMove(moveRequest: MoveRequest): Promise<MoveResponse> {
         const board = BoardSerializer.deserialize(moveRequest.board)
+        // the shuffling adds a randomness to the order of the moves
+        // to avoid the same moves being always evaluated first
         const possibleMoves = arrayShuffler(
             this.findNextMoveAlternatives(this.playerId, moveRequest.playerCards, board)
         )
 
         const moveResults = new Map<number, Move & { score: number }>()
-        for (let i = 0; i < this.iterationsPerAlternative; i++) {
+        for (let count = 0; count < this.iterationsPerAlternative; count++) {
             const boardCopy = board.clone()
-            const possibleMove = possibleMoves[i % possibleMoves.length]
+            // shuffle the possible moves to avoid the same moves being always evaluated first
+            // and some stupidness to the ai
+            const index = Math.floor(Math.random() * possibleMoves.length)
+            const possibleMove = possibleMoves[index]
             const moveScore = this.simulateRandomGame(possibleMove, moveRequest, boardCopy)
-            if (moveResults.has(i)) {
-                moveResults.set(i, { ...possibleMove, score: moveResults.get(i)!.score + moveScore })
+            if (moveResults.has(index)) {
+                moveResults.set(index, { ...possibleMove, score: moveResults.get(index)!.score + moveScore })
             } else {
-                moveResults.set(i, { ...possibleMove, score: moveScore })
+                moveResults.set(index, { ...possibleMove, score: moveScore })
             }
         }
         const bestMove = [...moveResults.values()].reduce(
