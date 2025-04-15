@@ -36,8 +36,8 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
     }
 
     return <div className='row g-0 header'>
-        <div className='col-6'>
-            {props.onQuit && <span className='ms-2 button' style={{ cursor: 'pointer' }} onClick={() => props.onQuit && props.onQuit()}>
+        <div className='col-6 col-sm-12 col-md-6 menu py-1'>
+            {props.onQuit && <span className='ms-2 button' onClick={() => props.onQuit && props.onQuit()}>
                 <i className="bi bi-x-lg"></i></span>}
             <span className='level-name ms-4' style={{ textAlign: 'center', fontSize: '1.2rem' }}>
                 {props.levelNumber !== undefined ? props.levelNumber : "5"}
@@ -45,7 +45,7 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
                 {props.gameConfiguration?.levelName ?? "Baiú"}
             </span>
         </div>
-        <div className='col-6 justify-content-end d-flex'>
+        <div className='col-6 col-sm-12 col-md-6 justify-content-end align-items-center d-flex menu py-1'>
             {props.gameConfiguration !== undefined &&
                 <>
                     {

@@ -1,6 +1,1 @@
-export const colors = [
-    'var(--compass-white)',
-    'var(--compass-black)',
-    'var(--compass-highlight-blue)',
-    'var(--compass-highlight-red)',
-]
+export const colors = ['var(--compass-highlight-red)', 'var(--compass-highlight-blue)']

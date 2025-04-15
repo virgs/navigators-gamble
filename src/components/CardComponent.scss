@@ -2,8 +2,8 @@
     width: var(--card-size);
     position: relative;
     overflow: hidden;
-
-    background-color: var(--compass-tertiary);
+    border: 2px solid var(--compass-card-border);
+    background-color: var(--compass-card-background);
     border-radius: 12px;
     &.show {
         animation: show_card var(--cards-animation-duration) ease-in-out forwards;
@@ -12,7 +12,7 @@
         animation: hide_card var(--cards-animation-duration) ease-in-out forwards;
     }
     &.selected {
-        box-shadow: 0 0 15px var(--compass-highlight-red);
+        box-shadow: 0 0 15px var(--compass-white);
         transition: all 0.2s ease-in-out;
     }
 }
@@ -73,17 +73,19 @@
     bottom: 0;
     right: 0;
     padding: 2px;
-    border-radius: 12px;
     display: flex;
-    color: var(--compass-highlight-red);
+    align-items: center;
+    justify-self: unset;
 
-    border: 2px solid var(--compass-primary);
-    padding: 2px;
+    &.covered {
+        background-color: var(--compass-card-cover-background);
+    }
 }
 
 .abbreviation {
     display: flex;
     line-height: 15px;
+    color: var(--compass-card-text);
 
     font-family: 'Pirata One', system-ui;
     font-weight: lighter;

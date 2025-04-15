@@ -1,8 +1,5 @@
 .game-screen-board {
-    // height: min(100svmin, calc(var(--game-container-size) * 0.95));
-    // width: min(100svmin, calc(var(--game-container-size) * 0.95));
     width: min(90%, 560px);
     display: flex;
-    align-items: center;
     justify-content: center;
 }

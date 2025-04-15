@@ -7,7 +7,7 @@ import { ScoreIncrease } from './ScoreIncrease';
 import './ScoreComponent.scss';
 
 export const ScoreComponent = (props: { player: GamePlayerCommonAttributes, turnOrder: number }): ReactNode => {
-    const color: string = props.turnOrder !== undefined ? colors[props.turnOrder] : 'var(--compass-highlight-red)'
+    const color: string = props.turnOrder !== undefined ? colors[props.turnOrder] : 'yellow'
 
     const [score, setScore] = useState<number>(0);
     const [turn, setTurn] = useState<Boolean>(false);

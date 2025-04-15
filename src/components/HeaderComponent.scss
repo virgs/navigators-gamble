@@ -1,10 +1,12 @@
 .header {
-    background-color: var(--bs-primary);
-    height: 40px;
+    background-color: var(--compass-header-background);
     width: 100%;
     align-items: center;
-    line-height: normal;
     color: white;
+
+    & .menu {
+        min-height: 40px;
+    }
 
     & .button {
         background-color: transparent;

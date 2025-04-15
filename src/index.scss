@@ -25,8 +25,20 @@
     --compass-tertiary: var(--peach);
     --compass-highlight-blue: var(--delft-blue);
     --compass-highlight-red: var(--carmine);
-    --compass-white: var(--white);
-    --compass-black: var(--black);
+    --compass-white: var(--bs-white);
+    --compass-light-gray: var(--bs-gray-200);
+    --compass-medium-gray: var(--bs-gray-400);
+    --compass-dark-gray: var(--bs-gray-700);
+    --compass-black: var(--bs-black);
+
+    --compass-card-background: var(--compass-dark-gray);
+    --compass-card-border: var(--compass-medium-gray);
+    --compass-card-text: var(--compass-white);
+
+    --compass-card-cover-background: var(--compass-white);
+    --compass-card-cover-border: var(--compass-medium-gray);
+
+    --compass-header-background: var(--compass-dark-gray);
 
     // animation durations
     --screen-transitions: 1s;

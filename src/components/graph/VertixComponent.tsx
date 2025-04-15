@@ -1,14 +1,30 @@
 import { ReactNode, useState } from 'react';
+import coconutTree from '../../assets/vertices/coconut-tree.png';
+import crossGraveStone from '../../assets/vertices/cross-gravestone.png';
+import footsteps from '../../assets/vertices/footsteps.png';
+import pirateBones from '../../assets/vertices/pirate-bones.png';
+import pirateSkull from '../../assets/vertices/pirate-skull.png';
+import treasureChest from '../../assets/vertices/treasure-chest.png';
 import { SerializableVertix } from '../../engine/board/serializable-board';
 import { Card } from '../../engine/card';
-import { emitVisibleVertixSelectedEvent, useBeginVerticesAnimationsCommandListener, useFinishVerticesAnimationsCommandListener, usePlayerMadeMoveEventListener, usePlayerTurnChangedListener, useVisibleCardSelectedEventListener, VisibleCardSelectedEvent } from '../../events/events';
-import { CardComponent, CardComponentProps } from '../CardComponent';
-import './VertixComponent.scss';
 import { ScoreType } from '../../engine/score-calculator/score-type';
+import { emitVisibleVertixSelectedEvent, useBeginVerticesAnimationsCommandListener, usePlayerMadeMoveEventListener, usePlayerTurnChangedListener, useVisibleCardSelectedEventListener, VisibleCardSelectedEvent } from '../../events/events';
+import { CardComponent, CardComponentProps } from '../CardComponent';
+
+import './VertixComponent.scss';
 
 type VertixProps = {
     vertix: SerializableVertix;
 };
+
+const backgrounds = [coconutTree, crossGraveStone, footsteps, pirateBones, pirateSkull, treasureChest,
+    // xMark
+];
+
+const getBackGroundFromId = (id: string): string => {
+    const integer = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return backgrounds[integer % backgrounds.length];
+}
 
 export const VertixComponent = (props: VertixProps): ReactNode => {
     const [classes, setClasses] = useState<string[]>(['vertix', 'empty']);
@@ -90,7 +106,8 @@ export const VertixComponent = (props: VertixProps): ReactNode => {
             onPointerDown={onPointerDown}>
             {cardConfiguration ? <CardComponent selected={cardConfiguration.selected}
                 card={cardConfiguration.card}
-                ownerTurnOrder={cardConfiguration.ownerTurnOrder}></CardComponent> : <>X</>}
+                ownerTurnOrder={cardConfiguration.ownerTurnOrder}></CardComponent> :
+                <div className='vertix-image' style={{ backgroundImage: `url(${getBackGroundFromId(props.vertix.id)})` }}></div>}
         </div>
     )
 }

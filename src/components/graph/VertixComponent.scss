@@ -4,18 +4,18 @@
     height: calc(var(--vertix-size) * 0.9);
     transition: transform 0.2s ease-in-out;
     transform: translate(-50%, -50%);
+    border-radius: 10px;
 
     &.clickable {
         cursor: pointer;
         &:hover {
-            border: 1px dashed var(--compass-highlight-blue);
+            border: 1px dashed var(--compass-black);
             transition: all 0.2s ease-in-out;
         }
     }
 
     &.scoring {
-        border-radius: 20%;
-        box-shadow: 0 0 10px var(--compass-highlight-red);
+        box-shadow: 0 0 10px var(--compass-light-gray);
         transform: scale(1.15) translate(-40%, -40%);
     }
 
@@ -26,9 +26,20 @@
         font-weight: lighter;
         font-style: normal;
         font-size: 2.5em;
-        color: var(--compass-highlight-red);
+        color: var(--compass-black);
         display: flex;
         align-items: center;
         justify-content: center;
     }
+}
+
+.vertix-image {
+    position: absolute;
+    filter: opacity(0.5);
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    transform: scale(0.5);
+    transform-origin: center;
 }

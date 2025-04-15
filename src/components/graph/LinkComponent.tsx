@@ -19,7 +19,7 @@ const BOARD_SCALE = .05;
 export const LinkComponent = (props: LinkComponentProps): ReactNode => {
     const [scoring, setScoring] = useState<string>('');
     const [scoreType, setScoreType] = useState<ScoreType | undefined>(undefined)
-    const [color, setColor] = useState<string>('var(--compass-highlight-red)')
+    const [color, setColor] = useState<string>('var(--compass-black)')
 
     useLinkAnimationCommandListener(payload => {
         if ((payload.first.id === props.first.id && payload.second.id === props.second.id) ||
