@@ -26,6 +26,11 @@ export class ScoreAnimationCoordinator {
     }
     private startEndGameBonusPointsAnimation(payload: EndGameBonusPointsEvent[]) {
         const currentBonus = payload.shift();
+        if (currentBonus?.vertices.length === 0) {
+            this.startEndGameBonusPointsAnimation(payload);
+            return;
+        }
+
         if (!currentBonus) {
             emitEndOfBonusPointsEvent();
             return;

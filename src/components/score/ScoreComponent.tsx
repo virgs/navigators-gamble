@@ -1,10 +1,10 @@
 import { ReactNode, useState } from 'react';
 import { colors } from '../../constants/colors';
 import { GamePlayerCommonAttributes } from '../../engine/game-configuration/game-configuration';
-import { useFinishVerticesAnimationsCommandListener, usePlayerTurnChangedListener } from '../../events/events';
+import { useBeginVerticesAnimationsCommandListener, useFinishVerticesAnimationsCommandListener, usePlayerTurnChangedListener } from '../../events/events';
 import { generateUID } from '../../math/generate-id';
-import { ScoreIncrease } from './ScoreIncrease';
 import './ScoreComponent.scss';
+import { ScoreIncrease } from './ScoreIncrease';
 
 export const ScoreComponent = (props: { player: GamePlayerCommonAttributes, turnOrder: number }): ReactNode => {
     const color: string = props.turnOrder !== undefined ? colors[props.turnOrder] : 'yellow'
@@ -14,15 +14,24 @@ export const ScoreComponent = (props: { player: GamePlayerCommonAttributes, turn
     const [increaseEffectList, setIncreaseEffectList] = useState<{ id: string; value: number }[]>([])
 
 
+    const animate = (points: number) => {
+        setScore(points);
+        setIncreaseEffectList((list) => list.concat({
+            id: generateUID(),
+            value: points,
+        }));
+    }
+    useBeginVerticesAnimationsCommandListener(payload => {
+        if (payload.playerId === props.player.id) {
+            animate(payload.score.points);
+        }
+    });
+
     useFinishVerticesAnimationsCommandListener(payload => {
         if (payload.playerId === props.player.id) {
-            setScore(score + payload.points);
-            setIncreaseEffectList((list) =>
-                list.concat({
-                    id: generateUID(),
-                    value: payload.points,
-                })
-            )
+            if (payload.playerId === props.player.id) {
+                animate(payload.points);
+            }
         }
     });
 
@@ -49,3 +58,4 @@ export const ScoreComponent = (props: { player: GamePlayerCommonAttributes, turn
         <span className='ms-1 turn-arrow' style={{ color: turn ? color : 'transparent' }}>⬅︎</span>
     </div>;
 };
+

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Circle, Group, Layer, Line, Stage, Text } from "react-konva";
+import { Circle, Group, Layer, Line, Shape, Stage } from "react-konva";
 import { SerializableVertix } from "../engine/board/serializable-board";
 import { generateUID } from "../math/generate-id";
-import { Point } from "../math/point";
+import { Point, add, multiplyByScalar, normalize, rotate90degreesCCW, subtract } from "../math/point";
 import "./GraphEditor.scss";
 
 interface LevelEditorVertix {
@@ -19,6 +19,7 @@ type GraphEditorProps = {
   canvasSize: number;
 }
 
+
 export default function GraphEditor(props: GraphEditorProps) {
 
   const [vertices, setVertices] = useState<LevelEditorVertix[]>([]);
@@ -27,19 +28,10 @@ export default function GraphEditor(props: GraphEditorProps) {
   const [selectedEdge, setSelectedEdge] = useState<string[] | null>(null);
 
   const snapAllVertices = (verts: LevelEditorVertix[]) => {
-    const result = verts.map((v) => {
+    return verts.map((v) => {
       const { x, y } = snapToGrid(v.x, v.y);
       return { ...v, x, y };
     });
-    if (JSON.stringify(result) !== JSON.stringify(vertices)) {
-      props.onChange(result.map(({ id, x, y, links }) => ({
-        id,
-        position: { x: parseFloat((x / props.canvasSize).toFixed(3)), y: parseFloat((y / props.canvasSize).toFixed(3)) },
-        linkedVertices: links,
-      })));
-    }
-
-    return result
   };
 
   useEffect(() => {
@@ -50,13 +42,24 @@ export default function GraphEditor(props: GraphEditorProps) {
         y: v.position.y * props.canvasSize,
         links: v.linkedVertices,
       }))))
-  }, []);
+  }, [props.vertices]);
 
+  useEffect(() => {
+    props.onChange(snapAllVertices(vertices).map((v) => ({
+      id: v.id,
+      position: {
+        x: v.x / props.canvasSize,
+        y: v.y / props.canvasSize,
+      },
+      linkedVertices: v.links,
+    })));
+  }, [vertices]);
+
+  const cellSize = props.canvasSize / (props.gridLines - 1);
   const snapToGrid = (x: number, y: number) => {
-    const cellSize = props.canvasSize / (props.gridLines - 1);
     return {
-      x: Math.round(x / cellSize) * cellSize,
-      y: Math.round(y / cellSize) * cellSize,
+      x: (Math.floor(x / cellSize) + .5) * cellSize,
+      y: (Math.floor(y / cellSize) + .5) * cellSize,
     };
   };
 
@@ -88,27 +91,32 @@ export default function GraphEditor(props: GraphEditorProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedVertix, selectedEdge]);
 
-  useEffect(() => {
-    setVertices((prev) => snapAllVertices(prev));
-  }, [props.gridLines]);
-
-  const addVertex = (x: number, y: number) => {
+  const addVertix = (x: number, y: number) => {
     const id = `v${generateUID()}`;
     const { x: sx, y: sy } = snapToGrid(x, y);
-    setVertices([...vertices, { id, x: sx, y: sy, links: [] }]);
+    const vertixAtPosition = vertices.find((v) => v.x === sx && v.y === sy);
+    if (vertixAtPosition) {
+      setSelectedVertix(vertixAtPosition.id);
+      setSelectedEdge(null);
+    } else {
+      setVertices([...vertices, { id, x: sx, y: sy, links: [] }]);
+      setSelectedVertix(id);
+    }
   };
 
-
   const handleClick = (e: MouseEvent) => {
+    console.log("Click", e.button);
     if (e.button === 0) {
       const pointer = {
         x: e.layerX,
         y: e.layerY,
       };
-      if (pointer) addVertex(pointer.x, pointer.y);
+      if (pointer) {
+        addVertix(pointer.x, pointer.y);
+      }
     }
   };
-  const deleteVertex = (id: string) => {
+  const deleteVertix = (id: string) => {
     setVertices((prev) =>
       prev
         .filter((v) => v.id !== id)
@@ -119,6 +127,11 @@ export default function GraphEditor(props: GraphEditorProps) {
 
   const toggleLink = (id1: string, id2: string) => {
     if (id1 === id2) return;
+    setSelectedVertix(id2);
+    if (vertices.find((v) => v.id === id1)?.links.includes(id2) || vertices.find((v) => v.id === id2)?.links.includes(id1)) {
+      return
+    }
+
     setVertices((vertices) =>
       vertices.map((vertix) => {
         if (vertix.id === id1) {
@@ -139,8 +152,11 @@ export default function GraphEditor(props: GraphEditorProps) {
       width={props.canvasSize}
       height={props.canvasSize}
       onContextMenu={(e) => e.evt.preventDefault()}
+      perfectDrawEnabled={false}
       onMouseDown={(e) => {
         if (e.evt.button === 2) {
+          setSelectedEdge(null);
+          setSelectedVertix(null);
           const stage = e.target.getStage()!;
           const pointer = stage.getPointerPosition()!;
           setStageDragInit({ x: pointer.x, y: pointer.y });
@@ -161,17 +177,16 @@ export default function GraphEditor(props: GraphEditorProps) {
         setStageDragInit(undefined);
       }}
       onClick={(e) => handleClick(e.evt)}
-      className="border border-gray-300 my-2"
-      style={{ backgroundColor: 'var(--compass-tertiary)', justifyItems: 'center', alignItems: 'center' }}
+      className="grapheditor-container"
     >
-      <Layer style={{ backgroundColor: 'red' }}>
+      <Layer>
         {/* Grid lines */}
         {[...Array(props.gridLines)].map((_, i) => {
           const pos = (props.canvasSize / (props.gridLines - 1)) * i;
           return (
             <React.Fragment key={i}>
-              <Line key={`h-${i}`} points={[0, pos, props.canvasSize, pos]} stroke="gray" opacity={0.5} strokeWidth={1} />
-              <Line key={`v-${i}`} points={[pos, 0, pos, props.canvasSize]} stroke="gray" opacity={0.5} strokeWidth={1} />
+              <Line key={`h-${i}`} points={[0, pos, props.canvasSize, pos]} stroke="var(--compass-primary)" opacity={0.5} strokeWidth={1} />
+              <Line key={`v-${i}`} points={[pos, 0, pos, props.canvasSize]} stroke="var(--compass-primary)" opacity={0.5} strokeWidth={1} />
             </React.Fragment>
           );
         })}
@@ -180,24 +195,6 @@ export default function GraphEditor(props: GraphEditorProps) {
         {vertices.map((v) => v.links.map((l) => {
           const target = vertices.find((vv) => vv.id === l);
           if (!target) return null;
-
-          const dx = target.x - v.x;
-          const dy = target.y - v.y;
-          const angle = Math.atan2(dy, dx);
-          const arrowLength = 10;
-          const arrowAngle = Math.PI / 7;
-
-          const arrowX = target.x - Math.cos(angle) * 10;
-          const arrowY = target.y - Math.sin(angle) * 10;
-
-          const arrowPoints = [
-            arrowX,
-            arrowY,
-            arrowX - arrowLength * Math.cos(angle - arrowAngle),
-            arrowY - arrowLength * Math.sin(angle - arrowAngle),
-            arrowX - arrowLength * Math.cos(angle + arrowAngle),
-            arrowY - arrowLength * Math.sin(angle + arrowAngle),
-          ];
 
           const handleEdgeContextMenu = (e: any) => {
             e.evt.preventDefault();
@@ -217,25 +214,41 @@ export default function GraphEditor(props: GraphEditorProps) {
           };
 
           const handleEdgeClick = (e: any) => {
+            setSelectedVertix(null);
             e.cancelBubble = true;
             setSelectedEdge([v.id, l]);
           };
 
+          const isSelected = () => {
+            if (selectedEdge === null) return false;
+            return (selectedEdge[0] === v.id && selectedEdge[1] === l) || (selectedEdge![0] === l && selectedEdge![1] === v.id);
+          };
+
           return (
             <React.Fragment key={`${v.id}-${l}`}>
-              <Line
-                points={[v.x, v.y, target.x, target.y]}
-                stroke="#aaa"
-                strokeWidth={5}
-                onContextMenu={handleEdgeContextMenu}
-                onClick={handleEdgeClick} />
-              <Line
-                points={arrowPoints}
+              <Shape
+                perfectDrawEnabled={false}
+                sceneFunc={(ctx, shape) => {
+                  ctx.beginPath();
+                  ctx.moveTo(v.x, v.y);
+                  const direction = rotate90degreesCCW(multiplyByScalar(normalize(subtract(target, v)), cellSize / 2));
+                  const middle = multiplyByScalar(add(target, v), .5);
+                  const anchor = add(middle, direction);
+
+                  ctx.bezierCurveTo(
+                    anchor.x, anchor.y,
+                    anchor.x, anchor.y,
+                    target.x, target.y
+                  );
+                  ctx.fillStrokeShape(shape);
+                }}
+                strokeWidth={6}
                 closed
-                fill="#aaa"
-                stroke="#aaa"
+                stroke={isSelected() ? "#4444FF" : "#00004F"}
                 onContextMenu={handleEdgeContextMenu}
-                onClick={handleEdgeClick} />
+                // onMouseDown={handleEdgeContextMenu}
+                onClick={handleEdgeClick}
+              />
             </React.Fragment>
           );
         })
@@ -252,31 +265,34 @@ export default function GraphEditor(props: GraphEditorProps) {
               draggable
               onClick={(e) => {
                 e.cancelBubble = true;
+                setSelectedEdge(null);
                 if (!selectedVertix) setSelectedVertix(v.id);
                 else {
-                  toggleLink(selectedVertix, v.id);
                   setSelectedVertix(null);
+                  toggleLink(selectedVertix, v.id);
                 }
               }}
               onDblClick={(e) => {
                 e.cancelBubble = true;
-                deleteVertex(v.id);
+                deleteVertix(v.id);
               }}
               onDragEnd={(e) => {
                 const snapped = snapToGrid(e.target.x(), e.target.y());
                 e.target.position(snapped); // Force visual update
-
-                setVertices((prev) => prev.map((vv) => vv.id === v.id ? { ...vv, ...snapped } : vv
-                )
-                );
+                setVertices((prev) => prev.map((vv) => vv.id === v.id ? { ...vv, ...snapped } : vv));
               }} />
-            <Text x={v.x + 10} y={v.y - 10} text={v.id} fontSize={12} fill="#333" />
+
           </Group>
         ))}
       </Layer>
-    </Stage><p className="text-sm text-gray-500 my-2">
-        Click to add. Click two vertices to connect. Double-click vertix to remove. Drag vertix to move. Right-click and drag to move all.
-      </p></>
+    </Stage>
+      <div style={{ textAlign: 'end', color: 'var(--compass-white)' }}>
+        <i className="bi bi-info-circle-fill ms-2"></i>
+      </div>
+      {/* <p className="text-sm text-gray-500 my-2">
+        Click to add vertix. Click two vertices to connect. Select and press 'delete' to remove. Drag vertix to move. Right-click and drag to move all. Right click on edge to invert it.
+      </p> */}
+    </>
 
   );
 }

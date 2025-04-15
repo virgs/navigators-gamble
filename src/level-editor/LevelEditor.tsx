@@ -15,7 +15,8 @@ const GRID_LINES = 8;
 const aiLimits = {
     min: 0,
     max: 200,
-    step: 10
+    step: 10,
+    human: 50
 };
 const cardsPerDirectionLimits = {
     min: 2,
@@ -183,9 +184,9 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
 
     return (
         <div className="level-editor p-4 space-y-4" style={{
-            // backgroundColor: 'var(--compass-secondary)',
-            // border: '3px solid var(--compass-primary)', color: 'var(--compass-white)',
-            // marginTop: '10px'
+            backgroundColor: 'var(--compass-secondary)',
+            border: '3px solid var(--compass-primary)', color: 'var(--compass-white)',
+            marginTop: '10px'
         }}>
             <h1 className="title">Level Editor</h1>
             <div className="row justify-content-between">
@@ -211,7 +212,7 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
                 <div className="col-auto" style={{ textAlign: 'end' }}>
                     <button disabled={!isValid()} onClick={async () => {
                         console.log("Evaluating level...");
-                        const result = await new LevelEvaluator(parseToConfiguration(), (aiLimits.max - aiLimits.min) / 2).evalue(100)
+                        const result = await new LevelEvaluator(parseToConfiguration(), aiLimits.human).evaluate(100)
                         console.log("Level evaluation result: ", result);
                     }} type="button" className="btn btn-danger btn-sm px-4">
                         Evaluate

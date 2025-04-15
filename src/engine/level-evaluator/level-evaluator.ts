@@ -24,7 +24,7 @@ export class LevelEvaluator {
         this.aiHumanPlayerId = aiHuman.id
     }
 
-    public async evalue(iterations: number = 100): Promise<number> {
+    public async evaluate(iterations: number = 100): Promise<number> {
         const startTime = performance.now()
         console.log(`Starting evaluation with ${iterations} iterations`)
         const promises = []
