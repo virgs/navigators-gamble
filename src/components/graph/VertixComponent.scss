@@ -1,10 +1,15 @@
 .vertix {
     position: absolute;
-    width: calc(var(--vertix-size) * 0.9);
-    height: calc(var(--vertix-size) * 0.9);
-    transition: transform 0.2s ease-in-out;
+    width: var(--vertix-size);
+    height: var(--vertix-size);
+    // width: calc(var(--vertix-size) * 0.9);
+    // height: calc(var(--vertix-size) * 0.9);
     transform: translate(-50%, -50%);
+    transition:
+        transform 0.2s ease-in-out,
+        border 0.2s ease-in-out;
     border-radius: 10px;
+    border: 1px dashed transparent;
 
     &.clickable {
         cursor: pointer;
@@ -16,11 +21,10 @@
 
     &.scoring {
         box-shadow: 0 0 10px var(--compass-light-gray);
-        transform: scale(1.15) translate(-40%, -40%);
+        transform: scale(1.2) translate(-40%, -40%);
     }
 
     &.empty {
-        opacity: 0.75;
         line-height: 15px;
         font-family: 'Pirata One', system-ui;
         font-weight: lighter;
@@ -35,11 +39,11 @@
 
 .vertix-image {
     position: absolute;
-    filter: opacity(0.5);
+    // filter: opacity(0.5);
     height: 100%;
     width: 100%;
     background-size: cover;
     background-position: center;
-    transform: scale(0.5);
+    transform: scale(0.75);
     transform-origin: center;
 }

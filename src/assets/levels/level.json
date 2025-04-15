@@ -1,4 +1,5 @@
 {
+  "levelName": "Level 1",
   "players": [
     {
       "id": "human-player",
@@ -11,7 +12,7 @@
       "aiAlgorithm": 0
     }
   ],
-  "levelName": "Level 1",
+  "estimatedDifficulty": 0.22,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 4,
   "cardsPerDirection": 3,
@@ -20,8 +21,8 @@
       {
         "id": "v1",
         "position": {
-          "x": 0.23,
-          "y": 0.195
+          "x": 0.2142857142857143,
+          "y": 0.2142857142857143
         },
         "linkedVertices": [
           "v2"
@@ -30,8 +31,8 @@
       {
         "id": "v2",
         "position": {
-          "x": 0.415,
-          "y": 0.392
+          "x": 0.35714285714285715,
+          "y": 0.35714285714285715
         },
         "linkedVertices": [
           "v3",
@@ -41,8 +42,8 @@
       {
         "id": "v3",
         "position": {
-          "x": 0.423,
-          "y": 0.643
+          "x": 0.35714285714285715,
+          "y": 0.6428571428571429
         },
         "linkedVertices": [
           "v4"
@@ -51,18 +52,19 @@
       {
         "id": "v4",
         "position": {
-          "x": 0.248,
-          "y": 0.842
+          "x": 0.2142857142857143,
+          "y": 0.7857142857142857
         },
         "linkedVertices": [
-          "v5"
+          "v5",
+          "v1"
         ]
       },
       {
         "id": "v5",
         "position": {
-          "x": 0.712,
-          "y": 0.737
+          "x": 0.6428571428571429,
+          "y": 0.7857142857142857
         },
         "linkedVertices": [
           "v6"
@@ -71,31 +73,33 @@
       {
         "id": "v6",
         "position": {
-          "x": 0.747,
-          "y": 0.49
+          "x": 0.7857142857142857,
+          "y": 0.5
         },
         "linkedVertices": [
-          "v8",
           "v3",
-          "v7"
+          "v8"
         ]
-      },
-      {
-        "id": "v7",
-        "position": {
-          "x": 0.977,
-          "y": 0.475
-        },
-        "linkedVertices": []
       },
       {
         "id": "v8",
         "position": {
-          "x": 0.635,
-          "y": 0.238
+          "x": 0.6428571428571429,
+          "y": 0.2142857142857143
         },
         "linkedVertices": [
-          "v1"
+          "v1",
+          "vxgfb"
+        ]
+      },
+      {
+        "id": "vxgfb",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.5
+        },
+        "linkedVertices": [
+          "v5"
         ]
       }
     ]

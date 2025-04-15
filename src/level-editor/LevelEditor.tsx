@@ -35,12 +35,12 @@ const createRandomValueFromLimits = (limits: { min: number, max: number, step: n
 }
 
 
-const exportLevel = (config: GameConfiguration) => {
+const exportLevel = (config: GameConfiguration, levelName: string) => {
     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${name}.json`;
+    a.download = `${levelName}.json`;
     a.click();
 };
 
@@ -70,14 +70,9 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
     const [vertices, setVertices] = useState<SerializableVertix[]>([]);
     const [initialCardsPerPlayer, setInitialCardsPerPlayer] = useState(initialCardsPerPlayerLimits.min);
     const [cardsPerDirection, setCardsPerDirection] = useState(cardsPerDirectionLimits.min);
-    const [name, setName] = useState<string>("");
+    const [levelName, setLevelName] = useState<string>("");
     const [iterations, setIterations] = useState(aiLimits.min);
     const [graphEditor, setGraphEditor] = useState<ReactElement>()
-
-    const onLoadLevel = () => {
-        //@ts-expect-error
-        inputFile.current?.click();
-    };
 
     useEffect(() => {
         if (props.configuration) {
@@ -87,7 +82,7 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
     }, []);
 
     const parseConfiguration = (config: GameConfiguration) => {
-        setName(config.levelName ?? "Level name");
+        setLevelName(config.levelName ?? "Level name");
         setInitialCardsPerPlayer(config.initialCardsPerPlayer);
         setCardsPerDirection(config.cardsPerDirection);
         setIterations(config.players.find(player => player.type === PlayerType.ARTIFICIAL_INTELLIGENCE)?.iterationsPerAlternative ?? 0);
@@ -108,7 +103,7 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
 
     const parseToConfiguration = (): GameConfiguration => {
         return {
-            levelName: name,
+            levelName: levelName,
             players: [
                 {
                     id: 'human-player',
@@ -145,18 +140,18 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
         setCardsPerDirection(createRandomValueFromLimits(cardsPerDirectionLimits));
         setInitialCardsPerPlayer(createRandomValueFromLimits(initialCardsPerPlayerLimits));
         setIterations(createRandomValueFromLimits(aiLimits));
-        setName(`Level ${Math.floor(Math.random() * 1000).toFixed(0).padStart(4, '0')}`);
+        setLevelName(`Level ${Math.floor(Math.random() * 1000).toFixed(0).padStart(4, '0')}`);
         setVertices(vertices);
         resetGraphEditor(vertices);
     };
 
     const onClearButton = () => {
         setVertices([]);
-        setName("");
+        setLevelName("");
         setCardsPerDirection(createRandomValueFromLimits(cardsPerDirectionLimits));
         setInitialCardsPerPlayer(createRandomValueFromLimits(initialCardsPerPlayerLimits));
         setIterations(createRandomValueFromLimits(aiLimits));
-        setName(`Level ${Math.floor(Math.random() * 1000).toFixed(0).padStart(4, '0')}`);
+        setLevelName(`Level ${Math.floor(Math.random() * 1000).toFixed(0).padStart(4, '0')}`);
         resetGraphEditor([]);
     };
 
@@ -175,7 +170,7 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
             // console.log("Not enough vertices");
             return false
         }
-        if (!name) {
+        if (!levelName) {
             console.log("Name is required");
             return false
         }
@@ -187,21 +182,25 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
     }
 
     return (
-        <div className="p-4 space-y-4" style={{
-            backgroundColor: 'var(--compass-secondary)',
-            border: '3px solid var(--compass-primary)', color: 'var(--compass-white)', marginTop: '10px'
+        <div className="level-editor p-4 space-y-4" style={{
+            // backgroundColor: 'var(--compass-secondary)',
+            // border: '3px solid var(--compass-primary)', color: 'var(--compass-white)',
+            // marginTop: '10px'
         }}>
             <h1 className="title">Level Editor</h1>
             <div className="row justify-content-between">
                 <div className="col-auto" style={{ textAlign: 'end' }}>
-                    <button onClick={() => onAutoGenerateButton()} type="button" className="btn btn-secondary px-4">
+                    <button onClick={() => onAutoGenerateButton()} type="button" className="btn btn-secondary btn-sm px-4">
                         Generate
                         <i className="bi bi-magic ms-2"></i>
                     </button>
                 </div>
 
                 <div className="col-auto mb-2">
-                    <button onClick={onLoadLevel} type="button" className="btn btn-info px-4">
+                    <button onClick={() => {
+                        //@ts-expect-error
+                        inputFile.current?.click();
+                    }} type="button" className="btn btn-info btn-sm px-4">
                         Load
                         {/* <i className="bi bi-cloud-arrow-up ms-2"></i> */}
                         <i className="bi bi-folder2-open ms-2"></i>
@@ -212,22 +211,23 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
                 <div className="col-auto" style={{ textAlign: 'end' }}>
                     <button disabled={!isValid()} onClick={async () => {
                         console.log("Evaluating level...");
-                        const result = await new LevelEvaluator(parseToConfiguration(), (aiLimits.max - aiLimits.min / 2)).evalue(100)
+                        const result = await new LevelEvaluator(parseToConfiguration(), (aiLimits.max - aiLimits.min) / 2).evalue(100)
                         console.log("Level evaluation result: ", result);
-                    }} type="button" className="btn btn-danger px-4">
+                    }} type="button" className="btn btn-danger btn-sm px-4">
                         Evaluate
                         <i className="bi bi-lightning-fill ms-2"></i>
                         {/* <i class="bi bi-speedometer"></i> */}
                     </button>
                 </div>
                 <div className="col-auto" style={{ textAlign: 'end' }}>
-                    <button onClick={() => onClearButton()} type="button" className="btn btn-danger px-4">
+                    <button onClick={() => onClearButton()} type="button" className="btn btn-danger btn-sm px-4">
                         Clear
                         <i className="bi bi-eraser ms-2"></i>
                     </button>
                 </div>
                 <div className="col-auto" style={{ textAlign: 'end' }}>
-                    <button disabled={!isValid()} onClick={() => props.onExit(parseToConfiguration())} type="button" className="btn btn-warning px-4">
+                    <button disabled={!isValid()} onClick={() => props.onExit(parseToConfiguration())}
+                        type="button" className="btn btn-warning btn-sm px-4">
                         Test
                         <i className="bi bi-play ms-2"></i>
                     </button>
@@ -250,9 +250,10 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
                 </div>
                 <div className="offset-6 col-6">
                     <div className="input-group mb-3">
-                        <input type="text" value={name} onChange={evt => setName(evt.target.value)} className="form-control" placeholder="Level name" aria-label="Level name"
+                        <input type="text" value={levelName} onChange={evt => setLevelName(evt.target.value)} className="form-control" placeholder="Level name" aria-label="Level name"
                             aria-describedby="basic-addon2" />
-                        <button id="basic-addon2" disabled={!isValid()} onClick={() => exportLevel(parseToConfiguration())} type="button" className="btn btn-primary px-4">
+                        <button id="basic-addon2" disabled={!isValid()} onClick={() => exportLevel(parseToConfiguration(), levelName)}
+                            type="button" className="btn btn-primary btn-sm px-4">
                             Save
                             <i className="bi bi-floppy ms-2"></i>
                         </button>

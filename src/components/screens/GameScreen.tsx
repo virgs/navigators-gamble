@@ -79,15 +79,14 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
     return (
         <>
             <div className={classes.join(' ')}>
-                <div className='col-12 col-sm-6 col-md-12 d-flex h-100 align-content-between align-content-sm-center align-content-md-between justify-content-center'
+                <div className='col-12 w-100'>
+                    <HeaderComponent gameConfiguration={props.gameConfiguration} onQuit={() => onGameFinished({
+                        scores: {},
+                        finished: false
+                    })}></HeaderComponent>
+                </div>
+                <div className='col-12 col-sm-6 col-md-12 d-flex align-content-between align-content-sm-center align-content-md-between justify-content-center'
                     style={{ flexWrap: 'wrap', alignContent: 'normal', overflow: 'hidden' }}>
-                    <div className='w-100 d-sm-none d-md-flex' >
-                        <HeaderComponent gameConfiguration={props.gameConfiguration} onQuit={() => onGameFinished({
-                            scores: {},
-                            finished: false
-                        })}></HeaderComponent>
-
-                    </div>
                     <div className='w-100 d-flex d-sm-none d-md-flex align-items-center' style={{ justifyContent: 'left' }}>
                         {hiddenPlayers.map((aiHand, index) => <div key={`ai-hand-${index}`} className='w-100'>{aiHand}</div>)}
                     </div>
@@ -98,13 +97,7 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
                         {visiblePlayerComponent}
                     </div>
                 </div>
-                <div className='col-6 d-none d-sm-flex d-md-none h-100' style={{ flexWrap: 'wrap', alignContent: 'normal' }}>
-                    <div className='w-100'>
-                        <HeaderComponent gameConfiguration={props.gameConfiguration} onQuit={() => onGameFinished({
-                            scores: {},
-                            finished: false
-                        })}></HeaderComponent>
-                    </div>
+                <div className='col-6 d-none d-sm-flex d-md-none' style={{ flexWrap: 'wrap', alignContent: 'normal' }}>
                     <div className='w-100 d-flex align-items-center' style={{ justifyContent: 'space-left' }}>
                         {hiddenPlayers}
                     </div>

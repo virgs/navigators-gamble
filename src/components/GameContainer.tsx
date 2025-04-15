@@ -24,6 +24,7 @@ export const GameContainer = (): ReactNode => {
     const backgroundClasses = classnames({
         'background': true,
         'game-running': gameIsRunning,
+        'level-editor': levelEditor,
     });
 
     const onStartButton = (config: GameConfiguration): void => {

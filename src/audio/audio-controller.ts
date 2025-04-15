@@ -14,7 +14,7 @@ export class AudioController {
 
     private constructor() {
         this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
-        this.backgroundAudio.play()
+        // this.backgroundAudio.play()
         this.backgroundAudio.loop = true
         this.backgroundAudio.volume = 0.5
 
@@ -53,8 +53,7 @@ export class AudioController {
     }
 
     public static isMuted(): boolean {
-        const instance = AudioController.getInstance()
-        return instance._muted
+        return AudioController.getInstance()._muted
     }
 
     public static playScoreSound(): void {

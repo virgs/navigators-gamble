@@ -35,7 +35,7 @@ export const ScoreComponent = (props: { player: GamePlayerCommonAttributes, turn
         setIncreaseEffectList((list) => list.filter((effect) => effect.id !== id))
     }
 
-    return <div className='score d-flex align-items-center' style={{ color: color, fontSize: '1.75rem' }}>
+    return <div className='score d-flex align-items-center mb-2' style={{ color: color, fontSize: '1.75rem' }}>
         <i className="bi bi-coin mx-2" style={{}}></i>
         {increaseEffectList.map((effect) => (
             <ScoreIncrease

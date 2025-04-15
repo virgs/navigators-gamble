@@ -8,7 +8,7 @@ import treasureChest from '../../assets/vertices/treasure-chest.png';
 import { SerializableVertix } from '../../engine/board/serializable-board';
 import { Card } from '../../engine/card';
 import { ScoreType } from '../../engine/score-calculator/score-type';
-import { emitVisibleVertixSelectedEvent, useBeginVerticesAnimationsCommandListener, usePlayerMadeMoveEventListener, usePlayerTurnChangedListener, useVisibleCardSelectedEventListener, VisibleCardSelectedEvent } from '../../events/events';
+import { emitVisibleVertixSelectedEvent, useBeginVerticesAnimationsCommandListener, useEndGameBonusPointsEventListener, useEndOfBonusPointsEventListener, usePlayerMadeMoveEventListener, usePlayerTurnChangedListener, useVisibleCardSelectedEventListener, VisibleCardSelectedEvent } from '../../events/events';
 import { CardComponent, CardComponentProps } from '../CardComponent';
 
 import './VertixComponent.scss';
@@ -32,12 +32,22 @@ export const VertixComponent = (props: VertixProps): ReactNode => {
     const [currentlyPlayerTurnOrder, setCurrentlyPlayerOrder] = useState<number>(0)
     const [selectedCard, setSelectedCard] = useState<VisibleCardSelectedEvent | undefined>(undefined);
 
-
     usePlayerTurnChangedListener(event => {
         setCurrentlyPlayerOrder(event.turnOrder)
         setClasses(list => list
             .filter(item => item !== 'scoring'))
     })
+
+    //bonus points have finished
+    useEndOfBonusPointsEventListener(() => {
+        setClasses(list => list
+            .filter(item => item !== 'scoring'))
+    });
+    // bonus points will begin
+    useEndGameBonusPointsEventListener(() => {
+        setClasses(list => list
+            .filter(item => item !== 'scoring'))
+    });
 
     useVisibleCardSelectedEventListener((event) => {
         if (!cardConfiguration) {

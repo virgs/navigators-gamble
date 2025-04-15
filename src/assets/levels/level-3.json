@@ -12,6 +12,7 @@
     }
   ],
   "levelName": "Level 3",
+  "estimatedDifficulty": 0.22,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 6,
   "cardsPerDirection": 3,

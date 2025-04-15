@@ -9,13 +9,20 @@
     display: block;
     background-origin: content-box;
     background-size: auto;
-    background-position: left;
+    background-position: center;
     transition: all ease-in-out var(--screen-transitions);
     filter: opacity(1) brightness(1);
 
-    &.game-running {
+    &.game-running,
+    &.level-editor {
         filter: opacity(0.75) brightness(1.5) blur(1px) sepia(80%);
+    }
+
+    &.game-running {
         background-position: right;
+    }
+    &.level-editor {
+        background-position: left;
     }
 }
 
@@ -27,31 +34,6 @@
 
     display: flex;
     justify-content: center;
-    // &:before {
-    //     content: ' ';
-    //     position: absolute;
-    //     z-index: 1;
-    //     top: 15px;
-    //     left: 15px;
-    //     right: 15px;
-    //     bottom: 15px;
-    //     border-style: solid;
-    //     border-color: #b06e26;
-    //     border-width: 3px;
-    // }
-
-    // &:after {
-    //     content: ' ';
-    //     position: absolute;
-    //     z-index: 1;
-    //     top: 5px;
-    //     left: 5px;
-    //     right: 5px;
-    //     bottom: 5px;
-    //     border-style: solid;
-    //     border-color: #b06e26;
-    //     border-width: 3px;
-    // }
 }
 
 .game-container-screen {

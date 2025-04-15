@@ -18,7 +18,9 @@ export class ScoreAnimationCoordinator {
         });
 
         useEndGameBonusPointsEventListener(payload => {
-            this.startEndGameBonusPointsAnimation(payload);
+            setTimeout(() => {
+                this.startEndGameBonusPointsAnimation(payload);
+            }, ScoreAnimationCoordinator.intervalBetweenAnimations);
         });
 
     }
@@ -29,12 +31,12 @@ export class ScoreAnimationCoordinator {
             return;
         }
 
+        emitBeginVerticesAnimationsCommand({
+            playerId: currentBonus.playerId,
+            score: { vertices: currentBonus.vertices, points: currentBonus.vertices.length, scoreType: ScoreType.BONUS }
+        });
+
         setTimeout(() => {
-            emitBeginVerticesAnimationsCommand({
-                playerId: currentBonus.playerId,
-                score: { vertices: currentBonus.vertices, points: currentBonus.vertices.length, scoreType: ScoreType.BONUS }
-            });
-            emitFinishVerticesAnimationsCommand({ playerId: currentBonus.playerId, points: currentBonus.vertices.length });
             this.startEndGameBonusPointsAnimation(payload);
         }, ScoreAnimationCoordinator.intervalBetweenAnimations);
 

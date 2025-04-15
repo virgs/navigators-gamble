@@ -36,7 +36,7 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
     }
 
     return <div className='row g-0 header'>
-        <div className='col-6 col-sm-12 col-md-6 menu py-1'>
+        <div className='col-12 col-sm-6 menu py-1'>
             {props.onQuit && <span className='ms-2 button' onClick={() => props.onQuit && props.onQuit()}>
                 <i className="bi bi-x-lg"></i></span>}
             <span className='level-name ms-4' style={{ textAlign: 'center', fontSize: '1.2rem' }}>
@@ -45,19 +45,29 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
                 {props.gameConfiguration?.levelName ?? "Baiú"}
             </span>
         </div>
-        <div className='col-6 col-sm-12 col-md-6 justify-content-end align-items-center d-flex menu py-1'>
+        <div className='col-12 col-sm-6 justify-content-between justify-content-sm-end align-items-center d-flex menu py-1'>
             {props.gameConfiguration !== undefined &&
                 <>
                     {
                         process.env.NODE_ENV === 'development' &&
-                        <span className='me-4'>
-                            <i className="bi bi-robot mx-2" />
-                            <span className='position-relative'>
-                                <span className="position-absolute top-100 start-100 translate-middle ">
-                                    {props.gameConfiguration.players.find(player => player.type === PlayerType.ARTIFICIAL_INTELLIGENCE)?.iterationsPerAlternative}
+                        <>
+                            <span className='me-4'>
+                                <i className="bi bi-robot mx-2" />
+                                <span className='position-relative'>
+                                    <span className="position-absolute top-100 start-100 translate-middle ">
+                                        {props.gameConfiguration.players.find(player => player.type === PlayerType.ARTIFICIAL_INTELLIGENCE)?.iterationsPerAlternative}
+                                    </span>
                                 </span>
                             </span>
-                        </span>
+                            <span className='me-4'>
+                                <i className="bi bi-speedometer mx-2" />
+                                <span className='position-relative'>
+                                    <span className="position-absolute top-100 start-100 translate-middle ">
+                                        {props.gameConfiguration.estimatedDifficulty}
+                                    </span>
+                                </span>
+                            </span>
+                        </>
                     }
                     {turnCounter !== undefined &&
                         <span className='me-4'>
