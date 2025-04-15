@@ -4,7 +4,7 @@ import { Card } from '../../engine/card';
 import { GamePlayerCommonAttributes } from '../../engine/game-configuration/game-configuration';
 import { emitVisibleCardSelectedEvent, MakeMoveCommand, useCardAddedToPlayerListener, useNewGameListener, useVisibleHandMakeMoveCommandListener, useVisibleVertixSelectedEventListener, VisibleVertixSelectedEvent } from '../../events/events';
 import { CardComponent } from '../CardComponent';
-import { ScoreComponent } from '../ScoreComponent';
+import { ScoreComponent } from '../score/ScoreComponent';
 import './VisibleCardsHandComponent.scss';
 
 

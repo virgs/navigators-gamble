@@ -13,21 +13,19 @@
     stroke-dasharray: 5, 5;
     fill: none;
 
-    &.show {
-        animation: dash 5s linear alternate infinite;
-    }
-
     &.cancel,
     &.pair {
         opacity: 0.75;
         filter: opacity(0.8);
         stroke-width: 3px;
         stroke-dasharray: 10;
+        animation: dash 5s linear alternate infinite;
     }
     &.sequence {
         opacity: 1;
         stroke-width: 5px;
         stroke-dasharray: none;
+        animation: dash 5s linear alternate infinite;
     }
 
     &.scoring {

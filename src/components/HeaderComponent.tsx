@@ -6,7 +6,13 @@ import { directions } from '../engine/directions';
 import { usePlayerMadeMoveEventListener } from '../events/events';
 import { PlayerType } from '../engine/game-configuration/player-type';
 
-export const HeaderComponent = (props: { gameConfiguration?: GameConfiguration, onQuit?: () => void, levelNumber?: number }): ReactNode => {
+type HeaderProps = {
+    gameConfiguration?: GameConfiguration;
+    onQuit?: () => void;
+    levelNumber?: number;
+};
+
+export const HeaderComponent = (props: HeaderProps): ReactNode => {
     const totalCards = (): number | undefined => {
         if (props.gameConfiguration === undefined) {
             return undefined;
@@ -16,10 +22,12 @@ export const HeaderComponent = (props: { gameConfiguration?: GameConfiguration, 
     };
 
     const [muted, setMuted] = useState<boolean>(AudioController.isMuted());
+    const [turnCounter, setTurnCounter] = useState<number | undefined>(0);
     const [remainingCards, setRemainingCards] = useState<number | undefined>(totalCards);
 
     usePlayerMadeMoveEventListener(() => {
         setRemainingCards(remainingCards === undefined ? undefined : remainingCards - 1);
+        setTurnCounter((turnCounter ?? 0) + 1);
     });
 
     const toggleSound = () => {
@@ -33,21 +41,34 @@ export const HeaderComponent = (props: { gameConfiguration?: GameConfiguration, 
                 <i className="bi bi-x-lg"></i></span>}
             <span className='level-name ms-4' style={{ textAlign: 'center', fontSize: '1.2rem' }}>
                 {props.levelNumber !== undefined ? props.levelNumber : "5"}
-                <i className="bi bi-dot mx-2"></i>
+                <i className="bi bi-dot mx-1"></i>
                 {props.gameConfiguration?.levelName ?? "Baiú"}
             </span>
         </div>
         <div className='col-6 justify-content-end d-flex'>
             {props.gameConfiguration !== undefined &&
                 <>
-                    <span className='me-4'>
-                        <i className="bi bi-robot mx-2" />
-                        <span className='position-relative'>
-                            <span className="position-absolute top-100 start-100 translate-middle ">
-                                {props.gameConfiguration.players.find(player => player.type === PlayerType.ARTIFICIAL_INTELLIGENCE)?.iterationsPerAlternative}
+                    {
+                        process.env.NODE_ENV === 'development' &&
+                        <span className='me-4'>
+                            <i className="bi bi-robot mx-2" />
+                            <span className='position-relative'>
+                                <span className="position-absolute top-100 start-100 translate-middle ">
+                                    {props.gameConfiguration.players.find(player => player.type === PlayerType.ARTIFICIAL_INTELLIGENCE)?.iterationsPerAlternative}
+                                </span>
                             </span>
                         </span>
-                    </span>
+                    }
+                    {turnCounter !== undefined &&
+                        <span className='me-4'>
+                            <i className="bi bi-arrow-repeat mx-2" />
+                            <span className='position-relative'>
+                                <span className="position-absolute top-100 start-100 translate-middle ">
+                                    {turnCounter}
+                                </span>
+                            </span>
+                        </span>
+                    }
                     <span className='me-4'>
                         <i className="bi bi-files mx-2" />
                         <span className='position-relative'>
