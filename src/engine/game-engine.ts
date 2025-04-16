@@ -90,7 +90,6 @@ export class GameEngine {
     public calculateEndGameBonusPoints(): void {
         const endBonusPayload: EndGameBonusPointsEvent[] = []
         this._players.forEach((player, index) => {
-            console.log('Player Id')
             const vetices = this._board.getVertices().filter((vertix) => vertix.ownerId === player.id)
             player.addScore(vetices.length)
             const newLocal = {
@@ -100,7 +99,6 @@ export class GameEngine {
                 playerTurnOrder: index,
                 vertices: vetices,
             }
-            console.log('End game bonus points for player', newLocal, vetices)
             endBonusPayload.push(newLocal)
         })
         emitEndGameBonusPointsEvent(endBonusPayload)
