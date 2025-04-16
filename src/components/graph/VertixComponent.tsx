@@ -9,7 +9,7 @@ import { SerializableVertix } from '../../engine/board/serializable-board';
 import { Card } from '../../engine/card';
 import { ScoreType } from '../../engine/score-calculator/score-type';
 import { emitVisibleVertixSelectedEvent, useBeginVerticesAnimationsCommandListener, useEndGameBonusPointsEventListener, useEndOfBonusPointsEventListener, usePlayerMadeMoveEventListener, usePlayerTurnChangedListener, useVisibleCardSelectedEventListener, VisibleCardSelectedEvent } from '../../events/events';
-import { CardComponent, CardComponentProps } from '../CardComponent';
+import { CardComponent, CardComponentProps } from '../card/CardComponent';
 
 import './VertixComponent.scss';
 

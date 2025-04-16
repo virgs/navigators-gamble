@@ -86,7 +86,7 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
                     })}></HeaderComponent>
                 </div>
                 <div className='col-12 col-sm-6 col-md-12 d-flex align-content-between align-content-sm-center align-content-md-between justify-content-center'
-                    style={{ flexWrap: 'wrap', alignContent: 'normal', overflow: 'hidden' }}>
+                    style={{ flexWrap: 'wrap', alignContent: 'normal' }}>
                     <div className='w-100 d-flex d-sm-none d-md-flex align-items-center' style={{ justifyContent: 'left' }}>
                         {hiddenPlayers.map((aiHand, index) => <div key={`ai-hand-${index}`} className='w-100'>{aiHand}</div>)}
                     </div>

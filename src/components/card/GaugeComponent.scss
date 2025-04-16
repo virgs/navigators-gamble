@@ -1,0 +1,26 @@
+.gauge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+
+    & path,
+    & circle {
+        stroke: var(--compass-black);
+        stroke-width: 1px;
+    }
+    // highlighted region
+    & .MuiGauge-valueArc,
+    & circle {
+        fill: var(--compass-white);
+    }
+    & circle {
+        filter: drop-shadow(1px 1px 2px var(--compass-black));
+    }
+    & .needle-path path {
+        stroke: var(--compass-white);
+        filter: drop-shadow(1px 1px 2px var(--compass-black));
+        stroke-width: 2px;
+    }
+}

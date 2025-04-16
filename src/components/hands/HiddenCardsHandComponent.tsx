@@ -3,7 +3,7 @@ import { ReactNode, useState } from 'react';
 import { Card } from '../../engine/card';
 import { GamePlayerCommonAttributes } from '../../engine/game-configuration/game-configuration';
 import { PlayerMadeMoveEvent, useCardAddedToPlayerListener, useNewGameListener, usePlayerMadeMoveEventListener } from '../../events/events';
-import { CardComponent } from '../CardComponent';
+import { CardComponent } from '../card/CardComponent';
 import { ScoreComponent } from '../score/ScoreComponent';
 import './HiddenCardsHandComponent.scss';
 

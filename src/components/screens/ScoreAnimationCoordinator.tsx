@@ -42,6 +42,10 @@ export class ScoreAnimationCoordinator {
         });
 
         setTimeout(() => {
+            emitFinishVerticesAnimationsCommand({
+                playerId: currentBonus.playerId,
+                points: currentBonus.vertices.length
+            });
             this.startEndGameBonusPointsAnimation(payload);
         }, ScoreAnimationCoordinator.intervalBetweenAnimations);
 

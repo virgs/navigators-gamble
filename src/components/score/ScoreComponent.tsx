@@ -1,7 +1,7 @@
 import { ReactNode, useState } from 'react';
 import { colors } from '../../constants/colors';
 import { GamePlayerCommonAttributes } from '../../engine/game-configuration/game-configuration';
-import { useBeginVerticesAnimationsCommandListener, useFinishVerticesAnimationsCommandListener, usePlayerTurnChangedListener } from '../../events/events';
+import { useFinishVerticesAnimationsCommandListener, usePlayerTurnChangedListener } from '../../events/events';
 import { generateUID } from '../../math/generate-id';
 import './ScoreComponent.scss';
 import { ScoreIncrease } from './ScoreIncrease';
@@ -15,20 +15,16 @@ export const ScoreComponent = (props: { player: GamePlayerCommonAttributes, turn
 
 
     const animate = (points: number) => {
-        setScore(points);
+        setScore(score + points);
         setIncreaseEffectList((list) => list.concat({
             id: generateUID(),
             value: points,
         }));
     }
-    useBeginVerticesAnimationsCommandListener(payload => {
-        if (payload.playerId === props.player.id) {
-            animate(payload.score.points);
-        }
-    });
 
     useFinishVerticesAnimationsCommandListener(payload => {
         if (payload.playerId === props.player.id) {
+            console.log('finish vertices animation', payload);
             if (payload.playerId === props.player.id) {
                 animate(payload.points);
             }
@@ -45,7 +41,7 @@ export const ScoreComponent = (props: { player: GamePlayerCommonAttributes, turn
     }
 
     return <div className='score d-flex align-items-center mb-2' style={{ color: color, fontSize: '1.75rem' }}>
-        <i className="bi bi-coin mx-2" style={{}}></i>
+        <i className="bi bi-coin mx-2"></i>
         {increaseEffectList.map((effect) => (
             <ScoreIncrease
                 key={effect.id}

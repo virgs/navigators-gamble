@@ -14,6 +14,7 @@
         animation: hide_card var(--cards-animation-duration) ease-in-out forwards;
     }
     &.selected {
+        z-index: -1;
         scale: 1.2;
         box-shadow: 0 0 10px 10px var(--compass-white);
     }
@@ -68,28 +69,6 @@
     position: absolute;
     top: 0;
     background-size: contain;
-}
-
-.gauge {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-
-    & path,
-    & circle {
-        stroke: var(--compass-black);
-        stroke-width: 1px;
-    }
-    // highlighted region
-    & .MuiGauge-valueArc,
-    & circle {
-        fill: var(--compass-white);
-    }
-    & .needle-path path {
-        stroke-width: 2px;
-    }
 }
 
 .direction-initials {
