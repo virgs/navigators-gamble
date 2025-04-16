@@ -16,7 +16,7 @@ const aiLimits = {
     min: 0,
     max: 200,
     step: 10,
-    human: 50
+    human: 30
 };
 const cardsPerDirectionLimits = {
     min: 2,

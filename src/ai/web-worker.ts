@@ -1,3 +1,4 @@
+import { sleep } from '../math/sleep'
 import { AiAlgorithm } from './algorithms/ai-algorithm'
 import { AiAlgorithmType } from './algorithms/ai-algorithm-type'
 import { PureMonteCarloTreeSearch } from './algorithms/pure-monte-carlo-tree-search'
@@ -12,10 +13,8 @@ const readyMessage: WebWorkerMessage = {
 }
 postMessage(readyMessage)
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-
 let aiAlgorithm: AiAlgorithm
-const minWaitTime: number = 0
+const minWaitTime: number = 1000
 
 self.onmessage = async (event: MessageEvent<WebWorkerMessage>) => {
     try {

@@ -1,7 +1,20 @@
 .board-box {
     width: 100%;
     position: relative;
+    & .show {
+        animation: fade-in calc(5 * var(--screen-transitions)) ease-in-out forwards;
+    }
 }
+
+@keyframes fade-in {
+    0% {
+        filter: opacity(0);
+    }
+    100% {
+        filter: opacity(1);
+    }
+}
+
 .board-box:before {
     content: '';
     display: block;

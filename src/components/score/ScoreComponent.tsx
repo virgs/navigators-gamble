@@ -24,7 +24,6 @@ export const ScoreComponent = (props: { player: GamePlayerCommonAttributes, turn
 
     useFinishVerticesAnimationsCommandListener(payload => {
         if (payload.playerId === props.player.id) {
-            console.log('finish vertices animation', payload);
             if (payload.playerId === props.player.id) {
                 animate(payload.points);
             }

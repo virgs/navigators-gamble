@@ -4,6 +4,7 @@ import { Card } from '../engine/card'
 import { Vertix } from '../engine/graph/vertix'
 import { Move } from '../engine/score-calculator/move'
 import { MoveScore } from '../engine/score-calculator/move-score'
+import { ScoreType } from '../engine/score-calculator/score-type'
 
 export type PlayerTurnChangeEvent = {
     turnOrder: number
@@ -66,6 +67,10 @@ export const { useVisibleVertixSelectedEventListener, emitVisibleVertixSelectedE
 export const { useBeginVerticesAnimationsCommandListener, emitBeginVerticesAnimationsCommand } = createEvent(
     'begin-vertices-animations-command'
 )<VerticesAnimationCommand>()
+
+export const { useAnnounceScoreCommandListener, emitAnnounceScoreCommand } = createEvent('announce-score-command')<{
+    type: ScoreType
+}>()
 
 export const { useLinkAnimationCommandListener, emitLinkAnimationCommand } = createEvent('link-animation-command')<{
     playerTurnOrder: number

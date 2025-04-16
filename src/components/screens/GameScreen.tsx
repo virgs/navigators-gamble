@@ -7,7 +7,8 @@ import { HeaderComponent } from '../HeaderComponent';
 import { HiddenCardsHandComponent } from '../hands/HiddenCardsHandComponent';
 import { VisibleCardsHandComponent } from '../hands/VisibleCardsHandComponent';
 import './GameScreen.scss';
-import { ScoreAnimationCoordinator } from './ScoreAnimationCoordinator';
+import { ScoreAnimationCoordinator } from '../score/ScoreAnimationCoordinator';
+import { ScoreModalComponent } from '../score/ScoreModalComponent';
 
 export type GameFinished = {
     scores: Record<string, number>;
@@ -106,6 +107,7 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
                     </div>
                 </div>
             </div>
+            <ScoreModalComponent />
         </>
     )
 }

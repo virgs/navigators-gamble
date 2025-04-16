@@ -1,5 +1,4 @@
 import { useWindowSize } from '@uidotdev/usehooks';
-import classnames from 'classnames';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { SerializabledBoard, SerializableVertix } from '../engine/board/serializable-board';
 import "./BoardComponent.scss";
@@ -51,12 +50,8 @@ export const BoardComponent = (props: BoardComponentProps): ReactNode => {
         return Object.values(links);
     }
 
-    const classes = classnames({
-        'board-box': true,
-    });
-
     return (
-        <div className={classes}>
+        <div className="board-box show">
             <div className='board-square'>
                 <div className='board-content' style={{ overflow: 'hidden' }}>
                     <svg ref={svgRef} className='board-svg' style={{ width: '100%', height: '100%' }}>
@@ -64,9 +59,7 @@ export const BoardComponent = (props: BoardComponentProps): ReactNode => {
                             .map((link: LinkComponentProps, index: number) => <LinkComponent key={index}
                                 first={link.first} second={link.second} boardWidth={boardWidth} />)}
                     </svg>
-                    {props.board.vertices.map((vertix: SerializableVertix) => {
-                        return <VertixComponent key={vertix.id} vertix={vertix}></VertixComponent>
-                    })}
+                    {props.board.vertices.map((vertix: SerializableVertix) => <VertixComponent key={vertix.id} vertix={vertix}></VertixComponent>)}
                 </div>
             </div>
         </div>

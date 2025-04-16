@@ -68,7 +68,7 @@
     transform-origin: center center;
     transform-box: fill-box;
     transition: transform 0.1s ease-in-out;
-    animation: cancel-cross 2s ease-in-out infinite;
+    animation: cancel-cross 2s ease-in-out alternate infinite;
     &.scoring {
         animation: none;
         transform: scale(1.25);
@@ -79,9 +79,9 @@
 
 @keyframes cancel-cross {
     0% {
-        transform: rotate(0deg);
+        transform: rotate(-15deg);
     }
     100% {
-        transform: rotate(90deg);
+        transform: rotate(15deg);
     }
 }
