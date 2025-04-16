@@ -29,18 +29,6 @@ export class Board {
         return Object.values(this.verticesMap)
     }
 
-    public getPlayerVerticesMap(): Record<string, Vertix[]> {
-        return this.getVertices()
-            .filter((vertix) => vertix.ownerId !== undefined)
-            .reduce(
-                (acc, vertix) => {
-                    ;(acc[vertix.ownerId!] ??= []).push(vertix)
-                    return acc
-                },
-                {} as Record<string, Vertix[]>
-            )
-    }
-
     public getEmptyVertices(): Vertix[] {
         return this.getVertices().filter((vertix) => vertix.direction === undefined)
     }

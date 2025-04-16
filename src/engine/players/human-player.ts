@@ -1,7 +1,6 @@
 import { emitVisibleHandMakeMoveCommand, useVisibleVertixSelectedEventListener } from '../../events/events'
 import { generateUID } from '../../math/generate-id'
 import { Card } from '../card'
-import { Directions } from '../directions'
 import { PlayerType } from '../game-configuration/player-type'
 import { Move } from '../score-calculator/move'
 import { Player } from './player'

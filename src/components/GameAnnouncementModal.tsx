@@ -1,22 +1,13 @@
 import * as bootstrap from 'bootstrap'
 import { ReactNode, useEffect, useState } from 'react'
-import { ScoreType } from '../../engine/score-calculator/score-type'
-import { useAnnounceScoreCommandListener } from '../../events/events'
-import { ScoreAnimationCoordinator } from './ScoreAnimationCoordinator'
+import { useAnnounceCommandListener } from '../events/events'
 
-const contentMap: Record<ScoreType, string> = {
-    [ScoreType.BONUS]: "Bonus points",
-    [ScoreType.CANCEL]: "Cancel of a direction",
-    [ScoreType.SEQUENCE]: "Sequence of directions",
-    [ScoreType.PAIR]: "Pair of directions",
-}
-
-export const ScoreModalComponent = (): ReactNode => {
+export const GameAnnouncementModal = (): ReactNode => {
     const [show, setShow] = useState<boolean>(false)
     const [content, setContent] = useState<string>('')
 
-    useAnnounceScoreCommandListener(payload => {
-        setContent(contentMap[payload.type])
+    useAnnounceCommandListener(async payload => {
+        setContent(payload.announcement)
         setShow(true)
         setTimeout(() => {
             const modalElement = document.getElementById('scoreModal')
@@ -27,7 +18,7 @@ export const ScoreModalComponent = (): ReactNode => {
                 }
                 document.removeChild(modalElement)
             }
-        }, ScoreAnimationCoordinator.INTERVAL_BETWEEN_ANIMATIONS * .75)
+        }, payload.duration)
     })
 
     useEffect(() => {

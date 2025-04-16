@@ -7,7 +7,7 @@
         {
             "id": "ai-player",
             "type": 1,
-            "iterationsPerAlternative": 0,
+            "iterationsPerAlternative": 200,
             "aiAlgorithm": 0
         }
     ],

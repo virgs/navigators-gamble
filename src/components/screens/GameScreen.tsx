@@ -30,7 +30,7 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
 
     useEffect(() => {
         gameEngine.current!.start()
-        setTimeout(() => iterate(), 1000)
+        iterate()
         return () => {
             gameEngine.current?.finish()
             gameEngine.current = undefined
@@ -49,10 +49,10 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
 
     useEndOfBonusPointsEventListener(() => {
         console.log('End of bonus points');
-        setTimeout(() => onGameFinished({
+        onGameFinished({
             scores: gameEngine.current!.getScores(),
             finished: true
-        }), 10000)
+        })
     })
 
     useEndOfScoreAnimationsEventListener(() => {
@@ -60,7 +60,7 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
     })
 
     const onGameFinished = (result: GameFinished) => {
-        setTimeout(() => props.onGameFinished(result), 0)
+        props.onGameFinished(result)
     }
 
     const visibleHandPlayerIndex = props.gameConfiguration.players

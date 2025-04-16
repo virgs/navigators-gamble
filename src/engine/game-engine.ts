@@ -88,19 +88,22 @@ export class GameEngine {
     }
 
     public calculateEndGameBonusPoints(): void {
-        const playerVerticesMap = this._board.getPlayerVerticesMap()
         const endBonusPayload: EndGameBonusPointsEvent[] = []
         this._players.forEach((player, index) => {
-            const score = playerVerticesMap[player.id]?.length ?? 0
-            player.addScore(score)
-            endBonusPayload.push({
+            console.log('Player Id')
+            const vetices = this._board.getVertices().filter((vertix) => vertix.ownerId === player.id)
+            player.addScore(vetices.length)
+            const newLocal = {
                 playerId: player.id,
+                playerType: player.type,
+                playerScore: player.score,
                 playerTurnOrder: index,
-                vertices: playerVerticesMap[player.id] ?? [],
-            })
+                vertices: vetices,
+            }
+            console.log('End game bonus points for player', newLocal, vetices)
+            endBonusPayload.push(newLocal)
         })
         emitEndGameBonusPointsEvent(endBonusPayload)
-        console.log(`Final score: ` + JSON.stringify(this.getScores()))
     }
 
     public finish(): void {
@@ -139,17 +142,17 @@ export class GameEngine {
 
         const move = await currentPlayer.makeMove({ board: this._board, scores: this.getScores() })
         const moveScores: MoveScore[] = this._board.makeMove(move)
-        emitPlayerMadeMoveEvent({
-            ...move,
-            scores: moveScores,
-            playerTurn: this.currentlyPlayingPlayerIndex,
-        })
-
         const totalScore = moveScores.reduce((acc, moveScore) => {
             moveScore.vertices.forEach((vertix) => (vertix.ownerId = move.playerId))
             return acc + moveScore.points
         }, 0)
         currentPlayer.addScore(totalScore)
+
+        emitPlayerMadeMoveEvent({
+            ...move,
+            scores: moveScores,
+            playerTurn: this.currentlyPlayingPlayerIndex,
+        })
 
         const playersNewCard = this._notPlayedYetCards.pop()
         if (playersNewCard) {

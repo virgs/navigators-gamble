@@ -2,13 +2,15 @@ import { ReactNode, useState } from 'react';
 import { SerializableVertix } from '../../engine/board/serializable-board';
 import { Card } from '../../engine/card';
 import { ScoreType } from '../../engine/score-calculator/score-type';
-import { emitVisibleVertixSelectedEvent, useBeginVerticesAnimationsCommandListener, useEndGameBonusPointsEventListener, useEndOfBonusPointsEventListener, usePlayerMadeMoveEventListener, usePlayerTurnChangedListener, useVisibleCardSelectedEventListener, VisibleCardSelectedEvent } from '../../events/events';
+import { emitVisibleVertixSelectedEvent, useBeginVerticesAnimationsCommandListener, useFinishVerticesAnimationsCommandListener, usePlayerMadeMoveEventListener, usePlayerTurnChangedListener, useVisibleCardSelectedEventListener, VisibleCardSelectedEvent } from '../../events/events';
 import { CardComponent, CardComponentProps } from '../card/CardComponent';
 
+import { Point } from '../../math/point';
 import './VertixComponent.scss';
 
 type VertixProps = {
     vertix: SerializableVertix;
+    convertToBoardDimensions: (point: Point) => Point
 };
 
 const filenames: Record<string, any> = import.meta.glob(`../../assets/vertices/*.png`, {
@@ -35,12 +37,7 @@ export const VertixComponent = (props: VertixProps): ReactNode => {
     })
 
     //bonus points have finished
-    useEndOfBonusPointsEventListener(() => {
-        setClasses(list => list
-            .filter(item => item !== 'scoring'))
-    });
-    // bonus points will begin
-    useEndGameBonusPointsEventListener(() => {
+    useFinishVerticesAnimationsCommandListener(() => {
         setClasses(list => list
             .filter(item => item !== 'scoring'))
     });
@@ -101,11 +98,13 @@ export const VertixComponent = (props: VertixProps): ReactNode => {
         }
     }
 
+    const converted = props.convertToBoardDimensions(props.vertix.position);
     const style: React.CSSProperties = {
-        top: `${props.vertix.position.y * 100}%`,
-        left: `${props.vertix.position.x * 100}%`,
+        top: props.vertix.position !== undefined ? converted.y : 0,
+        left: props.vertix.position !== undefined ? converted.x : 0,
         cursor: selectedCard ? 'pointer' : 'unset'
     };
+
     return (
         <div className={classes.join(' ')} data-id={props.vertix.id}
             style={style}

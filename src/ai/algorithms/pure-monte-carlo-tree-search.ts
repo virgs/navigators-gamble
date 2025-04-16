@@ -44,11 +44,11 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
             // and some stupidness to the ai
             const index = Math.floor(Math.random() * possibleMoves.length)
             const possibleMove = possibleMoves[index]
-            const moveScore = this.simulateRandomGame(possibleMove, moveRequest, boardCopy)
+            const moveWins: number = this.simulateRandomGame(possibleMove, moveRequest, boardCopy) ? 1 : 0
             if (moveResults.has(index)) {
-                moveResults.set(index, { ...possibleMove, score: moveResults.get(index)!.score + moveScore })
+                moveResults.set(index, { ...possibleMove, score: moveResults.get(index)!.score + moveWins })
             } else {
-                moveResults.set(index, { ...possibleMove, score: moveScore })
+                moveResults.set(index, { ...possibleMove, score: moveWins })
             }
         }
         const bestMove = [...moveResults.values()].reduce(
@@ -76,7 +76,7 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
         }
     }
 
-    private simulateRandomGame(initialMove: Move, moveRequest: MoveRequest, board: Board): number {
+    private simulateRandomGame(initialMove: Move, moveRequest: MoveRequest, board: Board): boolean {
         let turn = this.playerTurnOrder
         let move = initialMove
         let playerHand = [...moveRequest.playerCards]
@@ -90,7 +90,7 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
                 playerHand = this.updateCardsAfterMove(playerHand, move.direction, availableCards.pop())
             }
 
-            //TODO terminate the while earlier in case of a expressive score difference
+            //TODO terminate the method earlier in case of a expressive score difference
             scores[this.playerId] += this.calculateScore(moveScores, move.playerId)
 
             turn = (turn + 1) % this.playersIds.length
@@ -103,8 +103,20 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
 
             move = nextMoves[Math.floor(Math.random() * nextMoves.length)]
         }
+        board.getVertices().forEach((vertix) => {
+            if (vertix.ownerId !== undefined) {
+                scores[vertix.ownerId] += vertix.direction ? 1 : 0
+            }
+        })
+        const playerScore = scores[this.playerId] ?? 0
 
-        return this.calculateFinalScore(scores, board.getPlayerVerticesMap())
+        const playerHasWon = Object.entries(scores)
+            .filter(([id, _]) => id !== this.playerId)
+            .every(([, score]) => {
+                return score < playerScore
+            })
+
+        return playerHasWon
     }
 
     private updateCardsAfterMove(playerHand: Directions[], played: Directions, newCard?: Directions): Directions[] {
@@ -116,14 +128,6 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
         return moveScores.reduce((total, score) => {
             score.vertices.forEach((vertix) => (vertix.ownerId = playerId))
             return total + score.points
-        }, 0)
-    }
-
-    private calculateFinalScore(scores: Record<string, number>, bonusMap: Record<string, Vertix[]>): number {
-        return Object.entries(scores).reduce((total, [id, score]) => {
-            const bonus = bonusMap[id]?.length ?? 0
-            const playerScore = score + bonus
-            return total + (id === this.playerId ? playerScore : -playerScore)
         }, 0)
     }
 

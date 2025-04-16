@@ -4,6 +4,8 @@ import { SerializabledBoard, SerializableVertix } from '../engine/board/serializ
 import "./BoardComponent.scss";
 import { LinkComponent, LinkComponentProps } from './graph/LinkComponent';
 import { VertixComponent } from './graph/VertixComponent';
+import { Point } from 'framer-motion';
+import { multiplyByScalar } from '../math/point';
 
 type BoardComponentProps = {
     board: SerializabledBoard;
@@ -45,9 +47,16 @@ export const BoardComponent = (props: BoardComponentProps): ReactNode => {
             .forEach(vertix => vertix.linkedVertices
                 .forEach(linkedVertix => {
                     const linkId = `${vertix.id}-${linkedVertix}`;
-                    return links[linkId] ??= { first: vertix, second: verticesMap[linkedVertix], boardWidth: boardWidth };
+                    return links[linkId] ??= { first: vertix, second: verticesMap[linkedVertix], convertToBoardDimensions: convertToBoardDimensions };
                 }))
         return Object.values(links);
+    }
+
+    const convertToBoardDimensions = (point: Point): Point => {
+        if (boardWidth === undefined) {
+            return point;
+        }
+        return multiplyByScalar(point, boardWidth);
     }
 
     return (
@@ -57,9 +66,11 @@ export const BoardComponent = (props: BoardComponentProps): ReactNode => {
                     <svg ref={svgRef} className='board-svg' style={{ width: '100%', height: '100%' }}>
                         {getLinks()
                             .map((link: LinkComponentProps, index: number) => <LinkComponent key={index}
-                                first={link.first} second={link.second} boardWidth={boardWidth} />)}
+                                first={link.first} second={link.second} convertToBoardDimensions={link.convertToBoardDimensions} />)}
                     </svg>
-                    {props.board.vertices.map((vertix: SerializableVertix) => <VertixComponent key={vertix.id} vertix={vertix}></VertixComponent>)}
+                    {props.board.vertices.map((vertix: SerializableVertix) => <VertixComponent key={vertix.id}
+                        convertToBoardDimensions={convertToBoardDimensions}
+                        vertix={vertix}></VertixComponent>)}
                 </div>
             </div>
         </div>

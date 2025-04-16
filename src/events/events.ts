@@ -5,6 +5,7 @@ import { Vertix } from '../engine/graph/vertix'
 import { Move } from '../engine/score-calculator/move'
 import { MoveScore } from '../engine/score-calculator/move-score'
 import { ScoreType } from '../engine/score-calculator/score-type'
+import { PlayerType } from '../engine/game-configuration/player-type'
 
 export type PlayerTurnChangeEvent = {
     turnOrder: number
@@ -68,8 +69,9 @@ export const { useBeginVerticesAnimationsCommandListener, emitBeginVerticesAnima
     'begin-vertices-animations-command'
 )<VerticesAnimationCommand>()
 
-export const { useAnnounceScoreCommandListener, emitAnnounceScoreCommand } = createEvent('announce-score-command')<{
-    type: ScoreType
+export const { useAnnounceCommandListener, emitAnnounceCommand } = createEvent('announce-command')<{
+    announcement: string
+    duration: number
 }>()
 
 export const { useLinkAnimationCommandListener, emitLinkAnimationCommand } = createEvent('link-animation-command')<{
@@ -90,7 +92,9 @@ export const { useFinishVerticesAnimationsCommandListener, emitFinishVerticesAni
 
 export type EndGameBonusPointsEvent = {
     vertices: Vertix[]
+    playerScore: number
     playerId: string
+    playerType: PlayerType
     playerTurnOrder: number
 }
 

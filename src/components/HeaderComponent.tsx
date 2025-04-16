@@ -55,7 +55,7 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
                                 <i className="bi bi-robot mx-2" />
                                 <span className='position-relative'>
                                     <span className="position-absolute top-100 start-100 translate-middle ">
-                                        {props.gameConfiguration.players.find(player => player.type === PlayerType.ARTIFICIAL_INTELLIGENCE)?.iterationsPerAlternative}
+                                        {props.gameConfiguration.players.find(player => player.type === PlayerType.ARTIFICIAL_INTELLIGENCE)?.iterationsPerAlternative ?? '-'}
                                     </span>
                                 </span>
                             </span>
