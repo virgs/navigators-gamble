@@ -14,7 +14,7 @@ export type LinkComponentProps = {
 };
 
 const SQRT_2_HALF = Math.SQRT2 * .5;
-const BOARD_SCALE = .05;
+const BEZIER_CURVE_ANCHOR_DISTANCE = .05;
 
 export const LinkComponent = (props: LinkComponentProps): ReactNode => {
     const [scoring, setScoring] = useState<string>('');
@@ -43,7 +43,7 @@ export const LinkComponent = (props: LinkComponentProps): ReactNode => {
         const width = props.boardWidth
         const origin = multiplyByScalar(first, width);
         const target = multiplyByScalar(second, width);
-        const bezierAnchor = add(middle, multiplyByScalar(normal, props.boardWidth * BOARD_SCALE));
+        const bezierAnchor = add(middle, multiplyByScalar(normal, props.boardWidth * BEZIER_CURVE_ANCHOR_DISTANCE));
         const bezierPath = `M ${origin.x} ${origin.y} \
             C ${bezierAnchor.x} ${bezierAnchor.y}, \
             ${bezierAnchor.x} ${bezierAnchor.y}, \
@@ -100,7 +100,7 @@ export const LinkComponent = (props: LinkComponentProps): ReactNode => {
         const difference = subtract(target, origin);
         const middle = add(origin, multiplyByScalar(difference, .5));
         const normal = rotate90degreesCCW(normalize(difference));
-        const middleOnCurve = add(middle, multiplyByScalar(normal, props.boardWidth * BOARD_SCALE * (SQRT_2_HALF + .05)));
+        const middleOnCurve = add(middle, multiplyByScalar(normal, props.boardWidth * BEZIER_CURVE_ANCHOR_DISTANCE * (SQRT_2_HALF + .05)));
 
         components.push(drawBezierCurve(middle, normal))
         if (scoreType === ScoreType.PAIR) {

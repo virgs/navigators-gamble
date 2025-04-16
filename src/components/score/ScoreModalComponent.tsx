@@ -25,12 +25,22 @@ export const ScoreModalComponent = (): ReactNode => {
                 if (modal) {
                     modal.hide()
                 }
+                document.removeChild(modalElement)
             }
         }, ScoreAnimationCoordinator.INTERVAL_BETWEEN_ANIMATIONS * .75)
     })
 
     useEffect(() => {
         if (show) {
+            // const modalElement = document.getElementById('scoreModal')
+            // if (modalElement) {
+            //     const modal = bootstrap.Modal.getInstance(modalElement)
+            //     if (modal) {
+            //         modal.show()
+            //     }
+            // } else {
+            //     console.error('Modal element not found')
+            // }
             new bootstrap.Modal('#scoreModal', { focus: true }).show()
             const modalElement = document.getElementById('scoreModal')
             modalElement?.addEventListener('hidden.bs.modal', () => {
@@ -48,16 +58,11 @@ export const ScoreModalComponent = (): ReactNode => {
             className="modal fade"
             data-bs-backdrop="static"
             id="scoreModal"
-            tabIndex={-1}
-            aria-labelledby="scoreModalLabel"
-            aria-hidden="true"
-        >
+            tabIndex={-1}>
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content h-25 d-flex align-items-center justify-content-center"
                     style={{
-                        // backgroundColor: 'var(--bs-light)',
-                        // backgroundColor: 'var(--compass-light-gray)',
-                        backgroundColor: 'white',
+                        backgroundColor: 'var(--compass-light-gray)',
                         border: '2px solid var(--bs-dark)',
                         borderRadius: '1rem',
                         boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)',

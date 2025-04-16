@@ -3,6 +3,7 @@ import { useWindowSize } from '@uidotdev/usehooks';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Directions, directionToAngle, directions } from '../../engine/directions';
 import './GaugeComponent.scss';
+import { degreeToRadians } from '../../math/trigonometry';
 
 export type GaugeComponentProps = {
     direction: Directions
@@ -14,7 +15,7 @@ const GaugePointer = (props: { angle: number }): ReactNode => {
         // No value to display
         return null;
     }
-    const radians = props.angle * Math.PI / 180.0
+    const radians = degreeToRadians(props.angle)
     const target = {
         x: cx + (outerRadius + 2) * Math.sin(radians),
         y: cy - (outerRadius + 2) * Math.cos(radians),
@@ -32,7 +33,7 @@ const GaugeTicks = (): ReactNode => {
     const { outerRadius, innerRadius, cx, cy } = useGaugeState();
     const radiusDiff = outerRadius - innerRadius;
     return directions.map((direction, index) => {
-        const radians = directionToAngle(direction) * Math.PI / 180.0
+        const radians = degreeToRadians(directionToAngle(direction))
         const isMajorTick = index % 2 === 0;
         const target = {
             x: cx + (outerRadius + radiusDiff / 4) * Math.sin(radians),

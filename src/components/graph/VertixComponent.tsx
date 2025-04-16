@@ -1,10 +1,4 @@
 import { ReactNode, useState } from 'react';
-import coconutTree from '../../assets/vertices/coconut-tree.png';
-import crossGraveStone from '../../assets/vertices/cross-gravestone.png';
-import footsteps from '../../assets/vertices/footsteps.png';
-import pirateBones from '../../assets/vertices/pirate-bones.png';
-import pirateSkull from '../../assets/vertices/pirate-skull.png';
-import treasureChest from '../../assets/vertices/treasure-chest.png';
 import { SerializableVertix } from '../../engine/board/serializable-board';
 import { Card } from '../../engine/card';
 import { ScoreType } from '../../engine/score-calculator/score-type';
@@ -17,13 +11,15 @@ type VertixProps = {
     vertix: SerializableVertix;
 };
 
-const backgrounds = [coconutTree, crossGraveStone, footsteps, pirateBones, pirateSkull, treasureChest,
-    // xMark
-];
+const filenames: Record<string, any> = import.meta.glob(`../../assets/vertices/*.png`, {
+    eager: true,
+    import: 'default'
+});
 
-const getBackGroundFromId = (id: string): string => {
-    const integer = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    return backgrounds[integer % backgrounds.length];
+const getBackGroundFromId = (id: string): any => {
+    const values = Object.values(filenames);
+    const index = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % values.length;
+    return values[index];
 }
 
 export const VertixComponent = (props: VertixProps): ReactNode => {

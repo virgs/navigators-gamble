@@ -1,5 +1,5 @@
 .link {
-    stroke-width: 1px;
+    stroke-width: 2px;
 
     transform-origin: center left;
     opacity: 0.5;
@@ -17,13 +17,13 @@
     &.pair {
         opacity: 0.75;
         filter: opacity(0.8);
-        stroke-width: 3px;
+        stroke-width: 4px;
         stroke-dasharray: 10;
         animation: dash 5s linear alternate infinite;
     }
     &.sequence {
         opacity: 1;
-        stroke-width: 5px;
+        stroke-width: 6px;
         stroke-dasharray: none;
         animation: dash 5s linear alternate infinite;
     }
@@ -31,7 +31,7 @@
     &.scoring {
         opacity: 1;
         stroke-dasharray: none;
-        stroke-width: 7px;
+        stroke-width: 8px;
     }
 }
 

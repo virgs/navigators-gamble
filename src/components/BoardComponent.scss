@@ -2,7 +2,7 @@
     width: 100%;
     position: relative;
     & .show {
-        animation: fade-in calc(5 * var(--screen-transitions)) ease-in-out forwards;
+        animation: fade-in calc(3 * var(--screen-transitions)) ease-in-out forwards;
     }
 }
 

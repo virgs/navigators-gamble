@@ -8,6 +8,7 @@ import { LevelEvaluator } from "../engine/level-evaluator/level-evaluator";
 import { arrayShuffler } from "../math/array-shufller";
 import GraphEditor from "./GraphEditor";
 import "./LevelEditor.scss";
+import { Vertix } from "../engine/graph/vertix";
 
 const CANVAS_SIZE = 400;
 const GRID_LINES = 8;
@@ -45,7 +46,7 @@ const exportLevel = (config: GameConfiguration, levelName: string) => {
     a.click();
 };
 
-function generateRandomVertices() {
+const generateRandomVertices = (): SerializableVertix[] => {
     const space = 1 / GRID_LINES;
     const allVertices = [...Array(GRID_LINES)].map((_: any, x: number) => {
         return [...Array(GRID_LINES)].map((_: any, y: number) => {
@@ -64,6 +65,9 @@ function generateRandomVertices() {
     return arrayShuffler(allVertices).filter((_, i) => i < numOfVertices);
 }
 
+const isVertixOutOfBound = (vertix: SerializableVertix) => {
+    return vertix.position.x < 0 || vertix.position.x > 1 || vertix.position.y < 0 || vertix.position.y > 1;
+}
 
 export default function LevelEditor(props: { onExit: (configuration: GameConfiguration) => void, configuration?: GameConfiguration }) {
     const inputFile = useRef(null)
@@ -177,6 +181,10 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
         }
         if (vertices.some(vertix => numberOfLinksOfAVertix(vertix) < 2)) {
             console.log("Some vertices have less than 2 links");
+            return false
+        }
+        if (vertices.some(vertix => isVertixOutOfBound(vertix))) {
+            console.log("Some vertices are out of bounds");
             return false
         }
         return true;

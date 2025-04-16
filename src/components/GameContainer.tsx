@@ -7,6 +7,7 @@ import LevelEditor from '../level-editor/LevelEditor';
 import { GameFinished, GameScreen } from './screens/GameScreen';
 import { SetupScreen } from './screens/SetupScreen';
 import './GameContainer.scss';
+import { ScoreModalComponent } from './score/ScoreModalComponent';
 
 
 export const GameContainer = (): ReactNode => {
@@ -70,6 +71,8 @@ export const GameContainer = (): ReactNode => {
             <div className='w-100 h-100' style={{ zIndex: 10 }}>
                 {screen()}
             </div>
+            <ScoreModalComponent />
+
         </div>
     )
 }
