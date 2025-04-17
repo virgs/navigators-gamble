@@ -52,7 +52,7 @@
     }
 }
 
-.level-editor {
+.level-editor-screen {
     transition: transform ease var(--screen-transitions);
     &.show {
         animation: level-editor-show var(--screen-transitions) ease-in-out forwards;

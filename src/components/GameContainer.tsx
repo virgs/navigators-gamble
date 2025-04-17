@@ -46,12 +46,15 @@ export const GameContainer = (): ReactNode => {
                 <GameScreen gameConfiguration={gameConfiguration} onGameFinished={(result) => onGameFinished(result)}></GameScreen>
             </div>
         } else {
-            if (process.env.NODE_ENV === 'development' && levelEditor) {
-                return <div className='level-editor show mx-2'>
+            if (levelEditor) {
+                return <div className='level-editor-screen show mx-2'>
                     <LevelEditor
                         configuration={gameConfiguration}
-                        onExit={(config: GameConfiguration) => {
-                            onStartButton(config)
+                        onExit={(config?: GameConfiguration) => {
+                            if (config) {
+                                setGameConfiguration(config)
+                                onStartButton(config)
+                            }
                             setSetupScreenClasses(['show-from-right'])
                             return setLevelEditor(false);
                         }}></LevelEditor>

@@ -10,6 +10,7 @@ import { generateUID } from "../math/generate-id";
 import GraphEditor from "./GraphEditor";
 import "./LevelEditor.scss";
 import { clamp } from "../math/clamp";
+import { HeaderComponent } from "../components/HeaderComponent";
 
 const CANVAS_SIZE = 400;
 const GRID_LINES = 8;
@@ -49,14 +50,14 @@ const generateRandomVertices = (): SerializableVertix[] => {
     return arrayShuffler(allVertices).filter((_, i) => i < numOfVertices);
 }
 
-export default function LevelEditor(props: { onExit: (configuration: GameConfiguration) => void, configuration?: GameConfiguration }) {
+export default function LevelEditor(props: { onExit: (configuration?: GameConfiguration) => void, configuration?: GameConfiguration }) {
     const inputFile = useRef(null)
 
     const [validation, setValidation] = useState<ValidationResult | undefined>(undefined);
     const [vertices, setVertices] = useState<SerializableVertix[]>([]);
     const [initialCardsPerPlayer, setInitialCardsPerPlayer] = useState(gameConfigurationLimits.initialCardsPerPlayer.min);
     const [cardsPerDirection, setCardsPerDirection] = useState(gameConfigurationLimits.cardsPerDirection.min);
-    const [levelName, setLevelName] = useState<string>("");
+    const [levelName, setLevelName] = useState<string>(`Level ${Math.floor(Math.random() * 1000).toFixed(0).padStart(4, '0')}`);
     const [iterations, setIterations] = useState(gameConfigurationLimits.intelligence.ai.min);
     const [graphEditor, setGraphEditor] = useState<ReactElement>()
 
@@ -68,9 +69,7 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
     }, []);
 
     useEffect(() => {
-        const newLocal = new GameConfigurationValidator(parseToConfiguration()).validate();
-        console.log("Validating configuration...", newLocal.errors);
-        setValidation(newLocal);
+        setValidation(new GameConfigurationValidator(parseToConfiguration()).validate());
     }, [initialCardsPerPlayer, cardsPerDirection, iterations, vertices]);
 
     const parseConfiguration = (config: GameConfiguration) => {
@@ -148,29 +147,22 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
         resetGraphEditor([]);
     };
 
-    return (
-        <div className="level-editor p-4 space-y-4" style={{
-            backgroundColor: 'var(--compass-secondary)',
-            border: '3px solid var(--compass-primary)', color: 'var(--compass-white)',
-            marginTop: '10px'
-        }}>
-            <h1 className="title">Level Editor</h1>
-            <div className="invalid-message my-2" style={{ color: validation?.valid ? 'transparent' : 'var(--compass-highlight-red)' }}>
-                {(validation?.errors.length ?? 0) > 0 ? validation?.errors[0] : 'Invalid configuration'}
-            </div>
-            <div className="row justify-content-between">
-                <div className="col-auto" style={{ textAlign: 'end' }}>
-                    <button onClick={() => onAutoGenerateButton()} type="button" className="btn btn-secondary btn-sm px-4">
-                        Generate
-                        <i className="bi bi-magic ms-2"></i>
-                    </button>
-                </div>
 
-                <div className="col-auto mb-2">
+
+    const onEvaluateButton = async () => {
+        await new LevelEvaluator(parseToConfiguration(), gameConfigurationLimits.intelligence.human).evaluate(100);
+    }
+
+    return (<>
+        <HeaderComponent onQuit={() => props.onExit()}></HeaderComponent>
+        <div className="level-editor p-4 space-y-2">
+            <h1 className="title mx-auto">Level Editor</h1>
+            <div className="row justify-content-between">
+                <div className="col-auto">
                     <button onClick={() => {
                         //@ts-expect-error
                         inputFile.current?.click();
-                    }} type="button" className="btn btn-info btn-sm px-4">
+                    }} type="button" className="btn btn-info btn-sm px-2">
                         Load
                         {/* <i className="bi bi-cloud-arrow-up ms-2"></i> */}
                         <i className="bi bi-folder2-open ms-2"></i>
@@ -179,29 +171,37 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
                     </button>
                 </div>
                 <div className="col-auto" style={{ textAlign: 'end' }}>
-                    <button disabled={!validation?.valid} onClick={async () => {
-                        await new LevelEvaluator(parseToConfiguration(), gameConfigurationLimits.intelligence.human).evaluate(100)
-                    }} type="button" className="btn btn-danger btn-sm px-4">
-                        Evaluate
-                        <i className="bi bi-lightning-fill ms-2"></i>
-                        {/* <i class="bi bi-speedometer"></i> */}
-                    </button>
-                </div>
-                <div className="col-auto" style={{ textAlign: 'end' }}>
-                    <button onClick={() => onClearButton()} type="button" className="btn btn-danger btn-sm px-4">
+                    <button onClick={() => onClearButton()} type="button" className="btn btn-danger btn-sm px-2">
                         Clear
                         <i className="bi bi-eraser ms-2"></i>
                     </button>
                 </div>
+                <div className="col-auto">
+                    <button onClick={() => onAutoGenerateButton()} type="button" className="btn btn-success btn-sm px-2">
+                        Generate
+                        <i className="bi bi-magic ms-2"></i>
+                    </button>
+                </div>
+                <div className="col-auto" style={{ textAlign: 'end' }}>
+                    <button disabled={!validation?.valid} onClick={() => onEvaluateButton()} type="button"
+                        className="btn btn-warning btn-sm px-2">
+                        Evaluate
+                        {/* <i className="bi bi-lightning-fill ms-2"></i> */}
+                        <i className="bi bi-speedometer ms-2"></i>
+                    </button>
+                </div>
                 <div className="col-auto" style={{ textAlign: 'end' }}>
                     <button disabled={!validation?.valid} onClick={() => props.onExit(parseToConfiguration())}
-                        type="button" className="btn btn-warning btn-sm px-4">
+                        type="button" className="btn btn-warning btn-sm px-2">
                         Play
                         <i className="bi bi-play ms-2"></i>
                     </button>
                 </div>
-                <div className="col-4">
-                    <label htmlFor="initialCardsPerPlayer" className="form-label">Initial cards per player: {initialCardsPerPlayer}</label>
+
+                <div className="w-100 my-2"></div>
+
+                <div className="col-3">
+                    <label htmlFor="initialCardsPerPlayer" className="form-label">Cards per player: {initialCardsPerPlayer}</label>
                     <input type="range" className="form-range"
                         min={gameConfigurationLimits.initialCardsPerPlayer.min}
                         max={gameConfigurationLimits.initialCardsPerPlayer.max}
@@ -209,7 +209,7 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
                         id="initialCardsPerPlayer" value={initialCardsPerPlayer}
                         onChange={(e) => setInitialCardsPerPlayer(Number(e.target.value))} />
                 </div>
-                <div className="col-4">
+                <div className="col-3">
                     <label htmlFor="cardsPerDirection" className="form-label">Cards per direction: {cardsPerDirection}</label>
                     <input type="range" className="form-range"
                         min={gameConfigurationLimits.cardsPerDirection.min}
@@ -218,7 +218,7 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
                         id="cardsPerDirection" value={cardsPerDirection}
                         onChange={(e) => setCardsPerDirection(Number(e.target.value))} />
                 </div>
-                <div className="col-4">
+                <div className="col-3">
                     <label htmlFor="iterationsPerAlternative" className="form-label">AI level: {iterations}</label>
                     <input type="range" className="form-range"
                         min={gameConfigurationLimits.intelligence.ai.min}
@@ -228,21 +228,29 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
                         value={iterations}
                         onChange={(e) => setIterations(Number(e.target.value))} />
                 </div>
-                <div className="offset-6 col-6">
-                    <div className="input-group mb-3">
+                <div className="w-100 my-2"></div>
+                <div className="col-6">
+                    <div className="invalid-message my-2" style={{ color: validation?.valid ? 'transparent' : '' }}>
+                        {(validation?.errors.length ?? 0) > 0 ? validation?.errors[0] : 'Invalid configuration'}
+                    </div>
+                </div>
+                <div className="col-6">
+                    <div className="input-group">
                         <input type="text" value={levelName} onChange={evt => setLevelName(evt.target.value)} className="form-control" placeholder="Level name" aria-label="Level name"
                             aria-describedby="basic-addon2" />
                         <button id="basic-addon2" disabled={!validation?.valid} onClick={() => exportLevel(parseToConfiguration(), levelName)}
-                            type="button" className="btn btn-primary btn-sm px-4">
+                            type="button" className="btn btn-success btn-sm px-2">
                             Save
                             <i className="bi bi-floppy ms-2"></i>
                         </button>
                     </div>
                 </div>
+                <div className="w-100 my-2"></div>
+
             </div>
+
             {graphEditor}
         </div>
-    );
-
+    </>);
 }
 

@@ -5,8 +5,7 @@
 }
 
 .grapheditor-container canvas {
-    background-color: var(--compass-tertiary) !important;
-    border: 3px solid var(--compass-secondary) !important;
-    box-shadow: 3px 3px 3px var(--compass-primary) !important;
+    background-color: transparent !important;
+    box-shadow: 3px 3px 13px var(--compass-medium-gray) !important;
     padding: 10px !important;
 }

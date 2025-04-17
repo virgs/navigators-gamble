@@ -1,1 +1,29 @@
 @import '~bootstrap/scss/bootstrap';
+
+$form-range-track-width: 100%;
+$form-range-track-height: 0.5rem;
+$form-range-track-bg: var(--compass-white);
+$form-range-thumb-bg: var(--compass-dark-gray);
+
+.form-range {
+    width: 100%;
+    height: add($form-range-thumb-height, $form-range-thumb-focus-box-shadow-width * 2);
+    padding: 0;
+    background-color: transparent;
+    appearance: none;
+
+    &::-webkit-slider-thumb {
+        margin-top: ($form-range-track-height - $form-range-thumb-height) * 0.5;
+        background-color: $form-range-thumb-bg;
+    }
+    &::-webkit-slider-runnable-track {
+        width: $form-range-track-width;
+        height: $form-range-track-height;
+        background-color: $form-range-track-bg;
+    }
+    &::-moz-range-track {
+        width: $form-range-track-width;
+        height: $form-range-track-height;
+        background-color: $form-range-track-bg;
+    }
+}
