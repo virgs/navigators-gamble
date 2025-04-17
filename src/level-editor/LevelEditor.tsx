@@ -137,6 +137,8 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
         setInitialCardsPerPlayer(createRandomValueFromLimits(gameConfigurationLimits.initialCardsPerPlayer));
         setIterations(createRandomValueFromLimits(gameConfigurationLimits.intelligence.ai));
         setLevelName(`Level ${Math.floor(Math.random() * 1000).toFixed(0).padStart(4, '0')}`);
+        setHumanPlayerStarts(Math.random() > 0.5);
+        setEstimatedDifficulty(0);
         setVertices(vertices);
         resetGraphEditor(vertices);
     };
@@ -154,12 +156,16 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
     const onEvaluateButton = async () => {
         await levelEvaluator.current?.terminate()
         setEstimatedDifficulty(0);
-        levelEvaluator.current = new LevelEvaluator(parseToConfiguration(), gameConfigurationLimits.intelligence.human);
+        levelEvaluator.current = new LevelEvaluator(parseToConfiguration(), gameConfigurationLimits.intelligence.human, 3,
+            (value,) => {
+                setEstimatedDifficulty(value);
+            }, 1);
         if (!levelEvaluator.current.terminated()) {
             const result = await levelEvaluator.current.evaluate(100);
             setEstimatedDifficulty(result);
         }
         levelEvaluator.current = null;
+        console.log('Level evaluator terminated');
     }
 
     const isValid = () => {
@@ -203,8 +209,13 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
                     <button disabled={!isValid()} onClick={() => onEvaluateButton()} type="button"
                         className="btn btn-warning btn-sm px-2">
                         Evaluate
-                        {/* <i className="bi bi-lightning-fill ms-2"></i> */}
-                        <i className="bi bi-speedometer ms-2"></i>
+                        {levelEvaluator.current ?
+                            <div className="spinner-border spinner-border-sm ms-2" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
+                            :
+                            <i className="bi bi-speedometer ms-2"></i>
+                        }
                     </button>
                 </div>
                 <div className="col-auto" style={{ textAlign: 'end' }}>

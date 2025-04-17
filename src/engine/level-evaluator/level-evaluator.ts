@@ -8,10 +8,19 @@ export class LevelEvaluator {
     private readonly gameConfig: GameConfiguration
     private readonly aiHumanPlayerId: string
     private readonly parallelExecutions: number
+    private remainingIterations: number
     private evaluated: boolean
     private terminating: boolean
+    private readonly onUpdate?: (value: number) => void
 
-    public constructor(gameConfig: GameConfiguration, humanLevel: number = 300, parallelExecutions: number = 3) {
+    public constructor(
+        gameConfig: GameConfiguration,
+        humanLevel: number = 300,
+        parallelExecutions: number = 3,
+        onUpdate?: (value: number) => void
+    ) {
+        this.remainingIterations = 0
+        this.onUpdate = onUpdate
         this.evaluated = false
         this.terminating = false
 
@@ -44,6 +53,7 @@ export class LevelEvaluator {
     }
 
     public async evaluate(iterations: number = 100): Promise<number> {
+        this.remainingIterations = iterations
         this.evaluated = false
         this.terminating = false
         const startTime = performance.now()
@@ -82,6 +92,9 @@ export class LevelEvaluator {
                     .reduce((a, b) => a + b, 0)
                     ? 1
                     : 0
+            if (this.onUpdate) {
+                this.onUpdate(losses / iterations, --this.remainingIterations)
+            }
         }
         return losses
     }

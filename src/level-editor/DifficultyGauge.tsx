@@ -1,14 +1,12 @@
 import { Gauge, gaugeClasses, useGaugeState } from "@mui/x-charts";
 import { ReactNode } from "react";
 import { degreeToRadians } from "../math/trigonometry";
-import { getDistance } from "../math/point";
 
 
 const GaugePointer = (props: { angle: number }): ReactNode => {
     const { valueAngle, outerRadius, cx, cy } = useGaugeState();
     if (valueAngle === null) {
         // No value to display
-        console.log('No value to display');
         return null;
     }
     const radians = degreeToRadians(props.angle + 90 + 90 + 90)
@@ -16,7 +14,6 @@ const GaugePointer = (props: { angle: number }): ReactNode => {
         x: cx + (outerRadius + 2) * Math.sin(radians),
         y: cy - (outerRadius + 2) * Math.cos(radians),
     };
-    console.log({ x: cx, y: cy }, target, getDistance({ x: cx, y: cy }, target));
     return (
         <g className='needle-path' >
             <circle cx={cx} cy={cy} r={2} />
