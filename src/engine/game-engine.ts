@@ -12,6 +12,7 @@ import { BoardSerializer } from './board/board-serializer'
 import { Card } from './card'
 import { directions } from './directions'
 import { GameConfiguration } from './game-configuration/game-configuration'
+import { GameConfigurationValidator } from './game-configuration/game-configuration-validator'
 import { PlayerType } from './game-configuration/player-type'
 import { AiPlayer, AiPlayerInitialization } from './players/ai-player'
 import { HumanPlayer } from './players/human-player'
@@ -22,6 +23,7 @@ export class GameEngine {
     private readonly _notPlayedYetCards: Card[]
     private readonly _players: Player[]
     private readonly _board: Board
+    private started: boolean = false
     private currentlyPlayingPlayerIndex: number
 
     public constructor(gameConfiguration: GameConfiguration) {
@@ -32,13 +34,13 @@ export class GameEngine {
                 .map((direction, index) => new Card(`card-${index}`, direction))
         )
 
-        this._board = BoardSerializer.deserialize(gameConfiguration.board)
-
-        if (this._board.getVertices().length >= gameConfiguration.cardsPerDirection * directions.length) {
+        const validation = new GameConfigurationValidator(gameConfiguration).validate()
+        if (!validation.valid) {
             throw Error(
-                `Board has too many vertix to game configuration '${this._board.getVertices().length}'. Max allowed '${this._notPlayedYetCards.length - gameConfiguration.players.length * gameConfiguration.initialCardsPerPlayer}'`
+                `Game configuration is not valid. Please check the game configuration. ${validation.errors.join('\n')}`
             )
         }
+        this._board = BoardSerializer.deserialize(gameConfiguration.board)
 
         this._players = this.createPlayers(gameConfiguration)
 
@@ -70,7 +72,14 @@ export class GameEngine {
         return this._board
     }
 
-    public start(): void {
+    public createHooks(): void {
+        this._players.forEach((player) => player.createHooks())
+    }
+
+    public start(): boolean {
+        if (this.started) {
+            return false
+        }
         emitNewGame()
 
         this._players.forEach((player) => {
@@ -81,6 +90,8 @@ export class GameEngine {
                 })
             })
         })
+        this.started = true
+        return this.started
     }
 
     public isGameOver(): boolean {

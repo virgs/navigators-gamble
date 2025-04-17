@@ -261,6 +261,7 @@ export default function GraphEditor(props: GraphEditorProps) {
               x={v.x}
               y={v.y}
               radius={15}
+              name={v.id}
               fill={selectedVertix === v.id ? "#4444FF" : "#00004F"}
               draggable
               onClick={(e) => {

@@ -1,4 +1,4 @@
-import * as bootstrap from 'bootstrap'
+import { Modal } from 'bootstrap'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import { useAnnounceCommandListener } from '../events/events'
 
@@ -10,7 +10,7 @@ export const GameAnnouncementModal = (): ReactNode => {
 
     useAnnounceCommandListener(async payload => {
         if (modal.current === undefined) {
-            modal.current = new bootstrap.Modal('#scoreModal', { focus: true })
+            modal.current = new Modal('#scoreModal', { focus: true })
         }
 
         setContent(payload.announcement)

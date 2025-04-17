@@ -26,15 +26,18 @@ export class LevelEvaluator {
 
     public async evaluate(iterations: number = 100): Promise<number> {
         const startTime = performance.now()
-        console.log(`Starting evaluation with ${iterations} iterations`)
+        console.log(
+            `Starting evaluation with ${iterations} iterations in ${this.parallelExecutions} parallel executions`
+        )
         const promises = []
         for (let i = 0; i < this.parallelExecutions; i++) {
             promises.push(this.evaluateLevel(Math.ceil(iterations / this.parallelExecutions)))
         }
         const results = await Promise.all(promises)
         const endTime = performance.now()
-        console.log(`Evaluation took ${Math.round(endTime - startTime)} ms`)
-        return results.reduce((a, b) => a + b, 0) / iterations
+        const result = results.reduce((a, b) => a + b, 0) / iterations
+        console.log(`Evaluation took ${Math.round(endTime - startTime)} ms. ${result} losses average.`)
+        return result
     }
 
     private async evaluateLevel(iterations: number): Promise<number> {

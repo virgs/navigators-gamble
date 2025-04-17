@@ -1,34 +1,18 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { AiAlgorithmType } from "../ai/algorithms/ai-algorithm-type";
 import { SerializableVertix } from "../engine/board/serializable-board";
-import { directions } from "../engine/directions";
 import { GameConfiguration } from "../engine/game-configuration/game-configuration";
+import { gameConfigurationLimits, GameConfigurationValidator, ValidationResult } from "../engine/game-configuration/game-configuration-validator";
 import { PlayerType } from "../engine/game-configuration/player-type";
 import { LevelEvaluator } from "../engine/level-evaluator/level-evaluator";
 import { arrayShuffler } from "../math/array-shufller";
+import { generateUID } from "../math/generate-id";
 import GraphEditor from "./GraphEditor";
 import "./LevelEditor.scss";
-import { Vertix } from "../engine/graph/vertix";
+import { clamp } from "../math/clamp";
 
 const CANVAS_SIZE = 400;
 const GRID_LINES = 8;
-
-const aiLimits = {
-    min: 0,
-    max: 200,
-    step: 10,
-    human: 30
-};
-const cardsPerDirectionLimits = {
-    min: 2,
-    max: 5,
-    step: 1
-};
-const initialCardsPerPlayerLimits = {
-    min: 2,
-    max: 7,
-    step: 1
-};
 
 const createRandomValueFromLimits = (limits: { min: number, max: number, step: number }) => {
     const diff = limits.max - limits.min;
@@ -47,36 +31,33 @@ const exportLevel = (config: GameConfiguration, levelName: string) => {
 };
 
 const generateRandomVertices = (): SerializableVertix[] => {
-    const space = 1 / GRID_LINES;
+    const spacing = 1 / GRID_LINES;
     const allVertices = [...Array(GRID_LINES)].map((_: any, x: number) => {
         return [...Array(GRID_LINES)].map((_: any, y: number) => {
             const vertix: SerializableVertix = {
-                id: `${x}-${y}`,
+                id: `v-${generateUID()}`,
                 position: {
-                    x: space * x,
-                    y: space * y,
+                    x: spacing * x,
+                    y: spacing * y,
                 },
                 linkedVertices: [],
             };
             return vertix;
         });
     }).flat();
-    const numOfVertices = Math.floor(Math.random() * 20) + 6;
+    const numOfVertices = Math.floor(Math.random() * gameConfigurationLimits.board.vertices.max / 3) + gameConfigurationLimits.board.vertices.min;
     return arrayShuffler(allVertices).filter((_, i) => i < numOfVertices);
-}
-
-const isVertixOutOfBound = (vertix: SerializableVertix) => {
-    return vertix.position.x < 0 || vertix.position.x > 1 || vertix.position.y < 0 || vertix.position.y > 1;
 }
 
 export default function LevelEditor(props: { onExit: (configuration: GameConfiguration) => void, configuration?: GameConfiguration }) {
     const inputFile = useRef(null)
 
+    const [validation, setValidation] = useState<ValidationResult | undefined>(undefined);
     const [vertices, setVertices] = useState<SerializableVertix[]>([]);
-    const [initialCardsPerPlayer, setInitialCardsPerPlayer] = useState(initialCardsPerPlayerLimits.min);
-    const [cardsPerDirection, setCardsPerDirection] = useState(cardsPerDirectionLimits.min);
+    const [initialCardsPerPlayer, setInitialCardsPerPlayer] = useState(gameConfigurationLimits.initialCardsPerPlayer.min);
+    const [cardsPerDirection, setCardsPerDirection] = useState(gameConfigurationLimits.cardsPerDirection.min);
     const [levelName, setLevelName] = useState<string>("");
-    const [iterations, setIterations] = useState(aiLimits.min);
+    const [iterations, setIterations] = useState(gameConfigurationLimits.intelligence.ai.min);
     const [graphEditor, setGraphEditor] = useState<ReactElement>()
 
     useEffect(() => {
@@ -86,12 +67,19 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
         resetGraphEditor(props.configuration?.board.vertices ?? []);
     }, []);
 
+    useEffect(() => {
+        const newLocal = new GameConfigurationValidator(parseToConfiguration()).validate();
+        console.log("Validating configuration...", newLocal.errors);
+        setValidation(newLocal);
+    }, [initialCardsPerPlayer, cardsPerDirection, iterations, vertices]);
+
     const parseConfiguration = (config: GameConfiguration) => {
         setLevelName(config.levelName ?? "Level name");
-        setInitialCardsPerPlayer(config.initialCardsPerPlayer);
-        setCardsPerDirection(config.cardsPerDirection);
-        setIterations(config.players.find(player => player.type === PlayerType.ARTIFICIAL_INTELLIGENCE)?.iterationsPerAlternative ?? 0);
+        setInitialCardsPerPlayer(clamp(config.initialCardsPerPlayer, gameConfigurationLimits.initialCardsPerPlayer));
+        setCardsPerDirection(clamp(config.cardsPerDirection, gameConfigurationLimits.cardsPerDirection));
+        setIterations(clamp(config.players.find(player => player.type === PlayerType.ARTIFICIAL_INTELLIGENCE)?.iterationsPerAlternative ?? 0, gameConfigurationLimits.intelligence.ai));
         setVertices(config.board.vertices);
+
         return config;
     }
 
@@ -142,9 +130,9 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
     const onAutoGenerateButton = () => {
         const vertices = generateRandomVertices();
 
-        setCardsPerDirection(createRandomValueFromLimits(cardsPerDirectionLimits));
-        setInitialCardsPerPlayer(createRandomValueFromLimits(initialCardsPerPlayerLimits));
-        setIterations(createRandomValueFromLimits(aiLimits));
+        setCardsPerDirection(createRandomValueFromLimits(gameConfigurationLimits.cardsPerDirection));
+        setInitialCardsPerPlayer(createRandomValueFromLimits(gameConfigurationLimits.initialCardsPerPlayer));
+        setIterations(createRandomValueFromLimits(gameConfigurationLimits.intelligence.ai));
         setLevelName(`Level ${Math.floor(Math.random() * 1000).toFixed(0).padStart(4, '0')}`);
         setVertices(vertices);
         resetGraphEditor(vertices);
@@ -153,42 +141,12 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
     const onClearButton = () => {
         setVertices([]);
         setLevelName("");
-        setCardsPerDirection(createRandomValueFromLimits(cardsPerDirectionLimits));
-        setInitialCardsPerPlayer(createRandomValueFromLimits(initialCardsPerPlayerLimits));
-        setIterations(createRandomValueFromLimits(aiLimits));
+        setCardsPerDirection(createRandomValueFromLimits(gameConfigurationLimits.cardsPerDirection));
+        setInitialCardsPerPlayer(createRandomValueFromLimits(gameConfigurationLimits.initialCardsPerPlayer));
+        setIterations(createRandomValueFromLimits(gameConfigurationLimits.intelligence.ai));
         setLevelName(`Level ${Math.floor(Math.random() * 1000).toFixed(0).padStart(4, '0')}`);
         resetGraphEditor([]);
     };
-
-    const numberOfLinksOfAVertix = (vertex: SerializableVertix) => {
-        const links = vertex.linkedVertices.length;
-        const comingLinks = vertices.filter(v => v.linkedVertices.includes(vertex.id)).length;
-        return links + comingLinks;
-    }
-
-    const isValid = () => {
-        if (vertices.length >= cardsPerDirection * directions.length) {
-            console.log("Too many vertices");
-            return false
-        }
-        if (vertices.length < 6) {
-            // console.log("Not enough vertices");
-            return false
-        }
-        if (!levelName) {
-            console.log("Name is required");
-            return false
-        }
-        if (vertices.some(vertix => numberOfLinksOfAVertix(vertix) < 2)) {
-            console.log("Some vertices have less than 2 links");
-            return false
-        }
-        if (vertices.some(vertix => isVertixOutOfBound(vertix))) {
-            console.log("Some vertices are out of bounds");
-            return false
-        }
-        return true;
-    }
 
     return (
         <div className="level-editor p-4 space-y-4" style={{
@@ -197,6 +155,9 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
             marginTop: '10px'
         }}>
             <h1 className="title">Level Editor</h1>
+            <div className="invalid-message my-2" style={{ color: validation?.valid ? 'transparent' : 'var(--compass-highlight-red)' }}>
+                {(validation?.errors.length ?? 0) > 0 ? validation?.errors[0] : 'Invalid configuration'}
+            </div>
             <div className="row justify-content-between">
                 <div className="col-auto" style={{ textAlign: 'end' }}>
                     <button onClick={() => onAutoGenerateButton()} type="button" className="btn btn-secondary btn-sm px-4">
@@ -218,10 +179,8 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
                     </button>
                 </div>
                 <div className="col-auto" style={{ textAlign: 'end' }}>
-                    <button disabled={!isValid()} onClick={async () => {
-                        console.log("Evaluating level...");
-                        const result = await new LevelEvaluator(parseToConfiguration(), aiLimits.human).evaluate(100)
-                        console.log("Level evaluation result: ", result);
+                    <button disabled={!validation?.valid} onClick={async () => {
+                        await new LevelEvaluator(parseToConfiguration(), gameConfigurationLimits.intelligence.human).evaluate(100)
                     }} type="button" className="btn btn-danger btn-sm px-4">
                         Evaluate
                         <i className="bi bi-lightning-fill ms-2"></i>
@@ -235,25 +194,37 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
                     </button>
                 </div>
                 <div className="col-auto" style={{ textAlign: 'end' }}>
-                    <button disabled={!isValid()} onClick={() => props.onExit(parseToConfiguration())}
+                    <button disabled={!validation?.valid} onClick={() => props.onExit(parseToConfiguration())}
                         type="button" className="btn btn-warning btn-sm px-4">
-                        Test
+                        Play
                         <i className="bi bi-play ms-2"></i>
                     </button>
                 </div>
                 <div className="col-4">
                     <label htmlFor="initialCardsPerPlayer" className="form-label">Initial cards per player: {initialCardsPerPlayer}</label>
-                    <input type="range" className="form-range" min={initialCardsPerPlayerLimits.min} max={initialCardsPerPlayerLimits.max} step="1" id="initialCardsPerPlayer" value={initialCardsPerPlayer}
+                    <input type="range" className="form-range"
+                        min={gameConfigurationLimits.initialCardsPerPlayer.min}
+                        max={gameConfigurationLimits.initialCardsPerPlayer.max}
+                        step={gameConfigurationLimits.initialCardsPerPlayer.step}
+                        id="initialCardsPerPlayer" value={initialCardsPerPlayer}
                         onChange={(e) => setInitialCardsPerPlayer(Number(e.target.value))} />
                 </div>
                 <div className="col-4">
                     <label htmlFor="cardsPerDirection" className="form-label">Cards per direction: {cardsPerDirection}</label>
-                    <input type="range" className="form-range" min={cardsPerDirectionLimits.min} max={cardsPerDirectionLimits.max} step="1" id="cardsPerDirection" value={cardsPerDirection}
+                    <input type="range" className="form-range"
+                        min={gameConfigurationLimits.cardsPerDirection.min}
+                        max={gameConfigurationLimits.cardsPerDirection.max}
+                        step={gameConfigurationLimits.cardsPerDirection.step}
+                        id="cardsPerDirection" value={cardsPerDirection}
                         onChange={(e) => setCardsPerDirection(Number(e.target.value))} />
                 </div>
                 <div className="col-4">
                     <label htmlFor="iterationsPerAlternative" className="form-label">AI level: {iterations}</label>
-                    <input type="range" className="form-range" min={aiLimits.min} max={aiLimits.max} step={aiLimits.step} id="iterationsPerAlternative"
+                    <input type="range" className="form-range"
+                        min={gameConfigurationLimits.intelligence.ai.min}
+                        max={gameConfigurationLimits.intelligence.ai.max}
+                        step={gameConfigurationLimits.intelligence.ai.step}
+                        id="iterationsPerAlternative"
                         value={iterations}
                         onChange={(e) => setIterations(Number(e.target.value))} />
                 </div>
@@ -261,7 +232,7 @@ export default function LevelEditor(props: { onExit: (configuration: GameConfigu
                     <div className="input-group mb-3">
                         <input type="text" value={levelName} onChange={evt => setLevelName(evt.target.value)} className="form-control" placeholder="Level name" aria-label="Level name"
                             aria-describedby="basic-addon2" />
-                        <button id="basic-addon2" disabled={!isValid()} onClick={() => exportLevel(parseToConfiguration(), levelName)}
+                        <button id="basic-addon2" disabled={!validation?.valid} onClick={() => exportLevel(parseToConfiguration(), levelName)}
                             type="button" className="btn btn-primary btn-sm px-4">
                             Save
                             <i className="bi bi-floppy ms-2"></i>

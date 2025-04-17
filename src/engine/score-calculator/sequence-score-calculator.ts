@@ -1,5 +1,5 @@
-import { DirectionsComparer, isNextClockWise, isPreviousClockWise } from '../directions'
-import { LinkedVertix, Vertix } from '../graph/vertix'
+import { isNextClockWise, isPreviousClockWise } from '../directions'
+import { Vertix } from '../graph/vertix'
 import { Move } from './move'
 import { MoveScore } from './move-score'
 import { MoveScoreCalculator } from './move-score-checker'
@@ -37,26 +37,5 @@ export class SequenceScoreCalculator implements MoveScoreCalculator {
                     vertices: sequence,
                 }
             })
-    }
-
-    private mergeSequences(clockwiseSequences: Vertix[][], counterClockwiseSequences: Vertix[][]): Vertix[][] {
-        const sequences: Vertix[][] = []
-        if (clockwiseSequences.length === 0 || counterClockwiseSequences.length === 0) {
-            return clockwiseSequences.concat(counterClockwiseSequences)
-        } else {
-            //cw: 4567
-            //ccw: 23456
-            counterClockwiseSequences.forEach((counterClockwiseSequence: Vertix[]) => {
-                clockwiseSequences.forEach((clockwiseSequence: Vertix[]) => {
-                    const firstNotIncludedItem = clockwiseSequence.findIndex(
-                        // item 7, index: 3
-                        (clockwiseItem) => !counterClockwiseSequence.includes(clockwiseItem)
-                    )
-
-                    sequences.push(counterClockwiseSequence.concat(clockwiseSequence.slice(firstNotIncludedItem)))
-                })
-            })
-        }
-        return sequences
     }
 }

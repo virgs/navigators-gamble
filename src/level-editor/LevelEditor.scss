@@ -1,25 +1,31 @@
 .level-editor {
-    * {
-        font-family: 'Pirata One', system-ui;
-        font-style: normal;
-    }
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #f8f5f0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    // * {
+    //     font-family: 'Pirata One', system-ui;
+    //     font-style: normal;
+    // }
 
-    label {
-        font-size: 1.5rem;
-    }
-    p {
-        font-size: 1.25rem;
-    }
+    // label {
+    //     font-size: 1.5rem;
+    // }
+    // p {
+    //     font-size: 1.25rem;
+    // }
 
-    label,
-    p,
-    h1,
-    i.bi-info-circle-fill {
-        font-weight: lighter;
-        text-shadow: 3px 3px 1px var(--compass-primary);
-    }
+    // label,
+    // p,
+    // h1,
+    // i.bi-info-circle-fill {
+    //     font-weight: lighter;
+    //     text-shadow: 3px 3px 1px var(--compass-primary);
+    // }
 
-    .leveleditor-container {
-        padding: 1rem;
-    }
+    // .leveleditor-container {
+    //     padding: 1rem;
+    // }
 }

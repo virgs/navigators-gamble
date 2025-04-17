@@ -15,9 +15,25 @@ export class HumanPlayer implements Player {
         this._id = id
         this._cards = cards
         this._score = 0
-        // this._cards.sort((a, b) => a.direction - b.direction)
         this._movePromises = {}
+        console.log('Creating player', this._id)
+    }
 
+    public get type() {
+        return PlayerType.HUMAN
+    }
+
+    public get id(): string {
+        return this._id
+    }
+    public get score(): number {
+        return this._score
+    }
+
+    public get cards(): Card[] {
+        return this._cards
+    }
+    public createHooks(): void {
         useVisibleVertixSelectedEventListener((event) => {
             if (event.playerId === this._id) {
                 const cardPosition = this._cards.findIndex((card) => card.id === event.card.id)
@@ -38,21 +54,6 @@ export class HumanPlayer implements Player {
                 delete this._movePromises[event.moveId]
             }
         })
-    }
-
-    public get type() {
-        return PlayerType.HUMAN
-    }
-
-    public get id(): string {
-        return this._id
-    }
-    public get score(): number {
-        return this._score
-    }
-
-    public get cards(): Card[] {
-        return this._cards
     }
 
     public addScore(score: number): void {

@@ -13,6 +13,7 @@ export interface Player {
     get id(): string
     get score(): number
     get cards(): Card[]
+    createHooks(): void
     finish(): void
     drawCard(card: Card): void
     addScore(score: number): void

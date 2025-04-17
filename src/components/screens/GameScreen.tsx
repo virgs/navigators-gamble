@@ -14,36 +14,49 @@ export type GameFinished = {
     finished: boolean;
 }
 
-export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGameFinished: (result: GameFinished) => void }): ReactNode => {
-    const gameEngine = useRef<GameEngine>(undefined);
-    const scoreAnimationCoordinator = useRef<ScoreAnimationCoordinator>(undefined);
+type GameScreenProps = {
+    gameConfiguration: GameConfiguration;
+    onGameFinished: (result: GameFinished) => void;
+};
+
+export const GameScreen = (props: GameScreenProps): ReactNode => {
+
+    useEffect(() => {
+        if (gameEngine.current?.start()) {
+            iterate()
+        }
+    }, [])
+    const visibleHandPlayerIndex = props.gameConfiguration.players
+        .findIndex(player => player.id === props.gameConfiguration.visibleHandPlayerId)
+    const visiblePlayerComponent = visibleHandPlayerIndex !== -1 ? <VisibleCardsHandComponent turnOrder={visibleHandPlayerIndex}
+        player={props.gameConfiguration.players[visibleHandPlayerIndex]} /> : <></>;
+
+    const hiddenPlayers = props.gameConfiguration.players
+        .map((player, index) => {
+            if (player.id === props.gameConfiguration.visibleHandPlayerId) {
+                return null;
+            }
+            return <HiddenCardsHandComponent key={player.id} turnOrder={index} player={player}></HiddenCardsHandComponent>;
+        }).filter((player) => player !== null);
+
+    const gameEngine = useRef<GameEngine>(null);
+    const scoreAnimationCoordinator = useRef<ScoreAnimationCoordinator>(null);
     const [classes] = useState<string[]>(['game-screen', 'w-100', 'h-100', 'row', 'g-0'])
 
-    if (gameEngine.current === undefined) {
-        console.log('GameScreen mounted');
-        gameEngine.current = new GameEngine(props.gameConfiguration)
-    }
-
-    if (scoreAnimationCoordinator.current === undefined) {
+    if (gameEngine.current === null) {
+        gameEngine.current = new GameEngine(props.gameConfiguration);
         scoreAnimationCoordinator.current = new ScoreAnimationCoordinator(props.gameConfiguration);
     }
 
-    useEffect(() => {
-        gameEngine.current!.start()
-        iterate()
-        return () => {
-            gameEngine.current?.finish()
-            gameEngine.current = undefined
-            console.log('GameScreen unmounted');
-        }
-    }, [])
+    gameEngine.current?.createHooks();
+    scoreAnimationCoordinator.current?.createHooks();
+
 
     const iterate = async () => {
         if (gameEngine.current!.isGameOver()) {
-            console.log('Game finished');
-            gameEngine.current!.calculateEndGameBonusPoints()
+            gameEngine.current!.calculateEndGameBonusPoints();
         } else {
-            await gameEngine.current!.playNextRound()
+            await gameEngine.current!.playNextRound();
         }
     }
 
@@ -60,21 +73,11 @@ export const GameScreen = (props: { gameConfiguration: GameConfiguration, onGame
     })
 
     const onGameFinished = (result: GameFinished) => {
+        gameEngine.current?.finish()
+        gameEngine.current = null
+        console.log('GameScreen unmounted');
         props.onGameFinished(result)
     }
-
-    const visibleHandPlayerIndex = props.gameConfiguration.players
-        .findIndex(player => player.id === props.gameConfiguration.visibleHandPlayerId)
-    const visiblePlayerComponent = visibleHandPlayerIndex !== -1 ? <VisibleCardsHandComponent turnOrder={visibleHandPlayerIndex}
-        player={props.gameConfiguration.players[visibleHandPlayerIndex]} /> : <></>
-
-    const hiddenPlayers: ReactNode[] = props.gameConfiguration.players
-        .map((player, index) => {
-            if (player.id === props.gameConfiguration.visibleHandPlayerId) {
-                return null
-            }
-            return <HiddenCardsHandComponent key={player.id} turnOrder={index} player={player}></HiddenCardsHandComponent>;
-        }).filter((player) => player !== null);
 
     return (
         <>

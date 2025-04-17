@@ -70,6 +70,8 @@ export class AiPlayer implements Player {
         return this._score
     }
 
+    public createHooks(): void {}
+
     public finish(): void {
         this.worker.terminate()
     }

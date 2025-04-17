@@ -2,7 +2,6 @@ import { Board } from '../../engine/board/board'
 import { BoardSerializer } from '../../engine/board/board-serializer'
 import { Directions, directions } from '../../engine/directions'
 import { GameConfiguration } from '../../engine/game-configuration/game-configuration'
-import { Vertix } from '../../engine/graph/vertix'
 import { Move } from '../../engine/score-calculator/move'
 import { MoveScore } from '../../engine/score-calculator/move-score'
 import { arrayShuffler } from '../../math/array-shufller'
@@ -40,8 +39,8 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
         const moveResults = new Map<number, Move & { score: number }>()
         for (let count = 0; count < this.iterationsPerAlternative; count++) {
             const boardCopy = board.clone()
-            // shuffle the possible moves to avoid the same moves being always evaluated first
-            // and some stupidness to the ai
+            // randomly selects a move from the possible moves
+            // to add some stupidness to the ai
             const index = Math.floor(Math.random() * possibleMoves.length)
             const possibleMove = possibleMoves[index]
             const moveWins: number = this.simulateRandomGame(possibleMove, moveRequest, boardCopy) ? 1 : 0
@@ -103,6 +102,7 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
 
             move = nextMoves[Math.floor(Math.random() * nextMoves.length)]
         }
+        //bonus points
         board.getVertices().forEach((vertix) => {
             if (vertix.ownerId !== undefined) {
                 scores[vertix.ownerId] += vertix.direction ? 1 : 0
@@ -151,13 +151,13 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
         const empty = board.getEmptyVertices()
         const moves: Move[] = []
 
-        for (const card of cards) {
+        cards.forEach((card, index) => {
             for (const vertix of empty) {
                 if (!moves.find((move) => move.direction === card && move.vertixId === vertix.id)) {
-                    moves.push({ vertixId: vertix.id, direction: card, playerId: playerId })
+                    moves.push({ vertixId: vertix.id, direction: card, playerId: playerId, cardIndex: index })
                 }
             }
-        }
+        })
 
         return moves
     }

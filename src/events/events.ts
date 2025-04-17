@@ -1,11 +1,10 @@
 import { createEvent } from 'react-event-hook'
 import { SerializableVertix } from '../engine/board/serializable-board'
 import { Card } from '../engine/card'
+import { PlayerType } from '../engine/game-configuration/player-type'
 import { Vertix } from '../engine/graph/vertix'
 import { Move } from '../engine/score-calculator/move'
 import { MoveScore } from '../engine/score-calculator/move-score'
-import { ScoreType } from '../engine/score-calculator/score-type'
-import { PlayerType } from '../engine/game-configuration/player-type'
 
 export type PlayerTurnChangeEvent = {
     turnOrder: number

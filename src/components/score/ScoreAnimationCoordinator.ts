@@ -30,6 +30,9 @@ export class ScoreAnimationCoordinator {
 
     public constructor(configuration: GameConfiguration) {
         this.players = configuration.players
+    }
+
+    public createHooks(): void {
         usePlayerMadeMoveEventListener((payload) => {
             this.startScoreAnimation(payload)
         })
@@ -48,34 +51,25 @@ export class ScoreAnimationCoordinator {
             })
 
             await sleep(ScoreAnimationCoordinator.INTERVAL_BETWEEN_ANIMATIONS)
-            console.log('Starting end game bonus points animation', new Date().getSeconds())
             await this.startEndGameBonusPointsAnimation(payload)
 
             await sleep(ScoreAnimationCoordinator.INTERVAL_BETWEEN_ANIMATIONS)
 
-            console.log('Announcing end game result', new Date().getSeconds())
             emitAnnounceCommand({
                 announcement: humanPlayerHasWon ? 'You won!' : 'You lost!',
                 duration: ScoreAnimationCoordinator.INTERVAL_BETWEEN_ANIMATIONS,
             })
             await sleep(2 * ScoreAnimationCoordinator.INTERVAL_BETWEEN_ANIMATIONS)
-            console.log('Ending bonus points animation', new Date().getSeconds())
             emitEndOfBonusPointsEvent()
         })
     }
 
     private async startEndGameBonusPointsAnimation(payload: EndGameBonusPointsEvent[]): Promise<void> {
         const currentBonus = payload.shift()
-        console.log('Current bonus:', currentBonus?.playerScore, currentBonus?.vertices.length, new Date().getSeconds())
         if (currentBonus === undefined || currentBonus.vertices.length === 0) {
             return
         }
 
-        console.log(
-            'Starting end game bonus points animation for player',
-            currentBonus.playerId,
-            new Date().getSeconds()
-        )
         emitBeginVerticesAnimationsCommand({
             playerId: currentBonus.playerId,
             score: {
@@ -87,7 +81,6 @@ export class ScoreAnimationCoordinator {
 
         await sleep(ScoreAnimationCoordinator.INTERVAL_BETWEEN_ANIMATIONS)
 
-        console.log('Animating end game bonus points for player', currentBonus.playerId, new Date().getSeconds())
         emitFinishVerticesAnimationsCommand({
             playerId: currentBonus.playerId,
             points: currentBonus.vertices.length,
