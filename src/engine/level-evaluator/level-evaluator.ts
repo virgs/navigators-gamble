@@ -1,4 +1,5 @@
 import { AiAlgorithmType } from '../../ai/algorithms/ai-algorithm-type'
+import { sleep } from '../../math/sleep'
 import { GameConfiguration, GamePlayerConfiguration } from '../game-configuration/game-configuration'
 import { PlayerType } from '../game-configuration/player-type'
 import { GameEngine } from '../game-engine'
@@ -7,8 +8,13 @@ export class LevelEvaluator {
     private readonly gameConfig: GameConfiguration
     private readonly aiHumanPlayerId: string
     private readonly parallelExecutions: number
+    private evaluated: boolean
+    private terminating: boolean
 
     public constructor(gameConfig: GameConfiguration, humanLevel: number = 300, parallelExecutions: number = 3) {
+        this.evaluated = false
+        this.terminating = false
+
         this.gameConfig = gameConfig
         this.parallelExecutions = parallelExecutions
         const ai = this.gameConfig.players.find((p) => p.type === PlayerType.ARTIFICIAL_INTELLIGENCE)!
@@ -24,25 +30,41 @@ export class LevelEvaluator {
         this.aiHumanPlayerId = aiHuman.id
     }
 
+    public async terminate(): Promise<void> {
+        this.terminating = true
+        console.log('Terminating level evaluator')
+        while (!this.evaluated) {
+            await sleep(50)
+        }
+        console.log('Level evaluator terminated')
+    }
+
+    public terminated(): boolean {
+        return this.terminating
+    }
+
     public async evaluate(iterations: number = 100): Promise<number> {
+        this.evaluated = false
+        this.terminating = false
         const startTime = performance.now()
         console.log(
             `Starting evaluation with ${iterations} iterations in ${this.parallelExecutions} parallel executions`
         )
         const promises = []
-        for (let i = 0; i < this.parallelExecutions; i++) {
+        for (let i = 0; i < this.parallelExecutions && !this.terminating; i++) {
             promises.push(this.evaluateLevel(Math.ceil(iterations / this.parallelExecutions)))
         }
         const results = await Promise.all(promises)
         const endTime = performance.now()
         const result = results.reduce((a, b) => a + b, 0) / iterations
         console.log(`Evaluation took ${Math.round(endTime - startTime)} ms. ${result} losses average.`)
+        this.evaluated = true
         return result
     }
 
     private async evaluateLevel(iterations: number): Promise<number> {
         let losses = 0
-        for (let i = 0; i < iterations; i++) {
+        for (let i = 0; i < iterations && !this.terminating; i++) {
             console.log(`Iteration ${i + 1} of ${iterations}`)
             const gameEngine = new GameEngine(this.gameConfig)
             gameEngine.start()

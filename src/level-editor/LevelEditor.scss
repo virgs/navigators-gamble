@@ -2,6 +2,7 @@
     background-color: var(--compass-light-gray);
     border: 2px solid var(--compass-dark-gray);
     border-radius: 4px;
+    box-shadow: 5px 5px 10px var(--compass-dark-gray);
 
     .title {
         font-family: 'Pirata One', system-ui;
@@ -23,6 +24,9 @@
         font-size: 1.15rem;
         font-weight: 900;
         color: var(--compass-black);
+        margin-bottom: 5px;
+        text-align: center;
+        width: 100%;
     }
 
     .invalid-message {

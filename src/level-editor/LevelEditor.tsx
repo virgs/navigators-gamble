@@ -1,16 +1,17 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { AiAlgorithmType } from "../ai/algorithms/ai-algorithm-type";
+import { HeaderComponent } from "../components/HeaderComponent";
 import { SerializableVertix } from "../engine/board/serializable-board";
 import { GameConfiguration } from "../engine/game-configuration/game-configuration";
 import { gameConfigurationLimits, GameConfigurationValidator, ValidationResult } from "../engine/game-configuration/game-configuration-validator";
 import { PlayerType } from "../engine/game-configuration/player-type";
 import { LevelEvaluator } from "../engine/level-evaluator/level-evaluator";
 import { arrayShuffler } from "../math/array-shufller";
+import { clamp } from "../math/clamp";
 import { generateUID } from "../math/generate-id";
 import GraphEditor from "./GraphEditor";
 import "./LevelEditor.scss";
-import { clamp } from "../math/clamp";
-import { HeaderComponent } from "../components/HeaderComponent";
+import { DifficultyGauge } from "./DifficultyGauge";
 
 const CANVAS_SIZE = 400;
 const GRID_LINES = 8;
@@ -20,7 +21,6 @@ const createRandomValueFromLimits = (limits: { min: number, max: number, step: n
     const randomValue = Math.floor(Math.random() * (diff / limits.step)) * limits.step + limits.min;
     return randomValue;
 }
-
 
 const exportLevel = (config: GameConfiguration, levelName: string) => {
     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
@@ -52,8 +52,12 @@ const generateRandomVertices = (): SerializableVertix[] => {
 
 export default function LevelEditor(props: { onExit: (configuration?: GameConfiguration) => void, configuration?: GameConfiguration }) {
     const inputFile = useRef(null)
+    const levelEvaluator = useRef<LevelEvaluator | null>(null);
+    const validationResult = useRef<ValidationResult | null>(null);
 
-    const [validation, setValidation] = useState<ValidationResult | undefined>(undefined);
+    const [humanPlayerStarts, setHumanPlayerStarts] = useState<boolean>(true);
+
+    const [estimatedDifficulty, setEstimatedDifficulty] = useState<number>(.75);
     const [vertices, setVertices] = useState<SerializableVertix[]>([]);
     const [initialCardsPerPlayer, setInitialCardsPerPlayer] = useState(gameConfigurationLimits.initialCardsPerPlayer.min);
     const [cardsPerDirection, setCardsPerDirection] = useState(gameConfigurationLimits.cardsPerDirection.min);
@@ -69,7 +73,7 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
     }, []);
 
     useEffect(() => {
-        setValidation(new GameConfigurationValidator(parseToConfiguration()).validate());
+        validationResult.current = new GameConfigurationValidator(parseToConfiguration()).validate();
     }, [initialCardsPerPlayer, cardsPerDirection, iterations, vertices]);
 
     const parseConfiguration = (config: GameConfiguration) => {
@@ -147,11 +151,24 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
         resetGraphEditor([]);
     };
 
-
-
     const onEvaluateButton = async () => {
-        await new LevelEvaluator(parseToConfiguration(), gameConfigurationLimits.intelligence.human).evaluate(100);
+        await levelEvaluator.current?.terminate()
+        setEstimatedDifficulty(0);
+        levelEvaluator.current = new LevelEvaluator(parseToConfiguration(), gameConfigurationLimits.intelligence.human);
+        if (!levelEvaluator.current.terminated()) {
+            const result = await levelEvaluator.current.evaluate(100);
+            setEstimatedDifficulty(result);
+        }
+        levelEvaluator.current = null;
     }
+
+    const isValid = () => {
+        if (levelEvaluator.current) {
+            return false
+        }
+        return validationResult.current?.valid ?? false;
+    }
+
 
     return (<>
         <HeaderComponent onQuit={() => props.onExit()}></HeaderComponent>
@@ -183,7 +200,7 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
                     </button>
                 </div>
                 <div className="col-auto" style={{ textAlign: 'end' }}>
-                    <button disabled={!validation?.valid} onClick={() => onEvaluateButton()} type="button"
+                    <button disabled={!isValid()} onClick={() => onEvaluateButton()} type="button"
                         className="btn btn-warning btn-sm px-2">
                         Evaluate
                         {/* <i className="bi bi-lightning-fill ms-2"></i> */}
@@ -191,7 +208,7 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
                     </button>
                 </div>
                 <div className="col-auto" style={{ textAlign: 'end' }}>
-                    <button disabled={!validation?.valid} onClick={() => props.onExit(parseToConfiguration())}
+                    <button disabled={!isValid()} onClick={() => props.onExit(parseToConfiguration())}
                         type="button" className="btn btn-warning btn-sm px-2">
                         Play
                         <i className="bi bi-play ms-2"></i>
@@ -200,8 +217,8 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
 
                 <div className="w-100 my-2"></div>
 
-                <div className="col-3">
-                    <label htmlFor="initialCardsPerPlayer" className="form-label">Cards per player: {initialCardsPerPlayer}</label>
+                <div className="col-2">
+                    <label htmlFor="initialCardsPerPlayer" className="form-label">Hand size: {initialCardsPerPlayer}</label>
                     <input type="range" className="form-range"
                         min={gameConfigurationLimits.initialCardsPerPlayer.min}
                         max={gameConfigurationLimits.initialCardsPerPlayer.max}
@@ -209,8 +226,8 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
                         id="initialCardsPerPlayer" value={initialCardsPerPlayer}
                         onChange={(e) => setInitialCardsPerPlayer(Number(e.target.value))} />
                 </div>
-                <div className="col-3">
-                    <label htmlFor="cardsPerDirection" className="form-label">Cards per direction: {cardsPerDirection}</label>
+                <div className="col-2">
+                    <label htmlFor="cardsPerDirection" className="form-label">Direction: {cardsPerDirection}</label>
                     <input type="range" className="form-range"
                         min={gameConfigurationLimits.cardsPerDirection.min}
                         max={gameConfigurationLimits.cardsPerDirection.max}
@@ -218,7 +235,7 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
                         id="cardsPerDirection" value={cardsPerDirection}
                         onChange={(e) => setCardsPerDirection(Number(e.target.value))} />
                 </div>
-                <div className="col-3">
+                <div className="col-2">
                     <label htmlFor="iterationsPerAlternative" className="form-label">AI level: {iterations}</label>
                     <input type="range" className="form-range"
                         min={gameConfigurationLimits.intelligence.ai.min}
@@ -228,17 +245,48 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
                         value={iterations}
                         onChange={(e) => setIterations(Number(e.target.value))} />
                 </div>
+                <div className="col-2">
+                    <label htmlFor="iterationsPerAlternative" className="form-label">Difficulty</label>
+                    <DifficultyGauge value={estimatedDifficulty} minValue={0} maxValue={1} ></DifficultyGauge>
+                </div>
+                <div className="col-4">
+                    <label htmlFor="iterationsPerAlternative" className="form-label d-block">Starting Player</label>
+                    <input
+                        onChange={() => setHumanPlayerStarts(true)}
+                        checked={humanPlayerStarts}
+                        type="radio" className="btn-check"
+                        name="options-base" id="human-player" autoComplete="off"
+                    />
+                    <label className="btn w-50" htmlFor="human-player">
+                        Human
+                        <i className="bi bi-person-raised-hand ms-2"></i>
+                    </label>
+
+                    <input
+                        onChange={() => setHumanPlayerStarts(false)}
+                        checked={!humanPlayerStarts}
+                        type="radio"
+                        className="btn-check"
+                        name="options-base" id="ai-player" autoComplete="off" />
+                    <label className="btn w-50" htmlFor="ai-player">
+                        AI
+                        <i className="bi bi-robot ms-2"></i>
+                    </label>
+                </div>
+
                 <div className="w-100 my-2"></div>
+
                 <div className="col-6">
-                    <div className="invalid-message my-2" style={{ color: validation?.valid ? 'transparent' : '' }}>
-                        {(validation?.errors.length ?? 0) > 0 ? validation?.errors[0] : 'Invalid configuration'}
+                    <div className="invalid-message my-2" style={{ color: isValid() ? 'transparent' : '' }}>
+                        {!isValid() && validationResult.current?.errors[0]}
                     </div>
                 </div>
                 <div className="col-6">
                     <div className="input-group">
                         <input type="text" value={levelName} onChange={evt => setLevelName(evt.target.value)} className="form-control" placeholder="Level name" aria-label="Level name"
                             aria-describedby="basic-addon2" />
-                        <button id="basic-addon2" disabled={!validation?.valid} onClick={() => exportLevel(parseToConfiguration(), levelName)}
+                        <button id="basic-addon2"
+                            disabled={!isValid()} onClick={() => exportLevel(parseToConfiguration(), levelName)}
                             type="button" className="btn btn-success btn-sm px-2">
                             Save
                             <i className="bi bi-floppy ms-2"></i>
@@ -246,7 +294,6 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
                     </div>
                 </div>
                 <div className="w-100 my-2"></div>
-
             </div>
 
             {graphEditor}

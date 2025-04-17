@@ -39,11 +39,13 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
         <div className='col-12 col-sm-6 menu py-1'>
             {props.onQuit && <span className='ms-2 button' onClick={() => props.onQuit && props.onQuit()}>
                 <i className="bi bi-x-lg"></i></span>}
-            <span className='level-name ms-4' style={{ textAlign: 'center', fontSize: '1.2rem' }}>
-                {props.levelNumber !== undefined ? props.levelNumber : "5"}
-                <i className="bi bi-dot mx-1"></i>
-                {props.gameConfiguration?.levelName ?? "Baiú"}
-            </span>
+            {props.gameConfiguration !== undefined && <>
+                <span className='level-name ms-4' style={{ textAlign: 'center', fontSize: '1.2rem' }}>
+                    {props.levelNumber}
+                    <i className="bi bi-dot mx-1"></i>
+                    {props.gameConfiguration?.levelName}
+                </span>
+            </>}
         </div>
         <div className='col-12 col-sm-6 justify-content-between justify-content-sm-end align-items-center d-flex menu py-1'>
             {props.gameConfiguration !== undefined &&
