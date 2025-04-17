@@ -1,4 +1,4 @@
-import { Point } from './point'
+import { getDistance, Point } from './point'
 
 export type Line = {
     start: Point
@@ -7,67 +7,89 @@ export type Line = {
 
 // Given three collinear points p, q, r, the function checks if
 // point q lies on line segment 'pr'
-function onSegment(p: Point, q: Point, r: Point) {
+const isPointOnSegment = (point: Point, segment: Line) => {
+    const start = segment.start
+    const end = segment.end
     if (
-        q.x <= Math.max(p.x, r.x) &&
-        q.x >= Math.min(p.x, r.x) &&
-        q.y <= Math.max(p.y, r.y) &&
-        q.y >= Math.min(p.y, r.y)
+        point.x <= Math.max(start.x, end.x) &&
+        point.x >= Math.min(start.x, end.x) &&
+        point.y <= Math.max(start.y, end.y) &&
+        point.y >= Math.min(start.y, end.y)
     )
         return true
 
     return false
 }
 
-// To find orientation of ordered triplet (p, q, r).
-// The function returns following values
-// 0 --> p, q and r are collinear
+// To find orientation of ordered triplet (start, middle, end).
+// The function returns the following values:
+// 0 --> start, middle, and end are collinear
 // 1 --> Clockwise
 // 2 --> Counterclockwise
-function orientation(p: Point, q: Point, r: Point) {
-    // See https://www.geeksforgeeks.org/orientation-3-ordered-points/
-    // for details of below formula.
-    let val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y)
+const getOrientation = (start: Point, middle: Point, end: Point) => {
+    const value = (middle.y - start.y) * (end.x - middle.x) - (middle.x - start.x) * (end.y - middle.y)
 
-    if (val == 0) return 0 // collinear
+    if (value === 0) return 0 // collinear
 
-    return val > 0 ? 1 : 2 // clock or counterclock wise
+    return value > 0 ? 1 : 2 // clockwise or counterclockwise
 }
 
-// The main function that returns true if line segment 'p1q1'
-// and 'p2q2' intersect.
-export const linesIntersect = (a: Line, b: Line) => {
-    const p1 = a.start
-    const q1 = a.end
-    const p2 = b.start
-    const q2 = b.end
-    // Find the four orientations needed for general and
-    // special cases
-    const o1 = orientation(p1, q1, p2)
-    const o2 = orientation(p1, q1, q2)
-    const o3 = orientation(p2, q2, p1)
-    const o4 = orientation(p2, q2, q1)
+// The main function that returns true if line segment 'line1'
+// and 'line2' intersect, considering a tolerance for proximity to endpoints.
+export const doLinesIntersect = (line1: Line, line2: Line, tolerance: number = 0.1) => {
+    const line1Start = line1.start
+    const line1End = line1.end
+    const line2Start = line2.start
+    const line2End = line2.end
 
-    // let o1 = orientation(a.start, b.start, a.end)
-    // let o2 = orientation(a.start, b.start, b.end)
-    // let o3 = orientation(a.end, b.end, a.start)
-    // let o4 = orientation(a.end, b.end, b.start)
+    // Find the four orientations needed for general and special cases
+    const orientation1 = getOrientation(line1Start, line1End, line2Start)
+    const orientation2 = getOrientation(line1Start, line1End, line2End)
+    const orientation3 = getOrientation(line2Start, line2End, line1Start)
+    const orientation4 = getOrientation(line2Start, line2End, line1End)
 
     // General case
-    if (o1 != o2 && o3 != o4) return true
+    if (orientation1 !== orientation2 && orientation3 !== orientation4) {
+        // Check if the intersection point is too close to any endpoint
+        if (
+            getDistance(line1Start, line2Start) < tolerance ||
+            getDistance(line1Start, line2End) < tolerance ||
+            getDistance(line1End, line2Start) < tolerance ||
+            getDistance(line1End, line2End) < tolerance
+        ) {
+            return false
+        }
+        return true
+    }
 
     // Special Cases
-    // p1, q1 and p2 are collinear and p2 lies on segment p1q1
-    if (o1 == 0 && onSegment(p1, p2, q1)) return true
+    if (orientation1 === 0 && isPointOnSegment(line2Start, line1)) {
+        if (getDistance(line2Start, line1Start) < tolerance || getDistance(line2Start, line1End) < tolerance) {
+            return false
+        }
+        return true
+    }
 
-    // p1, q1 and q2 are collinear and q2 lies on segment p1q1
-    if (o2 == 0 && onSegment(p1, q2, q1)) return true
+    if (orientation2 === 0 && isPointOnSegment(line2End, line1)) {
+        if (getDistance(line2End, line1Start) < tolerance || getDistance(line2End, line1End) < tolerance) {
+            return false
+        }
+        return true
+    }
 
-    // p2, q2 and p1 are collinear and p1 lies on segment p2q2
-    if (o3 == 0 && onSegment(p2, p1, q2)) return true
+    if (orientation3 === 0 && isPointOnSegment(line1Start, line2)) {
+        if (getDistance(line1Start, line2Start) < tolerance || getDistance(line1Start, line2End) < tolerance) {
+            return false
+        }
+        return true
+    }
 
-    // p2, q2 and q1 are collinear and q1 lies on segment p2q2
-    if (o4 == 0 && onSegment(p2, q1, q2)) return true
+    if (orientation4 === 0 && isPointOnSegment(line1End, line2)) {
+        if (getDistance(line1End, line2Start) < tolerance || getDistance(line1End, line2End) < tolerance) {
+            return false
+        }
+        return true
+    }
 
     return false // Doesn't fall in any of the above cases
 }

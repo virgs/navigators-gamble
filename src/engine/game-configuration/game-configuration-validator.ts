@@ -1,4 +1,4 @@
-import { linesIntersect } from '../../math/line'
+import { doLinesIntersect } from '../../math/line'
 import { SerializableVertix } from '../board/serializable-board'
 import { directions } from '../directions'
 import { GameConfiguration } from './game-configuration'
@@ -85,11 +85,14 @@ export class GameConfigurationValidator {
                 edges
                     .slice(index + 1)
                     .some((edge2) =>
-                        linesIntersect({ start: edge1.start, end: edge1.end! }, { start: edge2.start, end: edge2.end! })
+                        doLinesIntersect(
+                            { start: edge1.start, end: edge1.end! },
+                            { start: edge2.start, end: edge2.end! }
+                        )
                     )
             )
         ) {
-            // errors.push('Some edges intersect.')
+            errors.push('Some edges intersect.')
         }
 
         if (this.gameConfiguration)

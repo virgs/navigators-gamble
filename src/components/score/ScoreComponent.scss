@@ -3,6 +3,23 @@
     font-weight: lighter;
     font-style: normal;
     font-size: 1.25em;
+
+    & .flip {
+        animation: flip 1s ease-in-out;
+        perspective: 1000px;
+    }
+}
+
+@keyframes flip {
+    0% {
+        transform: rotateY(0deg);
+    }
+    50% {
+        transform: rotateY(180deg);
+    }
+    100% {
+        transform: rotateY(0deg);
+    }
 }
 
 .turn-arrow {

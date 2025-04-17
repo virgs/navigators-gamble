@@ -40,7 +40,7 @@ export const ScoreComponent = (props: { player: GamePlayerCommonAttributes, turn
     }
 
     return <div className='score d-flex align-items-center mb-2' style={{ color: color, fontSize: '1.75rem' }}>
-        <i className="bi bi-coin mx-2"></i>
+        <i className={"bi bi-coin mx-2".concat(increaseEffectList.length > 0 ? ' flip' : '')}></i>
         {increaseEffectList.map((effect) => (
             <ScoreIncrease
                 key={effect.id}
