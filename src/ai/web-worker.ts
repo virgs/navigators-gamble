@@ -14,7 +14,7 @@ const readyMessage: WebWorkerMessage = {
 postMessage(readyMessage)
 
 let aiAlgorithm: AiAlgorithm
-const minWaitTime: number = 1000
+const minWaitTime: number = process.env.NODE_ENV === 'development' ? 0 : 1000 // 1000ms
 
 self.onmessage = async (event: MessageEvent<WebWorkerMessage>) => {
     try {
