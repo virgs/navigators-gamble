@@ -4,10 +4,9 @@ import backgroundImage from '../assets/resized-background.jpg';
 import { AudioController } from '../audio/audio-controller';
 import { GameConfiguration } from '../engine/game-configuration/game-configuration';
 import LevelEditor from '../level-editor/LevelEditor';
+import './GameContainer.scss';
 import { GameFinished, GameScreen } from './screens/GameScreen';
 import { SetupScreen } from './screens/SetupScreen';
-import './GameContainer.scss';
-import { GameAnnouncementModal } from './GameAnnouncementModal';
 
 
 export const GameContainer = (): ReactNode => {
@@ -74,8 +73,7 @@ export const GameContainer = (): ReactNode => {
             <div className='w-100 h-100' style={{ zIndex: 10 }}>
                 {screen()}
             </div>
-            <GameAnnouncementModal />
-
+            {/* <GameAnnouncementModal /> */}
         </div>
     )
 }

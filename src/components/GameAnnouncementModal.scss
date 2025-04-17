@@ -1,0 +1,18 @@
+.game-announcement-modal {
+    &-content {
+        background-color: var(--compass-light-gray);
+        border: 2px solid var(--bs-dark);
+        border-radius: 1rem;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        padding: 2rem;
+        color: var(--bs-dark);
+        font-family: 'Pirata One, system-ui';
+        font-size: 2rem;
+        font-weight: lighter;
+        font-style: normal;
+    }
+
+    &-text {
+        margin: 1.25rem 0;
+    }
+}

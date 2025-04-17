@@ -17,11 +17,12 @@
         "@mui/material": "^7.0.2",
         "@mui/x-charts": "^7.28.0",
         "@uidotdev/usehooks": "^2.4.1",
-        "bootstrap": "^5.3.3",
+        "bootstrap": "^5.3.5",
         "bootstrap-icons": "^1.11.3",
         "classnames": "^2.5.1",
         "framer-motion": "^12.6.3",
         "react": "^19.0.0",
+        "react-bootstrap": "^2.10.9",
         "react-dom": "^19.0.0",
         "react-event-hook": "^3.1.2"
     },

@@ -159,7 +159,7 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
         levelEvaluator.current = new LevelEvaluator(parseToConfiguration(), gameConfigurationLimits.intelligence.human, 3,
             (value,) => {
                 setEstimatedDifficulty(value);
-            }, 1);
+            });
         if (!levelEvaluator.current.terminated()) {
             const result = await levelEvaluator.current.evaluate(100);
             setEstimatedDifficulty(result);
@@ -306,7 +306,6 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
                 </div>
                 <div className="w-100 my-2"></div>
             </div>
-
             {graphEditor}
         </div>
     </>);

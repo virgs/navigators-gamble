@@ -4,6 +4,7 @@ import { SerializableVertix } from "../engine/board/serializable-board";
 import { generateUID } from "../math/generate-id";
 import { Point, add, multiplyByScalar, normalize, rotate90degreesCCW, subtract } from "../math/point";
 import "./GraphEditor.scss";
+import { LevelEditorInstructionsModal } from "./LevelEditorInstructionsModal";
 
 interface LevelEditorVertix {
   id: string;
@@ -22,6 +23,7 @@ type GraphEditorProps = {
 
 export default function GraphEditor(props: GraphEditorProps) {
 
+  const [showInstructions, setShowInstructions] = useState<boolean>(false);
   const [vertices, setVertices] = useState<LevelEditorVertix[]>([]);
   const [stageDragInit, setStageDragInit] = useState<Point | undefined>(undefined);
   const [selectedVertix, setSelectedVertix] = useState<string | null>(null);
@@ -287,12 +289,16 @@ export default function GraphEditor(props: GraphEditorProps) {
         ))}
       </Layer>
     </Stage>
-      <div style={{ textAlign: 'end', color: 'var(--compass-white)' }}>
-        <i className="bi bi-info-circle-fill ms-2"></i>
-      </div>
-      {/* <p className="text-sm text-gray-500 my-2">
-        Click to add vertix. Click two vertices to connect. Select and press 'delete' to remove. Drag vertix to move. Right-click and drag to move all. Right click on edge to invert it.
-      </p> */}
+      <div style={{ textAlign: 'end' }}>
+        <i className="bi bi-info-circle-fill"
+          onClick={() => setShowInstructions(true)}
+          style={{
+            color: 'var(--bs-warning)',
+            cursor: 'pointer',
+            textShadow: '1px 1px 1px var(--compass-black)'
+          }} />
+      </div >
+      <LevelEditorInstructionsModal show={showInstructions} onHide={() => setShowInstructions(false)} />
     </>
 
   );
