@@ -8,6 +8,7 @@ import { HiddenCardsHandComponent } from '../hands/HiddenCardsHandComponent';
 import { VisibleCardsHandComponent } from '../hands/VisibleCardsHandComponent';
 import { ScoreAnimationCoordinator } from '../score/ScoreAnimationCoordinator';
 import './GameScreen.scss';
+import { GameConfigurationValidator } from '../../engine/game-configuration/game-configuration-validator';
 
 export type GameFinished = {
     scores: Record<string, number>;
@@ -44,6 +45,12 @@ export const GameScreen = (props: GameScreenProps): ReactNode => {
     const [classes] = useState<string[]>(['game-screen', 'w-100', 'h-100', 'row', 'g-0'])
 
     if (gameEngine.current === null) {
+        const validation = new GameConfigurationValidator(props.gameConfiguration).validate()
+        if (!validation.valid) {
+            throw Error(
+                `Game configuration is not valid. Please check the game configuration. ${validation.errors.join('\n')}`
+            )
+        }
         gameEngine.current = new GameEngine(props.gameConfiguration);
         scoreAnimationCoordinator.current = new ScoreAnimationCoordinator(props.gameConfiguration);
     }

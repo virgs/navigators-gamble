@@ -1,3 +1,4 @@
+import { linesIntersect } from '../../math/line'
 import { SerializableVertix } from '../board/serializable-board'
 import { directions } from '../directions'
 import { GameConfiguration } from './game-configuration'
@@ -46,38 +47,61 @@ export class GameConfigurationValidator {
     }
 
     public validate(): ValidationResult {
+        const vertices: Readonly<SerializableVertix[]> = this.gameConfiguration.board.vertices
         const errors: string[] = []
-        if (
-            this.gameConfiguration.board.vertices.length >=
-            this.gameConfiguration.cardsPerDirection * directions.length
-        ) {
+        if (vertices.length >= this.gameConfiguration.cardsPerDirection * directions.length) {
             errors.push(
-                `Board has too many vertix to game configuration '${this.gameConfiguration.board.vertices.length}'. Max allowed '${
+                `Board has too many vertix to game configuration '${vertices.length}'. Max allowed '${
                     this.gameConfiguration.cardsPerDirection * directions.length
                 }.'`
             )
         }
-        if (this.gameConfiguration.board.vertices.length < gameConfigurationLimits.board.vertices.min) {
+        if (vertices.length < gameConfigurationLimits.board.vertices.min) {
             errors.push('Not enough vertices. Minimum 6 vertices required.')
         }
         if (!this.gameConfiguration.levelName) {
             errors.push('Level name is required.')
         }
-        if (this.gameConfiguration.board.vertices.some((vertix) => this.numberOfLinksOfAVertix(vertix) < 2)) {
+        if (vertices.some((vertix) => this.numberOfLinksOfAVertix(vertix) < 2)) {
             errors.push('Some vertices have less than 2 links.')
         }
-        if (this.gameConfiguration.board.vertices.some((vertix) => isVertixOutOfBound(vertix))) {
+        if (vertices.some((vertix) => isVertixOutOfBound(vertix))) {
             errors.push('Some vertices are out of bounds.')
         }
-        return {
-            valid: errors.length === 0,
-            errors: errors,
+
+        const edges = vertices
+            .flatMap((vertix) =>
+                vertix.linkedVertices.map((linkedVertixId) => ({
+                    start: vertix.position,
+                    end: vertices.find((v) => v.id === linkedVertixId)?.position,
+                    linkedVertixId,
+                }))
+            )
+            .filter((edge) => edge.end !== undefined)
+
+        // differents edges intersect
+        if (
+            edges.some((edge1, index) =>
+                edges
+                    .slice(index + 1)
+                    .some((edge2) =>
+                        linesIntersect({ start: edge1.start, end: edge1.end! }, { start: edge2.start, end: edge2.end! })
+                    )
+            )
+        ) {
+            // errors.push('Some edges intersect.')
         }
+
+        if (this.gameConfiguration)
+            return {
+                valid: errors.length === 0,
+                errors: errors,
+            }
     }
 
     private numberOfLinksOfAVertix(vertex: SerializableVertix): number {
         const links = vertex.linkedVertices.length
-        const comingLinks = this.gameConfiguration.board.vertices.filter((v) =>
+        const comingLinks = this.gameConfiguration.board.vertices.filter((v: SerializableVertix) =>
             v.linkedVertices.includes(vertex.id)
         ).length
         return links + comingLinks

@@ -12,7 +12,6 @@ import { BoardSerializer } from './board/board-serializer'
 import { Card } from './card'
 import { directions } from './directions'
 import { GameConfiguration } from './game-configuration/game-configuration'
-import { GameConfigurationValidator } from './game-configuration/game-configuration-validator'
 import { PlayerType } from './game-configuration/player-type'
 import { AiPlayer, AiPlayerInitialization } from './players/ai-player'
 import { HumanPlayer } from './players/human-player'
@@ -34,12 +33,6 @@ export class GameEngine {
                 .map((direction, index) => new Card(`card-${index}`, direction))
         )
 
-        const validation = new GameConfigurationValidator(gameConfiguration).validate()
-        if (!validation.valid) {
-            throw Error(
-                `Game configuration is not valid. Please check the game configuration. ${validation.errors.join('\n')}`
-            )
-        }
         this._board = BoardSerializer.deserialize(gameConfiguration.board)
 
         this._players = this.createPlayers(gameConfiguration)
