@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Circle, Group, Layer, Line, Shape, Stage } from "react-konva";
+import { Circle, Group, Layer, Line, Shape, Stage, Text } from "react-konva";
 import { SerializableVertix } from "../engine/board/serializable-board";
 import { generateUID } from "../math/generate-id";
 import { Point, add, multiplyByScalar, normalize, rotate90degreesCCW, subtract } from "../math/point";
@@ -107,7 +107,6 @@ export default function GraphEditor(props: GraphEditorProps) {
   };
 
   const handleClick = (e: MouseEvent) => {
-    console.log("Click", e.button);
     if (e.button === 0) {
       const pointer = {
         x: e.layerX,
@@ -147,6 +146,38 @@ export default function GraphEditor(props: GraphEditorProps) {
         return vertix;
       })
     );
+  };
+
+  const handleEdgeContextMenu = (e: any, v: LevelEditorVertix, l: string) => {
+    e.evt.preventDefault();
+    e.cancelBubble = true; // Prevent event propagation
+    setVertices((prev) =>
+      prev.map((vv) => {
+        if (vv.id === v.id) {
+          return { ...vv, links: vv.links.filter((id) => id !== l) };
+        }
+        if (vv.id === l) {
+          return {
+            ...vv,
+            links: vv.links.includes(v.id) ? vv.links : [...vv.links, v.id],
+          };
+        }
+        return vv;
+      })
+    );
+  };
+
+  const handleEdgeClick = (e: any, v: LevelEditorVertix, l: string) => {
+    e.cancelBubble = true; // Prevent event propagation
+    if (selectedVertix) {
+      // Create a new edge between the selected vertex and the clicked edge's vertices
+      toggleLink(selectedVertix, v.id);
+      toggleLink(selectedVertix, l);
+      setSelectedVertix(null);
+    } else {
+      // Select the edge
+      setSelectedEdge([v.id, l]);
+    }
   };
 
   return (
@@ -194,66 +225,52 @@ export default function GraphEditor(props: GraphEditorProps) {
         })}
 
         {/* Edges */}
-        {vertices.map((v) => v.links.map((l) => {
-          const target = vertices.find((vv) => vv.id === l);
-          if (!target) return null;
+        {vertices.map((v) =>
+          v.links.map((l) => {
+            const target = vertices.find((vv) => vv.id === l);
+            if (!target) return null;
 
-          const handleEdgeContextMenu = (e: any) => {
-            e.evt.preventDefault();
-            setVertices((prev) => prev.map((vv) => {
-              if (vv.id === v.id) {
-                return { ...vv, links: vv.links.filter((id) => id !== l) };
-              }
-              if (vv.id === l) {
-                return {
-                  ...vv,
-                  links: vv.links.includes(v.id) ? vv.links : [...vv.links, v.id],
-                };
-              }
-              return vv;
-            })
+            const isSelected = () => {
+              if (selectedEdge === null) return false;
+              return (
+                (selectedEdge[0] === v.id && selectedEdge[1] === l) ||
+                (selectedEdge[0] === l && selectedEdge[1] === v.id)
+              );
+            };
+
+            const middle = multiplyByScalar(add(target, v), 0.5); // Calculate the midpoint of the edge
+
+            return (
+              <React.Fragment key={`${v.id}-${l}`}>
+                <Shape
+                  perfectDrawEnabled={false}
+                  sceneFunc={(ctx, shape) => {
+                    ctx.beginPath();
+                    ctx.moveTo(v.x, v.y);
+                    const direction = rotate90degreesCCW(
+                      multiplyByScalar(normalize(subtract(target, v)), cellSize / 2)
+                    );
+                    const anchor = add(middle, direction);
+
+                    ctx.bezierCurveTo(
+                      anchor.x,
+                      anchor.y,
+                      anchor.x,
+                      anchor.y,
+                      target.x,
+                      target.y
+                    );
+                    ctx.fillStrokeShape(shape);
+                  }}
+                  strokeWidth={6}
+                  closed
+                  stroke={isSelected() ? "#4444FF" : "#00004F"}
+                  onContextMenu={(e) => handleEdgeContextMenu(e, v, l)}
+                  onClick={(e) => handleEdgeClick(e, v, l)}
+                />
+              </React.Fragment>
             );
-          };
-
-          const handleEdgeClick = (e: any) => {
-            setSelectedVertix(null);
-            e.cancelBubble = true;
-            setSelectedEdge([v.id, l]);
-          };
-
-          const isSelected = () => {
-            if (selectedEdge === null) return false;
-            return (selectedEdge[0] === v.id && selectedEdge[1] === l) || (selectedEdge![0] === l && selectedEdge![1] === v.id);
-          };
-
-          return (
-            <React.Fragment key={`${v.id}-${l}`}>
-              <Shape
-                perfectDrawEnabled={false}
-                sceneFunc={(ctx, shape) => {
-                  ctx.beginPath();
-                  ctx.moveTo(v.x, v.y);
-                  const direction = rotate90degreesCCW(multiplyByScalar(normalize(subtract(target, v)), cellSize / 2));
-                  const middle = multiplyByScalar(add(target, v), .5);
-                  const anchor = add(middle, direction);
-
-                  ctx.bezierCurveTo(
-                    anchor.x, anchor.y,
-                    anchor.x, anchor.y,
-                    target.x, target.y
-                  );
-                  ctx.fillStrokeShape(shape);
-                }}
-                strokeWidth={6}
-                closed
-                stroke={isSelected() ? "#4444FF" : "#00004F"}
-                onContextMenu={handleEdgeContextMenu}
-                // onMouseDown={handleEdgeContextMenu}
-                onClick={handleEdgeClick}
-              />
-            </React.Fragment>
-          );
-        })
+          })
         )}
 
         {/* Vertices */}
@@ -283,8 +300,16 @@ export default function GraphEditor(props: GraphEditorProps) {
                 const snapped = snapToGrid(e.target.x(), e.target.y());
                 e.target.position(snapped); // Force visual update
                 setVertices((prev) => prev.map((vv) => vv.id === v.id ? { ...vv, ...snapped } : vv));
-              }} />
-
+              }}
+            />
+            {/* Vertex ID */}
+            <Text
+              x={v.x - 10}
+              y={v.y - 25}
+              text={v.id}
+              fontSize={12}
+              fill="black"
+            />
           </Group>
         ))}
       </Layer>

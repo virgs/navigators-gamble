@@ -17,8 +17,9 @@ export type GamePlayerConfiguration = (GameHumanPlayerConfiguration | GameAiPlay
     GamePlayerCommonAttributes
 
 export type GameConfiguration = {
+    levelId: string
     levelName: string
-    estimatedDifficulty?: number
+    estimatedDifficulty: number
     players: GamePlayerConfiguration[]
     visibleHandPlayerId?: string
     cardsPerDirection: number

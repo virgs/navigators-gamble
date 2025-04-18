@@ -11,13 +11,13 @@ export class LevelEvaluator {
     private remainingIterations: number
     private evaluated: boolean
     private terminating: boolean
-    private readonly onUpdate?: (value: number) => void
+    private readonly onUpdate?: (value: number, remainingIterations: number) => void
 
     public constructor(
         gameConfig: GameConfiguration,
         humanLevel: number = 300,
         parallelExecutions: number = 3,
-        onUpdate?: (value: number) => void
+        onUpdate?: (value: number, remainingIterations: number) => void
     ) {
         this.remainingIterations = 0
         this.onUpdate = onUpdate

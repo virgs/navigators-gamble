@@ -69,6 +69,10 @@ export class GameConfigurationValidator {
     public validate(): ValidationResult {
         const errors: string[] = []
 
+        if (!this.gameConfiguration.levelName) {
+            errors.push('Level name is required.')
+        }
+
         errors.push(...this.validatePlayers())
         errors.push(...this.validateCards())
         errors.push(...this.validateVertices())
@@ -129,14 +133,13 @@ export class GameConfigurationValidator {
         if (vertices.length < gameConfigurationLimits.board.vertices.min) {
             errors.push('Minimum 6 vertices required.')
         }
-        if (!this.gameConfiguration.levelName) {
-            errors.push('Level name is required.')
+        const fewEdgesVertix = vertices.find((vertix) => this.numberOfEdgesOfAVertix(vertix) < 2)
+        if (fewEdgesVertix) {
+            errors.push(`Vertix '${fewEdgesVertix.id}' have less than 2 edges.`)
         }
-        if (vertices.some((vertix) => this.numberOfLinksOfAVertix(vertix) < 2)) {
-            errors.push('Some vertices have less than 2 links.')
-        }
-        if (vertices.some((vertix) => isVertixOutOfBound(vertix))) {
-            errors.push('Some vertices are out of bounds.')
+        const outOfBoundVertix = vertices.find((vertix) => isVertixOutOfBound(vertix))
+        if (outOfBoundVertix) {
+            errors.push(`Vertix '${outOfBoundVertix?.id}' is out of bounds.`)
         }
 
         return errors
@@ -157,15 +160,18 @@ export class GameConfigurationValidator {
             .filter((edge) => edge.end !== undefined)
 
         if (
-            edges.some((edge1, index) =>
-                edges
-                    .slice(index + 1)
-                    .some((edge2) =>
-                        doLinesIntersect(
-                            { start: edge1.start, end: edge1.end! },
-                            { start: edge2.start, end: edge2.end! }
-                        )
+            edges.find((edge1, index) =>
+                edges.slice(index + 1).some((edge2) => {
+                    const newLocal = doLinesIntersect(
+                        { start: edge1.start, end: edge1.end! },
+                        { start: edge2.start, end: edge2.end! },
+                        0.5
                     )
+                    if (newLocal) {
+                        console.log('Intersecting edges:', edge1, edge2)
+                    }
+                    return newLocal
+                })
             )
         ) {
             errors.push('Some edges intersect.')
@@ -174,7 +180,7 @@ export class GameConfigurationValidator {
         return errors
     }
 
-    private numberOfLinksOfAVertix(vertex: SerializableVertix): number {
+    private numberOfEdgesOfAVertix(vertex: SerializableVertix): number {
         const links = vertex.linkedVertices.length
         const comingLinks = this.gameConfiguration.board.vertices.filter((v: SerializableVertix) =>
             v.linkedVertices.includes(vertex.id)

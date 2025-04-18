@@ -53,7 +53,7 @@ const generateRandomVertices = (): SerializableVertix[] => {
 export default function LevelEditor(props: { onExit: (configuration?: GameConfiguration) => void, configuration?: GameConfiguration }) {
     const inputFile = useRef(null)
     const levelEvaluator = useRef<LevelEvaluator | null>(null);
-    const validationResult = useRef<ValidationResult | null>(null);
+    const [validationResult, setValidationResult] = useState<ValidationResult | null>(null);
 
     const [humanPlayerStarts, setHumanPlayerStarts] = useState<boolean>(true);
 
@@ -73,7 +73,7 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
     }, []);
 
     useEffect(() => {
-        validationResult.current = new GameConfigurationValidator(parseToConfiguration()).validate();
+        setValidationResult(new GameConfigurationValidator(parseToConfiguration()).validate());
     }, [initialCardsPerPlayer, cardsPerDirection, iterations, vertices]);
 
     const parseConfiguration = (config: GameConfiguration) => {
@@ -88,6 +88,7 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
 
     const importLevel = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
+        e.target.value = ''; // Clear the input value to allow re-uploading the same file
         if (!file) return;
         const reader = new FileReader();
         reader.onload = () => {
@@ -99,6 +100,7 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
 
     const parseToConfiguration = (): GameConfiguration => {
         return {
+            levelId: generateUID(),
             levelName: levelName,
             players: [
                 {
@@ -112,6 +114,7 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
                     aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
                 },
             ],
+            estimatedDifficulty: estimatedDifficulty,
             visibleHandPlayerId: 'human-player',
             initialCardsPerPlayer: initialCardsPerPlayer,
             cardsPerDirection,
@@ -157,7 +160,7 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
         await levelEvaluator.current?.terminate()
         setEstimatedDifficulty(0);
         levelEvaluator.current = new LevelEvaluator(parseToConfiguration(), gameConfigurationLimits.intelligence.human, 3,
-            (value,) => {
+            (value, remaining) => {
                 setEstimatedDifficulty(value);
             });
         if (!levelEvaluator.current.terminated()) {
@@ -165,14 +168,13 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
             setEstimatedDifficulty(result);
         }
         levelEvaluator.current = null;
-        console.log('Level evaluator terminated');
     }
 
     const isValid = () => {
         if (levelEvaluator.current) {
             return false
         }
-        return validationResult.current?.valid ?? false;
+        return validationResult?.valid ?? false;
     }
 
 
@@ -187,10 +189,11 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
                         inputFile.current?.click();
                     }} type="button" className="btn btn-info btn-sm px-2">
                         Load
-                        {/* <i className="bi bi-cloud-arrow-up ms-2"></i> */}
                         <i className="bi bi-folder2-open ms-2"></i>
                         <input type='file' id='file' ref={inputFile} style={{ display: 'none' }} accept="application/json"
-                            onChange={importLevel} />
+                            onChange={(e) => {
+                                importLevel(e as React.ChangeEvent<HTMLInputElement>);
+                            }} />
                     </button>
                 </div>
                 <div className="col-auto" style={{ textAlign: 'end' }}>
@@ -289,7 +292,7 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
 
                 <div className="col-6">
                     <div className="invalid-message my-2" style={{ color: isValid() ? 'transparent' : '' }}>
-                        {!isValid() && validationResult.current?.errors[0]}
+                        {!isValid() && validationResult?.errors[0]}
                     </div>
                 </div>
                 <div className="col-6">
