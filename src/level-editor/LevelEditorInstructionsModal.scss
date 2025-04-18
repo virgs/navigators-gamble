@@ -2,27 +2,17 @@
     background-color: transparent;
     font-family: 'Pirata One';
 
-    .modal-content {
+    .game-announcement-modal-content {
         background-color: var(--compass-light-gray) !important;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         padding: 2rem;
         font-family: 'Pirata One';
         font-weight: lighter;
         font-style: normal;
-    }
-
-    .modal-title {
-        font-size: 2.5rem;
-        font-weight: bold;
-        margin-bottom: 1rem;
-    }
-    .level-editor-instructions-body {
-        line-height: 1.5;
-        margin-bottom: 2rem;
-
-        & ol {
-            display: list-item;
-            padding-left: 2px;
+        .game-announcement-body {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
         }
     }
 }

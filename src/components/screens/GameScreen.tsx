@@ -9,6 +9,7 @@ import { VisibleCardsHandComponent } from '../hands/VisibleCardsHandComponent';
 import { ScoreAnimationCoordinator } from '../score/ScoreAnimationCoordinator';
 import './GameScreen.scss';
 import { GameConfigurationValidator } from '../../engine/game-configuration/game-configuration-validator';
+import { GameAnnouncementModal } from '../GameAnnouncementModal';
 
 export type GameFinished = {
     scores: Record<string, number>;
@@ -116,6 +117,7 @@ export const GameScreen = (props: GameScreenProps): ReactNode => {
                     </div>
                 </div>
             </div>
+            <GameAnnouncementModal />
         </>
     )
 }

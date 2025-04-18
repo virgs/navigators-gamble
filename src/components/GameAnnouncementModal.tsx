@@ -1,51 +1,33 @@
-import { Modal } from 'bootstrap'
-import { ReactNode, useEffect, useRef, useState } from 'react'
-import { useAnnounceCommandListener } from '../events/events'
-import "./GameAnnouncementModal.scss"
+import { ReactNode, useEffect, useState } from 'react';
+import Modal from 'react-bootstrap/Modal';
+import { useAnnounceCommandListener } from '../events/events';
+import "./GameAnnouncementModal.scss";
 
 export const GameAnnouncementModal = (): ReactNode => {
-    const modal = useRef<bootstrap.Modal>(undefined)
-    const [show, setShow] = useState<boolean>(false)
     const [content, setContent] = useState<string>('')
     const [timer, setTimer] = useState<NodeJS.Timeout | undefined>(undefined)
 
     useAnnounceCommandListener(async payload => {
-        if (modal.current === undefined) {
-            modal.current = new Modal('#scoreModal', { focus: true })
-        }
-
         setContent(payload.announcement)
-        setShow(true)
         if (timer) {
             clearTimeout(timer)
         }
         setTimer(setTimeout(() => {
-            setShow(false)
             setContent('')
         }, payload.duration))
     })
 
-    useEffect(() => {
-
-        if (show) {
-            modal.current?.show()
-        } else {
-            modal.current?.hide()
-        }
-    }, [show])
-
     return (
-        <div
-            className="modal fade"
-            data-bs-backdrop="static"
-            id="scoreModal"
-            tabIndex={-1}>
-            <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content h-25 d-flex align-items-center justify-content-center game-announcement-modal"
-                    id='scoreModalContent'>
-                    <span className='my-5'>{content}</span>
+        <Modal id='game-announcement-modal' backdrop="static"
+            keyboard={false}
+            centered
+            contentClassName='game-announcement-modal-content'
+            show={content !== ''}>
+            <Modal.Body>
+                <div className="game-announcement-body">
+                    {content}
                 </div>
-            </div>
-        </div>
+            </Modal.Body>
+        </Modal>
     )
 }

@@ -73,7 +73,6 @@ export const GameContainer = (): ReactNode => {
             <div className='w-100 h-100' style={{ zIndex: 10 }}>
                 {screen()}
             </div>
-            {/* <GameAnnouncementModal /> */}
         </div>
     )
 }
