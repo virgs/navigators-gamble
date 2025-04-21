@@ -1,8 +1,8 @@
 import classnames from 'classnames';
 import { ReactNode } from 'react';
 import level from '../../assets/levels/custom.json?raw';
-// import level from '../../assets/levels/level-4.json?raw';
 import { GameConfiguration } from '../../engine/game-configuration/game-configuration';
+import { HeaderComponent } from '../HeaderComponent';
 
 
 
@@ -14,10 +14,10 @@ export const SetupScreen = (props: { onStartButton: (config: GameConfiguration) 
 
     return (
         <>
-            <div className={classes} style={{ textAlign: 'center', height: '50%', backgroundColor: 'blue' }} onClick={() => props.onStartButton(levelConfig)} >
-            </div>
-            <div className={classes} style={{ textAlign: 'center', height: '50%', backgroundColor: 'red' }} onClick={() => props.onLevelEditorButton()} >
-            </div>
+            <HeaderComponent></HeaderComponent>
+            <div className={classes} style={{ textAlign: 'center', height: '50%', backgroundColor: 'transparent' }} />
+            <div className={classes} style={{ textAlign: 'center', height: '20%', backgroundColor: 'blue' }} onClick={() => props.onStartButton(levelConfig)} />
+            <div className={classes} style={{ textAlign: 'center', height: '20%', backgroundColor: 'red' }} onClick={() => props.onLevelEditorButton()} />
         </>
     )
 }

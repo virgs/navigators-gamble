@@ -14,7 +14,7 @@ import "./LevelEditor.scss";
 import { DifficultyGauge } from "./DifficultyGauge";
 
 const CANVAS_SIZE = 400;
-const GRID_LINES = 8;
+const GRID_LINES = 10;
 
 const createRandomValueFromLimits = (limits: { min: number, max: number, step: number }) => {
     const diff = limits.max - limits.min;
@@ -178,7 +178,7 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
     }
 
 
-    return (<>
+    return (<div className="level-editor-container">
         <HeaderComponent onQuit={() => props.onExit()}></HeaderComponent>
         <div className="level-editor p-4 space-y-2">
             <h1 className="title mx-auto">Level Editor</h1>
@@ -311,6 +311,6 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
             </div>
             {graphEditor}
         </div>
-    </>);
+    </div>);
 }
 

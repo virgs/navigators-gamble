@@ -4,7 +4,6 @@ import { Directions, directions } from '../../engine/directions'
 import { GameConfiguration } from '../../engine/game-configuration/game-configuration'
 import { Move } from '../../engine/score-calculator/move'
 import { MoveScore } from '../../engine/score-calculator/move-score'
-import { arrayShuffler } from '../../math/array-shufller'
 import { InitializeAiMessage } from '../messages/initialize-ai-message'
 import { MessageType } from '../messages/message-type'
 import { MoveRequest } from '../messages/move-request'
@@ -30,11 +29,7 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
 
     public async makeMove(moveRequest: MoveRequest): Promise<MoveResponse> {
         const board = BoardSerializer.deserialize(moveRequest.board)
-        // the shuffling adds a randomness to the order of the moves
-        // to avoid the same moves being always evaluated first
-        const possibleMoves = arrayShuffler(
-            this.findNextMoveAlternatives(this.playerId, moveRequest.playerCards, board)
-        )
+        const possibleMoves = this.findNextMoveAlternatives(this.playerId, moveRequest.playerCards, board)
 
         const moveResults = new Map<number, Move & { score: number }>()
         for (let count = 0; count < this.iterationsPerAlternative; count++) {

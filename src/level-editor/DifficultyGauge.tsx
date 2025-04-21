@@ -1,7 +1,8 @@
 import { Gauge, gaugeClasses, useGaugeState } from "@mui/x-charts";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { degreeToRadians } from "../math/trigonometry";
 
+const wiggleRange = Math.PI / 24;
 
 const GaugePointer = (props: { angle: number }): ReactNode => {
     const { valueAngle, outerRadius, cx, cy } = useGaugeState();
@@ -9,10 +10,25 @@ const GaugePointer = (props: { angle: number }): ReactNode => {
         // No value to display
         return null;
     }
-    const radians = degreeToRadians(props.angle + 90 + 90 + 90)
+
+    useEffect(() => {
+        setRadians(degreeToRadians(props.angle + 90 + 90 + 90))
+    }, [props.angle]);
+
+    const [radians, setRadians] = useState<number>(degreeToRadians(props.angle + 90 + 90 + 90))
+    const [wiggle, setWiggle] = useState<number>(radians)
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setWiggle(radians + Math.random() * 2 * wiggleRange - wiggleRange);
+        }, 100);
+        return () => clearInterval(interval);
+    })
+
+
     const target = {
-        x: cx + (outerRadius + 2) * Math.sin(radians),
-        y: cy - (outerRadius + 2) * Math.cos(radians),
+        x: cx + (outerRadius + 2) * Math.sin(wiggle),
+        y: cy - (outerRadius + 2) * Math.cos(wiggle),
     };
     return (
         <g className='needle-path' >

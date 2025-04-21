@@ -21,6 +21,9 @@ type GraphEditorProps = {
 }
 
 
+const vertixRadius = 10;
+const edgeWidth = 5;
+
 export default function GraphEditor(props: GraphEditorProps) {
 
   const [showInstructions, setShowInstructions] = useState<boolean>(false);
@@ -262,7 +265,7 @@ export default function GraphEditor(props: GraphEditorProps) {
                     );
                     ctx.fillStrokeShape(shape);
                   }}
-                  strokeWidth={6}
+                  strokeWidth={edgeWidth}
                   closed
                   stroke={isSelected() ? "#4444FF" : "#00004F"}
                   onContextMenu={(e) => handleEdgeContextMenu(e, v, l)}
@@ -279,7 +282,7 @@ export default function GraphEditor(props: GraphEditorProps) {
             <Circle
               x={v.x}
               y={v.y}
-              radius={15}
+              radius={vertixRadius}
               name={v.id}
               fill={selectedVertix === v.id ? "#4444FF" : "#00004F"}
               draggable

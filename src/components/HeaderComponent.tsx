@@ -53,7 +53,7 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
                     {
                         process.env.NODE_ENV === 'development' &&
                         <>
-                            <span className='me-4'>
+                            <span className='mx-4'>
                                 <i className="bi bi-robot mx-2" />
                                 <span className='position-relative'>
                                     <span className="position-absolute top-100 start-100 translate-middle ">
@@ -61,7 +61,7 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
                                     </span>
                                 </span>
                             </span>
-                            <span className='me-4'>
+                            <span className='mx-4'>
                                 <i className="bi bi-speedometer mx-2" />
                                 <span className='position-relative'>
                                     <span className="position-absolute top-100 start-100 translate-middle ">
@@ -72,7 +72,7 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
                         </>
                     }
                     {turnCounter !== undefined &&
-                        <span className='me-4'>
+                        <span className='mx-4'>
                             <i className="bi bi-arrow-repeat mx-2" />
                             <span className='position-relative'>
                                 <span className="position-absolute top-100 start-100 translate-middle ">
@@ -81,7 +81,7 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
                             </span>
                         </span>
                     }
-                    <span className='me-4'>
+                    <span className='mx-4'>
                         <i className="bi bi-files mx-2" />
                         <span className='position-relative'>
                             <span className="position-absolute top-100 start-100 translate-middle ">
@@ -89,7 +89,7 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
                             </span>
                         </span>
                     </span>
-                    <span className='me-4'>
+                    <span className='mx-4'>
                         <i className="bi bi-compass" />
                         {/* <i class="bi bi-browser-safari"></i> */}
                         <span className='position-relative'>
@@ -100,7 +100,7 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
                     </span>
                 </>
             }
-            <span className='me-2 button' onClick={() => toggleSound()}>{muted ?
+            <span className='mx-2 button' onClick={() => toggleSound()}>{muted ?
                 <i className="bi bi-volume-up-fill"></i> :
                 <i className="bi bi-volume-mute-fill"></i>}
             </span>

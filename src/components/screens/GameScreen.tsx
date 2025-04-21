@@ -22,18 +22,18 @@ type GameScreenProps = {
 };
 
 export const GameScreen = (props: GameScreenProps): ReactNode => {
-
     useEffect(() => {
         if (gameEngine.current?.start()) {
+            console.log('GameScreen started');
             iterate()
         }
     }, [])
-    const visibleHandPlayerIndex = props.gameConfiguration.players
+    const visibleHandPlayerIndex = props.gameConfiguration?.players
         .findIndex(player => player.id === props.gameConfiguration.visibleHandPlayerId)
     const visiblePlayerComponent = visibleHandPlayerIndex !== -1 ? <VisibleCardsHandComponent turnOrder={visibleHandPlayerIndex}
-        player={props.gameConfiguration.players[visibleHandPlayerIndex]} /> : <></>;
+        player={props.gameConfiguration?.players[visibleHandPlayerIndex]} /> : <></>;
 
-    const hiddenPlayers = props.gameConfiguration.players
+    const hiddenPlayers = props.gameConfiguration?.players
         .map((player, index) => {
             if (player.id === props.gameConfiguration.visibleHandPlayerId) {
                 return null;
@@ -43,9 +43,10 @@ export const GameScreen = (props: GameScreenProps): ReactNode => {
 
     const gameEngine = useRef<GameEngine>(null);
     const scoreAnimationCoordinator = useRef<ScoreAnimationCoordinator>(null);
-    const [classes] = useState<string[]>(['game-screen', 'w-100', 'h-100', 'row', 'g-0'])
+    const [classes] = useState<string[]>(['game-screen-container', 'w-100', 'h-100', 'row', 'g-0'])
 
     if (gameEngine.current === null) {
+        console.log('Instantiating game engine');
         const validation = new GameConfigurationValidator(props.gameConfiguration).validate()
         if (!validation.valid) {
             throw Error(

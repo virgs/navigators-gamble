@@ -1,3 +1,8 @@
+.level-editor-container {
+    max-height: 100svh;
+    overflow: auto;
+}
+
 .level-editor {
     background-color: var(--compass-light-gray);
     border: 2px solid var(--compass-dark-gray);
