@@ -23,9 +23,13 @@ const scoreAnnouncementMap: Record<ScoreType, string> = {
     [ScoreType.PAIR]: 'Direction pair',
 }
 
+const isDevMode = import.meta.env.MODE === 'development'
+
+console.log('isDevMode', isDevMode)
+
 export class ScoreAnimationCoordinator {
-    public static readonly INTERVAL_BETWEEN_ANIMATIONS = 2000
-    public static readonly INTERVAL_BETWEEN_LINKS_ANIMATIONS = 300
+    public static readonly INTERVAL_BETWEEN_ANIMATIONS = isDevMode ? 200 : 2000
+    public static readonly INTERVAL_BETWEEN_LINKS_ANIMATIONS = isDevMode ? 30 : 300
     private readonly players: GamePlayerConfiguration[]
 
     public constructor(configuration: GameConfiguration) {

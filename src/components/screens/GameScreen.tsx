@@ -1,8 +1,10 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { GameConfiguration } from '../../engine/game-configuration/game-configuration';
 import { GameConfigurationValidator } from '../../engine/game-configuration/game-configuration-validator';
+import { PlayerType } from '../../engine/game-configuration/player-type';
 import { GameEngine } from '../../engine/game-engine';
 import { useEndOfBonusPointsEventListener, useEndOfScoreAnimationsEventListener } from '../../events/events';
+import { BrowserDb, MatchStats } from '../../repository/browser-db';
 import { BoardComponent } from '../BoardComponent';
 import { GameAnnouncementModal } from '../GameAnnouncementModal';
 import { HiddenCardsHandComponent } from '../hands/HiddenCardsHandComponent';
@@ -10,14 +12,9 @@ import { VisibleCardsHandComponent } from '../hands/VisibleCardsHandComponent';
 import { ScoreAnimationCoordinator } from '../score/ScoreAnimationCoordinator';
 import './GameScreen.scss';
 
-export type GameFinished = {
-    scores: Record<string, number>;
-    finished: boolean;
-}
-
 type GameScreenProps = {
     gameConfiguration: GameConfiguration;
-    onGameFinished: (result: GameFinished) => void;
+    onGameFinished: (result: MatchStats) => void;
 };
 
 export const GameScreen = (props: GameScreenProps): ReactNode => {
@@ -70,17 +67,28 @@ export const GameScreen = (props: GameScreenProps): ReactNode => {
 
     useEndOfBonusPointsEventListener(() => {
         console.log('End of bonus points');
-        onGameFinished({
-            scores: gameEngine.current!.getScores(),
-            finished: true
-        })
+        const result = gameEngine.current!.getScores()
+        const humanId = props.gameConfiguration?.players.find((player) => player.type === PlayerType.HUMAN)?.id
+        const humanScore = result[humanId!]
+        const someOpponentBeatsHumanScore = Object.entries(result)
+            .some(([key, value]) => key !== humanId && value > humanScore)
+        const someOpponentTiesHumanScore = Object.entries(result)
+            .some(([key, value]) => key !== humanId && value === humanScore)
+        const stats: MatchStats = {
+            defeat: someOpponentBeatsHumanScore,
+            draw: someOpponentTiesHumanScore,
+            victory: !someOpponentBeatsHumanScore && !someOpponentTiesHumanScore,
+            levelConfiguration: props.gameConfiguration,
+            levelHash: BrowserDb.getLevelHash(props.gameConfiguration)
+        }
+        onGameFinished(stats)
     })
 
     useEndOfScoreAnimationsEventListener(() => {
         iterate()
     })
 
-    const onGameFinished = (result: GameFinished) => {
+    const onGameFinished = (result: MatchStats) => {
         gameEngine.current?.finish()
         gameEngine.current = null
         console.log('GameScreen unmounted');

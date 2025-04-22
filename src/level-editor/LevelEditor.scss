@@ -45,3 +45,28 @@
         font-weight: lighter;
     }
 }
+
+#load-level-button {
+    background-color: var(--compass-highlight-blue);
+    color: var(--compass-white);
+}
+#export-level-button {
+    background-color: var(--compass-highlight-yellow);
+    color: var(--compass-white);
+}
+#play-level-button {
+    background-color: var(--compass-highlight-green);
+    color: var(--compass-white);
+}
+#evaluate-level-button {
+    background-color: var(--compass-highlight-yellow);
+    color: var(--compass-white);
+}
+#random-level-button {
+    background-color: var(--compass-highlight-green);
+    color: var(--compass-white);
+}
+#clear-level-button {
+    background-color: var(--compass-highlight-red);
+    color: var(--compass-white);
+}

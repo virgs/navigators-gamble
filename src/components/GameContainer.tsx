@@ -3,6 +3,7 @@ import { AudioController } from '../audio/audio-controller';
 import { GameConfiguration } from '../engine/game-configuration/game-configuration';
 import LevelEditor from '../level-editor/LevelEditor';
 import { sleep } from '../math/sleep';
+import { BrowserDb } from '../repository/browser-db';
 import './GameContainer.scss';
 import { HeaderComponent } from './HeaderComponent';
 import { GameScreen } from './screens/GameScreen';
@@ -28,6 +29,7 @@ const removeFromMap = <T,>(map: Set<T>, value: T): Set<T> => {
 
 export const GameContainer = (): ReactNode => {
     const [gameScreens, setGameScreens] = useState<Set<GameScreens>>(new Set([GameScreens.LEVEL_SETUP]))
+    const [setupUpdateCounter, setSetupUpdateCounter] = useState<number>(0)
 
     const [backgroundClasses, setBackgroundClasses] = useState<string[]>(['background-image'])
     const [gameOnClasses, setGameOnClasses] = useState<string[]>([])
@@ -67,6 +69,7 @@ export const GameContainer = (): ReactNode => {
             result.push(
                 <div className={['setup-screen'].concat(...setupScreenClasses).join(' ')}>
                     <SetupScreen
+                        setupUpdateCounter={setupUpdateCounter}
                         onStartButton={async (config: GameConfiguration) => {
                             setGameConfiguration(config)
                             setSetupScreenClasses(classes => classes.concat(hideToLeftClass))
@@ -89,9 +92,10 @@ export const GameContainer = (): ReactNode => {
                 <div className={['game-on-screen'].concat(...gameOnClasses).join(' ')}>
                     <GameScreen
                         gameConfiguration={gameConfiguration!}
-                        onGameFinished={async (result) => {
-                            //TODO persist data
-                            console.log(result)
+                        onGameFinished={async (stats) => {
+                            BrowserDb.addLevelStats(stats)
+                            console.log('Stats saved', stats)
+                            setSetupUpdateCounter(c => c + 1)
                             onHumeButtonClicked()
                         }} />
                 </div>

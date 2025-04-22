@@ -191,7 +191,7 @@ export default function LevelEditor(props: { onPlay: (configuration: GameConfigu
                     <button onClick={() => {
                         //@ts-expect-error
                         inputFile.current?.click();
-                    }} type="button" className="btn btn-info btn-sm px-2">
+                    }} type="button" className="btn btn-sm px-2" id="load-level-button">
                         Load
                         <i className="bi bi-folder2-open ms-2"></i>
                         <input type='file' id='file' ref={inputFile} style={{ display: 'none' }} accept="application/json"
@@ -201,20 +201,20 @@ export default function LevelEditor(props: { onPlay: (configuration: GameConfigu
                     </button>
                 </div>
                 <div className="col-auto" style={{ textAlign: 'end' }}>
-                    <button onClick={() => onClearButton()} type="button" className="btn btn-danger btn-sm px-2">
+                    <button onClick={() => onClearButton()} type="button" className="btn btn-sm px-2" id="clear-level-button">
                         Clear
                         <i className="bi bi-eraser ms-2"></i>
                     </button>
                 </div>
                 <div className="col-auto">
-                    <button onClick={() => onAutoGenerateButton()} type="button" className="btn btn-success btn-sm px-2">
+                    <button id="random-level-button" onClick={() => onAutoGenerateButton()} type="button" className="btn btn-sm px-2">
                         Generate
                         <i className="bi bi-magic ms-2"></i>
                     </button>
                 </div>
                 <div className="col-auto" style={{ textAlign: 'end' }}>
-                    <button disabled={!isValid()} onClick={() => onEvaluateButton()} type="button"
-                        className="btn btn-warning btn-sm px-2">
+                    <button id="evaluate-level-button" disabled={!isValid()} onClick={() => onEvaluateButton()} type="button"
+                        className="btn btn-sm px-2">
                         Evaluate
                         {levelEvaluator.current ?
                             <div className="spinner-border spinner-border-sm ms-2" role="status">
@@ -226,8 +226,8 @@ export default function LevelEditor(props: { onPlay: (configuration: GameConfigu
                     </button>
                 </div>
                 <div className="col-auto" style={{ textAlign: 'end' }}>
-                    <button disabled={!isValid()} onClick={() => props.onPlay(parseToConfiguration())}
-                        type="button" className="btn btn-warning btn-sm px-2">
+                    <button id="play-level-button" disabled={!isValid()} onClick={() => props.onPlay(parseToConfiguration())}
+                        type="button" className="btn btn-sm px-2">
                         Play
                         <i className="bi bi-play ms-2"></i>
                     </button>
@@ -302,10 +302,10 @@ export default function LevelEditor(props: { onPlay: (configuration: GameConfigu
                 <div className="col-6">
                     <div className="input-group">
                         <input type="text" value={levelName} onChange={evt => setLevelName(evt.target.value)} className="form-control" placeholder="Level name" aria-label="Level name"
-                            aria-describedby="basic-addon2" />
-                        <button id="basic-addon2"
+                            aria-describedby="export-level-button" />
+                        <button id="export-level-button"
                             disabled={!isValid()} onClick={() => exportLevel(parseToConfiguration(), levelName)}
-                            type="button" className="btn btn-success btn-sm px-2">
+                            type="button" className="btn btn-sm px-2">
                             Export
                             <i className="bi bi-floppy ms-2"></i>
                         </button>

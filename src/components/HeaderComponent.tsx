@@ -1,15 +1,16 @@
-import { ReactNode, useState } from 'react';
-import { GameConfiguration } from '../engine/game-configuration/game-configuration';
-import "./HeaderComponent.scss"
+import { ReactNode, useEffect, useState } from 'react';
 import { AudioController } from '../audio/audio-controller';
 import { directions } from '../engine/directions';
-import { usePlayerMadeMoveEventListener } from '../events/events';
+import { GameConfiguration } from '../engine/game-configuration/game-configuration';
 import { PlayerType } from '../engine/game-configuration/player-type';
+import { usePlayerMadeMoveEventListener } from '../events/events';
+import "./HeaderComponent.scss";
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
 type HeaderProps = {
     gameConfiguration?: GameConfiguration;
     onHomeButton?: () => void;
-    levelNumber?: number;
 };
 
 export const HeaderComponent = (props: HeaderProps): ReactNode => {
@@ -23,91 +24,106 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
 
     const [muted, setMuted] = useState<boolean>(AudioController.isMuted());
     const [turnCounter, setTurnCounter] = useState<number | undefined>(0);
-    const [remainingCards, setRemainingCards] = useState<number | undefined>(totalCards);
+    const [remainingCards, setRemainingCards] = useState<number | undefined>(totalCards());
+
+    useEffect(() => {
+        if (props.gameConfiguration !== undefined) {
+            setRemainingCards(totalCards());
+            setTurnCounter(0);
+        }
+    }, [props.gameConfiguration]);
 
     usePlayerMadeMoveEventListener(() => {
-        setRemainingCards(remainingCards === undefined ? undefined : remainingCards - 1);
+        setRemainingCards(cards => cards === undefined ? undefined : cards - 1);
         setTurnCounter((turnCounter ?? 0) + 1);
     });
 
     const toggleSound = () => {
         setMuted(!muted);
         AudioController.toggleMute();
-    }
+    };
 
-    return <div className='header'>
-        <div className='row g-0 justify-content-end'>
-            <div className='col-12 col-sm-6 menu py-1'>
-                <span id="home-button" className='ms-2 button show' onClick={() => props.onHomeButton && props.onHomeButton()}
-                    style={{ color: props.onHomeButton ? 'unset' : 'transparent', boxShadow: props.onHomeButton ? '' : 'none' }}>
-                    <i className="bi bi-house-fill"></i>
-                </span>
-                {props.gameConfiguration !== undefined && <>
-                    <span className='level-name ms-4' style={{ textAlign: 'center', fontSize: '1.2rem' }}>
-                        {props.levelNumber}
-                        <i className="bi bi-dot mx-1"></i>
-                        {props.gameConfiguration.levelName}
-                    </span>
-                </>}
-            </div>
-            <div className='col-12 col-sm-6 justify-content-between justify-content-sm-end align-items-center d-flex menu py-1'>
-                {props.gameConfiguration !== undefined &&
-                    <>
-                        {
-                            process.env.NODE_ENV === 'development' &&
+    return (
+        <div className='header'>
+            <Row className='g-0 gx-2 justify-content-between align-items-center py-1'>
+                {props.onHomeButton && (
+                    <Col xs="auto">
+                        <span
+                            id="home-button"
+                            className='ms-2 button show'
+                            onClick={() => props.onHomeButton && props.onHomeButton()}
+                        >
+                            <i className="bi bi-house-fill"></i>
+                        </span>
+                    </Col>
+                )}
+                <Col xs className="ms-auto">
+                    <Row className='g-0 gx-2 justify-content-end align-items-center py-1'>
+                        {props.gameConfiguration !== undefined && (
                             <>
-                                <span className='mx-4'>
-                                    <i className="bi bi-robot mx-2" />
+                                <Col xs>
+                                    <span className='level-name'>
+                                        {props.gameConfiguration.levelName}
+                                    </span>
+                                </Col>
+                                {process.env.NODE_ENV === 'development' && (
+                                    <>
+                                        <Col xs="auto" className='d-none d-lg-flex ms-lg-2'>
+                                            <i className="bi bi-robot mx-2" />
+                                            <span className='position-relative'>
+                                                <span className="position-absolute top-100 start-100 translate-middle">
+                                                    {props.gameConfiguration.players.find(player => player.type === PlayerType.ARTIFICIAL_INTELLIGENCE)?.iterationsPerAlternative ?? '-'}
+                                                </span>
+                                            </span>
+                                        </Col>
+                                        <Col xs="auto" className='d-none d-lg-flex ms-lg-2'>
+                                            <i className="bi bi-speedometer mx-2" />
+                                            <span className='position-relative'>
+                                                <span className="position-absolute top-100 start-100 translate-middle">
+                                                    {props.gameConfiguration.estimatedDifficulty}
+                                                </span>
+                                            </span>
+                                        </Col>
+                                    </>
+                                )}
+                                <Col xs="auto" className='d-none d-lg-flex ms-lg-2'>
+                                    <i className="bi bi-arrow-repeat mx-2" />
                                     <span className='position-relative'>
-                                        <span className="position-absolute top-100 start-100 translate-middle ">
-                                            {props.gameConfiguration.players.find(player => player.type === PlayerType.ARTIFICIAL_INTELLIGENCE)?.iterationsPerAlternative ?? '-'}
+                                        <span className="position-absolute top-100 start-100 translate-middle">
+                                            {turnCounter}
                                         </span>
                                     </span>
-                                </span>
-                                <span className='mx-4'>
-                                    <i className="bi bi-speedometer mx-2" />
+                                </Col>
+                                <Col xs="auto" className='ms-lg-2'>
+                                    <i className="bi bi-files mx-2" />
                                     <span className='position-relative'>
-                                        <span className="position-absolute top-100 start-100 translate-middle ">
-                                            {props.gameConfiguration.estimatedDifficulty}
+                                        <span className="position-absolute top-100 start-100 translate-middle">
+                                            {Math.max(remainingCards ?? 0, 0)}
                                         </span>
                                     </span>
-                                </span>
+                                </Col>
+                                <Col xs="auto" className='ms-lg-2'>
+                                    <i className="bi bi-compass" />
+                                    <span className='position-relative'>
+                                        <span className="position-absolute top-100 start-100 translate-middle">
+                                            {props.gameConfiguration.cardsPerDirection}
+                                        </span>
+                                    </span>
+                                </Col>
                             </>
-                        }
-                        {turnCounter !== undefined &&
-                            <span className='mx-4'>
-                                <i className="bi bi-arrow-repeat mx-2" />
-                                <span className='position-relative'>
-                                    <span className="position-absolute top-100 start-100 translate-middle ">
-                                        {turnCounter}
-                                    </span>
-                                </span>
+                        )}
+                        <Col xs="auto" className='ms-lg-2'>
+                            <span className='mx-2 button' onClick={() => toggleSound()}>
+                                {muted ? (
+                                    <i className="bi bi-volume-up-fill"></i>
+                                ) : (
+                                    <i className="bi bi-volume-mute-fill"></i>
+                                )}
                             </span>
-                        }
-                        <span className='mx-4'>
-                            <i className="bi bi-files mx-2" />
-                            <span className='position-relative'>
-                                <span className="position-absolute top-100 start-100 translate-middle ">
-                                    {Math.max(remainingCards ?? 0, 0)}
-                                </span>
-                            </span>
-                        </span>
-                        <span className='mx-4'>
-                            <i className="bi bi-compass" />
-                            {/* <i class="bi bi-browser-safari"></i> */}
-                            <span className='position-relative'>
-                                <span className="position-absolute top-100 start-100 translate-middle ">
-                                    {props.gameConfiguration.cardsPerDirection}
-                                </span>
-                            </span>
-                        </span>
-                    </>
-                }
-                <span className='mx-2 button' onClick={() => toggleSound()}>{muted ?
-                    <i className="bi bi-volume-up-fill"></i> :
-                    <i className="bi bi-volume-mute-fill"></i>}
-                </span>
-            </div>
+                        </Col>
+                    </Row>
+                </Col>
+            </Row>
         </div>
-    </div>;
+    );
 };

@@ -79,11 +79,14 @@
         font-size: 1.5rem;
         margin-bottom: 2px;
         font-weight: bold;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 
     .level-stats {
         font-family: 'Pirata One', system-ui;
-        font-size: 0.75rem;
+        font-size: 0.95rem;
         font-weight: lighter;
     }
 

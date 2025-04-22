@@ -3,6 +3,7 @@ import score1 from '../assets/sfx/retro-coin-1.mp3'
 import score2 from '../assets/sfx/retro-coin-2.mp3'
 import score3 from '../assets/sfx/retro-coin-3.mp3'
 import score4 from '../assets/sfx/retro-coin-4.mp3'
+import { BrowserDb } from '../repository/browser-db'
 
 const scoreAudioPath: string[] = [score1, score2, score3, score4]
 export class AudioController {
@@ -14,7 +15,7 @@ export class AudioController {
 
     private constructor() {
         this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
-        // this.backgroundAudio.play()
+        this._muted = !BrowserDb.getAudioStatus()
         this.backgroundAudio.loop = true
         this.backgroundAudio.volume = 0.5
 
@@ -27,7 +28,10 @@ export class AudioController {
     }
 
     public static start() {
-        AudioController.getInstance()
+        const instance = AudioController.getInstance()
+        if (!instance._muted) {
+            instance.backgroundAudio.play()
+        }
     }
 
     public static getInstance(): AudioController {
@@ -46,9 +50,13 @@ export class AudioController {
         const instance = AudioController.getInstance()
         instance._muted = muted
         if (muted) {
+            console.log('AudioController: muted')
             instance.backgroundAudio.pause()
+            BrowserDb.setAudioStatus(false)
         } else {
+            console.log('AudioController: unmuted')
             instance.backgroundAudio.play()
+            BrowserDb.setAudioStatus(true)
         }
     }
 
