@@ -159,7 +159,7 @@ export default function LevelEditor(props: { onPlay: (configuration: GameConfigu
         await levelEvaluator.current?.terminate()
         setEstimatedDifficulty(0);
         levelEvaluator.current = new LevelEvaluator(parseToConfiguration(), gameConfigurationLimits.intelligence.human, 3,
-            (value, remaining) => {
+            (value) => {
                 setEstimatedDifficulty(value);
             });
         if (!levelEvaluator.current.terminated()) {

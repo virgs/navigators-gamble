@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { useAnnounceCommandListener } from '../events/events';
 import "./GameAnnouncementModal.scss";
