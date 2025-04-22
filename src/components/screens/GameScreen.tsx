@@ -1,15 +1,14 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { GameConfiguration } from '../../engine/game-configuration/game-configuration';
+import { GameConfigurationValidator } from '../../engine/game-configuration/game-configuration-validator';
 import { GameEngine } from '../../engine/game-engine';
 import { useEndOfBonusPointsEventListener, useEndOfScoreAnimationsEventListener } from '../../events/events';
 import { BoardComponent } from '../BoardComponent';
-import { HeaderComponent } from '../HeaderComponent';
+import { GameAnnouncementModal } from '../GameAnnouncementModal';
 import { HiddenCardsHandComponent } from '../hands/HiddenCardsHandComponent';
 import { VisibleCardsHandComponent } from '../hands/VisibleCardsHandComponent';
 import { ScoreAnimationCoordinator } from '../score/ScoreAnimationCoordinator';
 import './GameScreen.scss';
-import { GameConfigurationValidator } from '../../engine/game-configuration/game-configuration-validator';
-import { GameAnnouncementModal } from '../GameAnnouncementModal';
 
 export type GameFinished = {
     scores: Record<string, number>;
@@ -43,7 +42,7 @@ export const GameScreen = (props: GameScreenProps): ReactNode => {
 
     const gameEngine = useRef<GameEngine>(null);
     const scoreAnimationCoordinator = useRef<ScoreAnimationCoordinator>(null);
-    const [classes] = useState<string[]>(['game-screen-container', 'w-100', 'h-100', 'row', 'g-0'])
+    const [classes] = useState<string[]>(['w-100', 'h-100', 'row', 'g-0', 'game-arena-container'])
 
     if (gameEngine.current === null) {
         console.log('Instantiating game engine');
@@ -91,25 +90,19 @@ export const GameScreen = (props: GameScreenProps): ReactNode => {
     return (
         <>
             <div className={classes.join(' ')}>
-                <div className='col-12 w-100'>
-                    <HeaderComponent gameConfiguration={props.gameConfiguration} onQuit={() => onGameFinished({
-                        scores: {},
-                        finished: false
-                    })}></HeaderComponent>
-                </div>
-                <div className='col-12 col-sm-6 col-md-12 d-flex align-content-between align-content-sm-center align-content-md-between justify-content-center'
+                <div className='col-12 col-sm-6 col-lg-12 d-flex align-content-between align-content-sm-center align-content-lg-between justify-content-center'
                     style={{ flexWrap: 'wrap', alignContent: 'normal' }}>
-                    <div className='w-100 d-flex d-sm-none d-md-flex align-items-center' style={{ justifyContent: 'left' }}>
+                    <div className='w-100 d-flex d-sm-none d-lg-flex align-items-center' style={{ justifyContent: 'left' }}>
                         {hiddenPlayers.map((aiHand, index) => <div key={`ai-hand-${index}`} className='w-100'>{aiHand}</div>)}
                     </div>
                     <div className='game-screen-board'>
                         <BoardComponent board={props.gameConfiguration.board} />
                     </div>
-                    <div className='w-100 mb-5 d-sm-none d-md-block'>
+                    <div className='w-100 mb-5 d-sm-none d-lg-block'>
                         {visiblePlayerComponent}
                     </div>
                 </div>
-                <div className='col-6 d-none d-sm-flex d-md-none' style={{ flexWrap: 'wrap', alignContent: 'normal' }}>
+                <div className='col-6 d-none d-sm-flex d-lg-none' style={{ flexWrap: 'wrap', alignContent: 'normal' }}>
                     <div className='w-100 d-flex align-items-center' style={{ justifyContent: 'space-left' }}>
                         {hiddenPlayers}
                     </div>

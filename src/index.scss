@@ -44,10 +44,12 @@
     --screen-transitions: 1s;
     --cards-animation-duration: 1000ms;
     --link-scoring-animation-duration: 0.1s;
+
+    --header-height: 40px;
 }
 body {
     margin: 0;
-    display: flex;
+    // display: flex;
     place-items: center;
     min-width: 320px;
     min-height: 100svh;
@@ -61,11 +63,12 @@ body {
 
 #root {
     min-height: 100svh;
-    display: flex;
-    justify-content: center;
+    // display: flex;
+    // justify-content: center;
     background-color: var(--compass-black);
-    max-width: var(--game-container-size);
-    width: var(--game-container-size);
+
+    max-width: min(100svw, var(--game-container-size));
+    width: min(100svw, var(--game-container-size));
 }
 
 /* SCSS HEX */

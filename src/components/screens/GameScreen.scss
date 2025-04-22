@@ -1,6 +1,6 @@
-.game-screen-container {
+.game-arena-container {
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 .game-screen-board {

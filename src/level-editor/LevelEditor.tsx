@@ -1,6 +1,5 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { AiAlgorithmType } from "../ai/algorithms/ai-algorithm-type";
-import { HeaderComponent } from "../components/HeaderComponent";
 import { SerializableVertix } from "../engine/board/serializable-board";
 import { GameConfiguration } from "../engine/game-configuration/game-configuration";
 import { gameConfigurationLimits, GameConfigurationValidator, ValidationResult } from "../engine/game-configuration/game-configuration-validator";
@@ -9,9 +8,9 @@ import { LevelEvaluator } from "../engine/level-evaluator/level-evaluator";
 import { arrayShuffler } from "../math/array-shufller";
 import { clamp } from "../math/clamp";
 import { generateUID } from "../math/generate-id";
+import { DifficultyGauge } from "./DifficultyGauge";
 import GraphEditor from "./GraphEditor";
 import "./LevelEditor.scss";
-import { DifficultyGauge } from "./DifficultyGauge";
 
 const CANVAS_SIZE = 400;
 const GRID_LINES = 10;
@@ -50,7 +49,7 @@ const generateRandomVertices = (): SerializableVertix[] => {
     return arrayShuffler(allVertices).filter((_, i) => i < numOfVertices);
 }
 
-export default function LevelEditor(props: { onExit: (configuration?: GameConfiguration) => void, configuration?: GameConfiguration }) {
+export default function LevelEditor(props: { onPlay: (configuration: GameConfiguration) => void, configuration?: GameConfiguration }) {
     const inputFile = useRef(null)
     const levelEvaluator = useRef<LevelEvaluator | null>(null);
     const [validationResult, setValidationResult] = useState<ValidationResult | null>(null);
@@ -179,7 +178,6 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
 
 
     return (<div className="level-editor-container">
-        <HeaderComponent onQuit={() => props.onExit()}></HeaderComponent>
         <div className="level-editor p-4 space-y-2">
             <h1 className="title mx-auto">Level Editor</h1>
             <div className="row justify-content-between">
@@ -222,7 +220,7 @@ export default function LevelEditor(props: { onExit: (configuration?: GameConfig
                     </button>
                 </div>
                 <div className="col-auto" style={{ textAlign: 'end' }}>
-                    <button disabled={!isValid()} onClick={() => props.onExit(parseToConfiguration())}
+                    <button disabled={!isValid()} onClick={() => props.onPlay(parseToConfiguration())}
                         type="button" className="btn btn-warning btn-sm px-2">
                         Play
                         <i className="bi bi-play ms-2"></i>

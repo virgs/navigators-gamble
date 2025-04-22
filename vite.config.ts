@@ -15,4 +15,12 @@ export default defineConfig({
     optimizeDeps: {
         exclude: [],
     },
+    build: {
+        target: 'esnext',
+        rollupOptions: {
+            output: {},
+        },
+        outDir: 'docs',
+        assetsDir: '.',
+    },
 })
