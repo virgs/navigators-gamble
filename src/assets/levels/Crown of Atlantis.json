@@ -1,0 +1,148 @@
+{
+  "levelId": "x97o",
+  "levelName": "Crown of Atlantis",
+  "players": [
+    {
+      "id": "human-player",
+      "type": 0
+    },
+    {
+      "id": "ai-player",
+      "type": 1,
+      "iterationsPerAlternative": 60,
+      "aiAlgorithm": 0
+    }
+  ],
+  "estimatedDifficulty": 0.63,
+  "visibleHandPlayerId": "human-player",
+  "initialCardsPerPlayer": 2,
+  "cardsPerDirection": 2,
+  "board": {
+    "vertices": [
+      {
+        "id": "vxar6",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxgym"
+        ]
+      },
+      {
+        "id": "vx6rg",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxar6",
+          "vxgym"
+        ]
+      },
+      {
+        "id": "vx6zx",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxz0f"
+        ]
+      },
+      {
+        "id": "vxi7u",
+        "position": {
+          "x": 0.5,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxbuw"
+        ]
+      },
+      {
+        "id": "vxbuw",
+        "position": {
+          "x": 0.2142857142857143,
+          "y": 0.5
+        },
+        "linkedVertices": [
+          "vxz94"
+        ]
+      },
+      {
+        "id": "vx4nn",
+        "position": {
+          "x": 0.7857142857142857,
+          "y": 0.5
+        },
+        "linkedVertices": [
+          "vxi7u"
+        ]
+      },
+      {
+        "id": "vxz94",
+        "position": {
+          "x": 0.2142857142857143,
+          "y": 0.2142857142857143
+        },
+        "linkedVertices": [
+          "vx2ng",
+          "vxvvt"
+        ]
+      },
+      {
+        "id": "vx2ng",
+        "position": {
+          "x": 0.5,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vxcii"
+        ]
+      },
+      {
+        "id": "vxcii",
+        "position": {
+          "x": 0.7857142857142857,
+          "y": 0.2142857142857143
+        },
+        "linkedVertices": [
+          "vx4nn"
+        ]
+      },
+      {
+        "id": "vxvvt",
+        "position": {
+          "x": 0.5,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxcii"
+        ]
+      },
+      {
+        "id": "vxz0f",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vx6rg"
+        ]
+      },
+      {
+        "id": "vxgym",
+        "position": {
+          "x": 0.5,
+          "y": 0.7857142857142857
+        },
+        "linkedVertices": [
+          "vxz0f",
+          "vxi7u",
+          "vx6zx"
+        ]
+      }
+    ]
+  }
+}

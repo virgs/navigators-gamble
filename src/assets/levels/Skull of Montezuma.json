@@ -1,0 +1,188 @@
+{
+  "levelId": "x6k1",
+  "levelName": "Skull of Montezuma",
+  "players": [
+    {
+      "id": "human-player",
+      "type": 0
+    },
+    {
+      "id": "ai-player",
+      "type": 1,
+      "iterationsPerAlternative": 60,
+      "aiAlgorithm": 0
+    }
+  ],
+  "estimatedDifficulty": 0.66,
+  "visibleHandPlayerId": "human-player",
+  "initialCardsPerPlayer": 5,
+  "cardsPerDirection": 3,
+  "board": {
+    "vertices": [
+      {
+        "id": "vx75q",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxbj6"
+        ]
+      },
+      {
+        "id": "vxbj6",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vx5z7"
+        ]
+      },
+      {
+        "id": "vx5z7",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vxglv",
+          "vxf7e"
+        ]
+      },
+      {
+        "id": "vxglv",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vx75q",
+          "vx0tl"
+        ]
+      },
+      {
+        "id": "vx6ke",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxtpt",
+          "vxbj6"
+        ]
+      },
+      {
+        "id": "vxtpt",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxmd2"
+        ]
+      },
+      {
+        "id": "vxmd2",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxf7e"
+        ]
+      },
+      {
+        "id": "vxf7e",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxa8f"
+        ]
+      },
+      {
+        "id": "vxa8f",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vxlsa"
+        ]
+      },
+      {
+        "id": "vx0tl",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxv72"
+        ]
+      },
+      {
+        "id": "vxv72",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxos8"
+        ]
+      },
+      {
+        "id": "vxos8",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxgd9"
+        ]
+      },
+      {
+        "id": "vxgd9",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxks4",
+          "vx75q"
+        ]
+      },
+      {
+        "id": "vxks4",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vx6dq"
+        ]
+      },
+      {
+        "id": "vx6dq",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vx6ke"
+        ]
+      },
+      {
+        "id": "vxlsa",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vx0tl"
+        ]
+      }
+    ]
+  }
+}

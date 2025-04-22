@@ -1,0 +1,184 @@
+{
+  "levelId": "xwfj",
+  "levelName": "Alma Negra's Curse",
+  "players": [
+    {
+      "id": "human-player",
+      "type": 0
+    },
+    {
+      "id": "ai-player",
+      "type": 1,
+      "iterationsPerAlternative": 110,
+      "aiAlgorithm": 0
+    }
+  ],
+  "estimatedDifficulty": 0.66,
+  "visibleHandPlayerId": "human-player",
+  "initialCardsPerPlayer": 3,
+  "cardsPerDirection": 4,
+  "board": {
+    "vertices": [
+      {
+        "id": "vxgyh",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxqjp"
+        ]
+      },
+      {
+        "id": "vxqjp",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxrg8"
+        ]
+      },
+      {
+        "id": "vxrg8",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vx894"
+        ]
+      },
+      {
+        "id": "vx894",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxgyh"
+        ]
+      },
+      {
+        "id": "vxf2x",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vx1hz"
+        ]
+      },
+      {
+        "id": "vx1hz",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vx6gw"
+        ]
+      },
+      {
+        "id": "vx6gw",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxg0o"
+        ]
+      },
+      {
+        "id": "vxg0o",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vxf2x"
+        ]
+      },
+      {
+        "id": "vxnyt",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxhju"
+        ]
+      },
+      {
+        "id": "vxhju",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxijz"
+        ]
+      },
+      {
+        "id": "vxijz",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vxz23"
+        ]
+      },
+      {
+        "id": "vxz23",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vxnyt"
+        ]
+      },
+      {
+        "id": "vx44k",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxlug"
+        ]
+      },
+      {
+        "id": "vxlug",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxgd4"
+        ]
+      },
+      {
+        "id": "vxgd4",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxu8c"
+        ]
+      },
+      {
+        "id": "vxu8c",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vx44k"
+        ]
+      }
+    ]
+  }
+}

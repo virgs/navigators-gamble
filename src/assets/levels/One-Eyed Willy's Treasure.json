@@ -1,4 +1,6 @@
 {
+  "levelId": "xbu4",
+  "levelName": "One-Eyed Willy's Treasure",
   "players": [
     {
       "id": "human-player",
@@ -7,22 +9,21 @@
     {
       "id": "ai-player",
       "type": 1,
-      "iterationsPerAlternative": 300,
+      "iterationsPerAlternative": 200,
       "aiAlgorithm": 0
     }
   ],
-  "levelName": "Level 3",
-  "estimatedDifficulty": 0.22,
+  "estimatedDifficulty": 0.74,
   "visibleHandPlayerId": "human-player",
-  "initialCardsPerPlayer": 6,
+  "initialCardsPerPlayer": 4,
   "cardsPerDirection": 3,
   "board": {
     "vertices": [
       {
         "id": "v1",
         "position": {
-          "x": 0.113,
-          "y": 0.317
+          "x": 0.2142857142857143,
+          "y": 0.2142857142857143
         },
         "linkedVertices": [
           "v2"
@@ -31,38 +32,40 @@
       {
         "id": "v2",
         "position": {
-          "x": 0.117,
-          "y": 0.543
+          "x": 0.35714285714285715,
+          "y": 0.35714285714285715
         },
         "linkedVertices": [
           "v3",
-          "v8"
+          "v6"
         ]
       },
       {
         "id": "v3",
         "position": {
-          "x": 0.333,
-          "y": 0.725
+          "x": 0.35714285714285715,
+          "y": 0.6428571428571429
         },
-        "linkedVertices": []
+        "linkedVertices": [
+          "v4"
+        ]
       },
       {
         "id": "v4",
         "position": {
-          "x": 0.663,
-          "y": 0.73
+          "x": 0.2142857142857143,
+          "y": 0.7857142857142857
         },
         "linkedVertices": [
-          "v9",
-          "v5"
+          "v5",
+          "v1"
         ]
       },
       {
         "id": "v5",
         "position": {
-          "x": 0.858,
-          "y": 0.54
+          "x": 0.6428571428571429,
+          "y": 0.7857142857142857
         },
         "linkedVertices": [
           "v6"
@@ -71,53 +74,33 @@
       {
         "id": "v6",
         "position": {
-          "x": 0.852,
-          "y": 0.273
+          "x": 0.7857142857142857,
+          "y": 0.5
         },
         "linkedVertices": [
-          "v7"
-        ]
-      },
-      {
-        "id": "v7",
-        "position": {
-          "x": 0.647,
-          "y": 0.423
-        },
-        "linkedVertices": [
-          "v9",
-          "v5"
+          "v3",
+          "v8"
         ]
       },
       {
         "id": "v8",
         "position": {
-          "x": 0.348,
-          "y": 0.423
+          "x": 0.6428571428571429,
+          "y": 0.2142857142857143
         },
         "linkedVertices": [
-          "v1"
+          "v1",
+          "vxgfb"
         ]
       },
       {
-        "id": "v9",
+        "id": "vxgfb",
         "position": {
-          "x": 0.495,
-          "y": 0.275
+          "x": 0.9285714285714286,
+          "y": 0.5
         },
         "linkedVertices": [
-          "v8",
-          "v3"
-        ]
-      },
-      {
-        "id": "v10",
-        "position": {
-          "x": 0.487,
-          "y": 0.085
-        },
-        "linkedVertices": [
-          "v9"
+          "v5"
         ]
       }
     ]
