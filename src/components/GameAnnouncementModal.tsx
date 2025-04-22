@@ -1,32 +1,35 @@
-import { ReactNode, useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
-import { useAnnounceCommandListener } from '../events/events';
-import "./GameAnnouncementModal.scss";
+import { ReactNode, useState } from 'react'
+import Modal from 'react-bootstrap/Modal'
+import { useAnnounceCommandListener } from '../events/events'
+import './GameAnnouncementModal.scss'
 
 export const GameAnnouncementModal = (): ReactNode => {
     const [content, setContent] = useState<string>('')
     const [timer, setTimer] = useState<NodeJS.Timeout | undefined>(undefined)
 
-    useAnnounceCommandListener(async payload => {
+    useAnnounceCommandListener(async (payload) => {
         setContent(payload.announcement)
         if (timer) {
             clearTimeout(timer)
         }
-        setTimer(setTimeout(() => {
-            setContent('')
-        }, payload.duration))
+        setTimer(
+            setTimeout(() => {
+                setContent('')
+            }, payload.duration)
+        )
     })
 
     return (
-        <Modal id='game-announcement-modal' backdrop="static"
+        <Modal
+            id="game-announcement-modal"
+            backdrop="static"
             keyboard={false}
             centered
-            contentClassName='game-announcement-modal-content'
-            show={content !== ''}>
+            contentClassName="game-announcement-modal-content"
+            show={content !== ''}
+        >
             <Modal.Body>
-                <div className="game-announcement-body">
-                    {content}
-                </div>
+                <div className="game-announcement-body">{content}</div>
             </Modal.Body>
         </Modal>
     )

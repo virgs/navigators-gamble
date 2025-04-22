@@ -1,9 +1,7 @@
 import { GameContainer } from './components/GameContainer'
 
 function App() {
-    return (
-        <GameContainer></GameContainer>
-    )
+    return <GameContainer></GameContainer>
 }
 
 export default App

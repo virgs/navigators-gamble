@@ -1,14 +1,16 @@
-import { ReactNode } from 'react';
-import Modal from 'react-bootstrap/Modal';
-import "./LevelEditorInstructionsModal.scss";
+import { ReactNode } from 'react'
+import Modal from 'react-bootstrap/Modal'
+import './LevelEditorInstructionsModal.scss'
 
-export const LevelEditorInstructionsModal = (props: { show: boolean, onHide: Function }): ReactNode => {
-
+export const LevelEditorInstructionsModal = (props: { show: boolean; onHide: Function }): ReactNode => {
     return (
-        <Modal dialogClassName='level-editor-instructions-dialog'
-            contentClassName='level-editor-instructions-content'
-            id='level-editor-instructions-modal'
-            show={props.show} onHide={() => props.onHide()}>
+        <Modal
+            dialogClassName="level-editor-instructions-dialog"
+            contentClassName="level-editor-instructions-content"
+            id="level-editor-instructions-modal"
+            show={props.show}
+            onHide={() => props.onHide()}
+        >
             <Modal.Header>
                 <Modal.Title>Intructions</Modal.Title>
             </Modal.Header>
@@ -16,7 +18,8 @@ export const LevelEditorInstructionsModal = (props: { show: boolean, onHide: Fun
                 <div className="level-editor-instructions-body">
                     <h4>How to use the level editor</h4>
                     <p>
-                        The level editor allows you to create and edit levels for the game. You can add, remove, and move vertices and edges around the grid.
+                        The level editor allows you to create and edit levels for the game. You can add, remove, and
+                        move vertices and edges around the grid.
                     </p>
                     <h4>Controls</h4>
                     <ul>
@@ -30,5 +33,5 @@ export const LevelEditorInstructionsModal = (props: { show: boolean, onHide: Fun
                 </div>
             </Modal.Body>
         </Modal>
-    );
+    )
 }

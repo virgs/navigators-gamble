@@ -5,13 +5,11 @@ import App from './App.tsx'
 import './scss/styles.scss'
 import './index.scss'
 
-import "bootstrap-icons/font/bootstrap-icons.css";
+import 'bootstrap-icons/font/bootstrap-icons.css'
 
-
-
-document.addEventListener("contextmenu", (event) => {
-    event.preventDefault();
-});
+document.addEventListener('contextmenu', (event) => {
+    event.preventDefault()
+})
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>

@@ -1,14 +1,7 @@
-import { ReactNode, useEffect } from 'react';
-import "./ScoreIncrease.scss";
+import { ReactNode, useEffect } from 'react'
+import './ScoreIncrease.scss'
 
-
-
-export const ScoreIncrease = (props: {
-    id: string
-    increase: number
-    onDismiss: (id: string) => void
-}): ReactNode => {
-
+export const ScoreIncrease = (props: { id: string; increase: number; onDismiss: (id: string) => void }): ReactNode => {
     useEffect(() => {
         setTimeout(() => {
             props.onDismiss(props.id)
@@ -16,8 +9,8 @@ export const ScoreIncrease = (props: {
     }, [])
 
     return (
-        <div className='score-increase-container'>
+        <div className="score-increase-container">
             <div className="score-increase">+{props.increase}</div>
         </div>
-    );
+    )
 }
