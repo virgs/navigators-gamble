@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { AiAlgorithmType } from "../ai/algorithms/ai-algorithm-type";
 import { SerializableVertix } from "../engine/board/serializable-board";
-import { GameConfiguration } from "../engine/game-configuration/game-configuration";
+import { GameConfiguration, GamePlayerConfiguration } from "../engine/game-configuration/game-configuration";
 import { gameConfigurationLimits, GameConfigurationValidator, ValidationResult } from "../engine/game-configuration/game-configuration-validator";
 import { PlayerType } from "../engine/game-configuration/player-type";
 import { LevelEvaluator } from "../engine/level-evaluator/level-evaluator";
@@ -81,6 +81,8 @@ export default function LevelEditor(props: { onPlay: (configuration: GameConfigu
         setCardsPerDirection(clamp(config.cardsPerDirection, gameConfigurationLimits.cardsPerDirection));
         setIterations(clamp(config.players.find(player => player.type === PlayerType.ARTIFICIAL_INTELLIGENCE)?.iterationsPerAlternative ?? 0, gameConfigurationLimits.intelligence.ai));
         setVertices(config.board.vertices);
+        setHumanPlayerStarts(config.players[0].type === PlayerType.HUMAN);
+        setEstimatedDifficulty(config.estimatedDifficulty);
 
         return config;
     }
@@ -98,21 +100,25 @@ export default function LevelEditor(props: { onPlay: (configuration: GameConfigu
     };
 
     const parseToConfiguration = (): GameConfiguration => {
+        const players: GamePlayerConfiguration[] = [{
+            id: 'ai-player',
+            type: PlayerType.ARTIFICIAL_INTELLIGENCE,
+            iterationsPerAlternative: iterations,
+            aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
+        }];
+        const humanPlayer: GamePlayerConfiguration = {
+            id: 'human-player',
+            type: PlayerType.HUMAN,
+        };
+        if (humanPlayerStarts) {
+            players.unshift(humanPlayer);
+        } else {
+            players.push(humanPlayer);
+        }
         return {
             levelId: generateUID(),
             levelName: levelName,
-            players: [
-                {
-                    id: 'human-player',
-                    type: PlayerType.HUMAN,
-                },
-                {
-                    id: 'ai-player',
-                    type: PlayerType.ARTIFICIAL_INTELLIGENCE,
-                    iterationsPerAlternative: iterations,
-                    aiAlgorithm: AiAlgorithmType.PURE_MONTE_CARLO_TREE_SEARCH,
-                },
-            ],
+            players: players,
             estimatedDifficulty: estimatedDifficulty,
             visibleHandPlayerId: 'human-player',
             initialCardsPerPlayer: initialCardsPerPlayer,
@@ -300,7 +306,7 @@ export default function LevelEditor(props: { onPlay: (configuration: GameConfigu
                         <button id="basic-addon2"
                             disabled={!isValid()} onClick={() => exportLevel(parseToConfiguration(), levelName)}
                             type="button" className="btn btn-success btn-sm px-2">
-                            Save
+                            Export
                             <i className="bi bi-floppy ms-2"></i>
                         </button>
                     </div>

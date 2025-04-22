@@ -38,7 +38,7 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
     return <div className='header'>
         <div className='row g-0 justify-content-end'>
             <div className='col-12 col-sm-6 menu py-1'>
-                <span className='ms-2 button' onClick={() => props.onHomeButton && props.onHomeButton()}
+                <span id="home-button" className='ms-2 button show' onClick={() => props.onHomeButton && props.onHomeButton()}
                     style={{ color: props.onHomeButton ? 'unset' : 'transparent', boxShadow: props.onHomeButton ? '' : 'none' }}>
                     <i className="bi bi-house-fill"></i>
                 </span>

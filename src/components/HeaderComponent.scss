@@ -11,7 +11,7 @@
     height: fit-content;
 
     & .menu {
-        min-height: 40px;
+        min-height: var(--header-height);
     }
 
     & .button {

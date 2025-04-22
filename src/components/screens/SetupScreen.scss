@@ -5,76 +5,114 @@
     align-items: center;
 }
 
-.setup-screen-header {
-    height: min(85%, 400px);
-    max-height: min(85%, 400px);
-    text-align: center;
-    margin-top: 40px;
-    background: url('../../assets/combined.jpg') no-repeat center;
-    background-size: contain;
-}
-
-.setup-screen-title {
-    margin-top: -30px;
-    width: max(30%, 250px);
-    animation: float 5s ease-in-out infinite;
-}
-
-@keyframes float {
-    0% {
-        transform: translateY(0);
+#setup-screen-element {
+    .setup-screen-header {
+        height: min(85%, 400px);
+        max-height: min(85%, 400px);
+        text-align: center;
+        margin-top: 40px;
+        background: url('../../assets/combined.png') no-repeat center;
+        background-size: contain;
     }
-    50% {
-        transform: translateY(-10px) scale(1.05);
+
+    .setup-screen-title {
+        margin-top: -30px;
+        width: max(30%, 250px);
+        animation: float 5s ease-in-out infinite;
     }
-    100% {
-        transform: translateY(0);
+
+    @keyframes float {
+        0% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px) scale(1.05);
+        }
+        100% {
+            transform: translateY(0);
+        }
     }
-}
 
-.setup-screen-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-    height: 40%;
-    max-height: 40%;
-}
+    .setup-screen-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        height: 40%;
+        max-height: 40%;
+    }
 
-.setup-screen-levels {
-    width: 90%;
-}
+    .setup-screen-levels {
+        width: 90%;
+    }
 
-.setup-screen-heading {
-    font-family: 'Pirata One', system-ui;
+    .setup-screen-heading {
+        font-family: 'Pirata One', system-ui;
 
-    font-size: 2.5rem;
-    font-weight: bold;
-}
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
 
-.setup-screen-list {
-    width: 100%;
-    height: 150px;
-    max-height: 150px;
-    overflow-y: auto;
-}
+    .setup-screen-list {
+        width: 100%;
+        height: 150px;
+        max-height: 150px;
+        overflow-y: auto;
+    }
 
-.setup-screen-buttons {
-    padding-top: 20px;
-    width: 100%;
-    justify-content: space-between;
-}
+    .level-list-item {
+        z-index: 2;
+        background-color: rgba($color: #fde6b2, $alpha: 0.75);
+        padding: 4px 1rem;
+        border-color: var(--compass-dark-gray);
+        cursor: pointer;
+        &.active {
+            color: var(--compass-light-gray);
+            background-color: var(--compass-highlight-blue);
+            border-color: var(--compass-black);
+        }
+    }
 
-.setup-screen-button {
-    width: 100%;
-    font-family: 'Pirata One', system-ui !important;
-    font-size: 1.15rem !important;
-    font-weight: lighter !important;
-}
+    .level-title {
+        font-family: 'Pirata One', system-ui;
+        font-size: 1.5rem;
+        margin-bottom: 2px;
+        font-weight: bold;
+    }
 
-.level-title {
-    font-family: 'Pirata One', system-ui;
-    font-size: 1.5rem;
-    font-weight: bold;
+    .level-stats {
+        font-family: 'Pirata One', system-ui;
+        font-size: 0.75rem;
+        font-weight: lighter;
+    }
+
+    .setup-screen-buttons {
+        padding-top: 20px;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .setup-screen-button {
+        width: 100%;
+        font-family: 'Pirata One', system-ui !important;
+        font-size: 1.15rem !important;
+        font-weight: lighter !important;
+        border: none;
+    }
+
+    #setup-screen-info-button {
+        background-color: var(--compass-highlight-green);
+        color: var(--compass-white);
+    }
+
+    #setup-screen-editor-button {
+        background-color: var(--compass-dark-gray);
+        color: var(--compass-white);
+    }
+
+    #setup-screen-play-button {
+        background-color: var(--compass-highlight-blue);
+        color: var(--compass-light-gray);
+    }
 }

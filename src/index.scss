@@ -25,6 +25,8 @@
     --compass-tertiary: var(--peach);
     --compass-highlight-blue: var(--delft-blue);
     --compass-highlight-red: var(--carmine);
+    --compass-highlight-yellow: #edab30;
+    --compass-highlight-green: #14450e;
     --compass-white: var(--bs-white);
     --compass-light-gray: var(--bs-gray-200);
     --compass-medium-gray: var(--bs-gray-400);
@@ -38,7 +40,7 @@
     --compass-card-cover-background: var(--compass-white);
     --compass-card-cover-border: var(--compass-medium-gray);
 
-    --compass-header-background: var(--compass-dark-gray);
+    --compass-header-background: var(--compass-black);
 
     // animation durations
     --screen-transitions: 1s;

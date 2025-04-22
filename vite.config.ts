@@ -6,7 +6,7 @@ import { qrcode } from 'vite-plugin-qrcode'
 // https://vite.dev/config/
 export default defineConfig({
     plugins: [react(), qrcode()],
-    assetsInclude: ['**/*.midi'],
+    assetsInclude: [],
     resolve: {
         alias: {
             '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
@@ -15,6 +15,7 @@ export default defineConfig({
     optimizeDeps: {
         exclude: [],
     },
+    base: '/navigators-gamble',
     build: {
         target: 'esnext',
         rollupOptions: {
