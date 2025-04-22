@@ -3,13 +3,21 @@ import score1 from '../assets/sfx/retro-coin-1.mp3'
 import score2 from '../assets/sfx/retro-coin-2.mp3'
 import score3 from '../assets/sfx/retro-coin-3.mp3'
 import score4 from '../assets/sfx/retro-coin-4.mp3'
+import pop1 from '../assets/sfx/pop1.mp3'
+import pop2 from '../assets/sfx/pop2.mp3'
+import pop3 from '../assets/sfx/pop3.mp3'
+import chain from '../assets/sfx/chain.mp3'
 import { BrowserDb } from '../repository/browser-db'
+import { sleep } from '../math/sleep'
 
 const scoreAudioPath: string[] = [score1, score2, score3, score4]
+const popAudiosPath: string[] = [pop1, pop2, pop3]
 export class AudioController {
     private static instance: AudioController
     private readonly audioContext: AudioContext
     private readonly scoreAudios: HTMLAudioElement[] = []
+    private readonly popAudios: HTMLAudioElement[] = []
+    private readonly chainAudio: HTMLAudioElement = new Audio(chain)
     private readonly backgroundAudio: HTMLAudioElement = new Audio(background)
     private _muted: boolean = false
 
@@ -25,12 +33,20 @@ export class AudioController {
             audio.load()
             this.scoreAudios.push(audio)
         })
+        popAudiosPath.forEach((path) => {
+            const audio = new Audio(path)
+            audio.volume = 0.5
+            audio.load()
+            this.popAudios.push(audio)
+        })
     }
 
     public static start() {
         const instance = AudioController.getInstance()
         if (!instance._muted) {
-            instance.backgroundAudio.play()
+            if (instance.backgroundAudio.paused) {
+                instance.backgroundAudio.play()
+            }
         }
     }
 
@@ -66,13 +82,34 @@ export class AudioController {
 
     public static playScoreSound(): void {
         const instance = AudioController.getInstance()
-
         if (instance._muted) {
             return
         }
         if (instance.audioContext) {
             const scoreAudios = instance.scoreAudios
             scoreAudios[Math.floor(Math.random() * scoreAudios.length)].play()
+        }
+    }
+
+    public static playPopSound(): void {
+        const instance = AudioController.getInstance()
+        if (instance._muted) {
+            return
+        }
+        if (instance.audioContext) {
+            const popAudios = instance.popAudios
+            popAudios[Math.floor(Math.random() * popAudios.length)].play()
+        }
+    }
+
+    public static async playChainSound(): Promise<void> {
+        const instance = AudioController.getInstance()
+        if (instance._muted) {
+            return
+        }
+        if (instance.audioContext) {
+            await sleep(150)
+            instance.chainAudio.play()
         }
     }
 }

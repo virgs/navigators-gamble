@@ -7,6 +7,7 @@ import { CardComponent, CardComponentProps } from '../card/CardComponent';
 
 import { Point } from '../../math/point';
 import './VertixComponent.scss';
+import { AudioController } from '../../audio/audio-controller';
 
 type VertixProps = {
     vertix: SerializableVertix;
@@ -89,6 +90,7 @@ export const VertixComponent = (props: VertixProps): ReactNode => {
 
     const onPointerDown = () => {
         if (selectedCard) {
+            AudioController.playPopSound();
             emitVisibleVertixSelectedEvent({
                 vertix: props.vertix,
                 card: selectedCard.card,

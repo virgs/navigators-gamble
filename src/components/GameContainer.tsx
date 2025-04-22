@@ -40,6 +40,7 @@ export const GameContainer = (): ReactNode => {
 
 
     const onHumeButtonClicked = async () => {
+        AudioController.playChainSound()
         if (gameScreens.has(GameScreens.LEVEL_EDITOR)) {
             setLevelEditorClasses(classes => classes.concat(hideToLeftClass))
             setBackgroundClasses(classes => classes.filter(gs => gs !== GameScreens[GameScreens.LEVEL_EDITOR].toLowerCase()))
@@ -71,6 +72,7 @@ export const GameContainer = (): ReactNode => {
                     <SetupScreen
                         setupUpdateCounter={setupUpdateCounter}
                         onStartButton={async (config: GameConfiguration) => {
+                            AudioController.playChainSound()
                             setGameConfiguration(config)
                             setSetupScreenClasses(classes => classes.concat(hideToLeftClass))
                             setGameOnClasses(classes => classes.concat(showFromRightClass))
@@ -78,6 +80,7 @@ export const GameContainer = (): ReactNode => {
                             setBackgroundClasses(classes => classes.concat(GameScreens[GameScreens.GAME_ON].toLowerCase()))
                         }}
                         onLevelEditorButton={async () => {
+                            AudioController.playChainSound()
                             setGameConfiguration(undefined)
                             setSetupScreenClasses(classes => classes.concat(hideToRightClass))
                             setLevelEditorClasses(classes => classes.concat(showFromLeftClass))
