@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { AudioController } from '../audio/audio-controller'
 import { GameConfiguration } from '../engine/game-configuration/game-configuration'
 import { GithubCorner } from '../github-corner/GithubCorner'
