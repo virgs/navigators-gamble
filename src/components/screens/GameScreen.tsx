@@ -92,6 +92,7 @@ export const GameScreen = (props: GameScreenProps): ReactNode => {
             victory: !someOpponentBeatsHumanScore && !someOpponentTiesHumanScore,
             levelConfiguration: props.gameConfiguration,
             levelHash: BrowserDb.getLevelHash(props.gameConfiguration),
+            timestamp: Date.now(),
         }
         onGameFinished(stats)
     })

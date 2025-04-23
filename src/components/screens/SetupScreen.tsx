@@ -92,7 +92,7 @@ export const SetupScreen = (props: SetupScreenProps): ReactNode => {
         <>
             <Row id="setup-screen-element" className="setup-screen-container g-0">
                 <Col xs={12} sm={5} lg={12} className="setup-screen-header">
-                    <Image className="setup-screen-title" src={title} fluid />
+                    <Image className="setup-screen-title" src={title} fluid onDoubleClick={() => BrowserDb.clearLevelStats()} />
                 </Col>
                 <Col xs={12} sm={7} lg={12} className="setup-screen-content">
                     <div className="setup-screen-levels">

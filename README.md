@@ -32,6 +32,25 @@ This basic procedure can be applied to any game whose positions necessarily have
 
 Pure Monte Carlo Game Search results in strong play in several games with random elements, as described below in the [outcome section](#outcome). It converges to optimal play (as k tends to infinity) in board filling games with random turn order.
 
+###### Core
+
+The PureMonteCarloTreeSearch class appears to be logically structured and implements a Monte Carlo Tree Search (MCTS) algorithm with random simulations. However, there are a few areas that could be improved or clarified to ensure correctness and robustness. Below is an analysis of the class:
+
+Strengths
+Monte Carlo Simulation Logic:
+
+The simulateRandomGame method simulates random games to evaluate moves, which is a core part of MCTS.
+It uses a loop to simulate moves until the board is full, updating scores and player hands appropriately.
+Move Selection:
+
+The makeMove method evaluates possible moves and selects the best one based on the win rate (score / games).
+Dynamic Player Turn Handling:
+
+The simulateRandomGame method dynamically updates the turn and alternates between players.
+Utility Methods:
+
+Methods like updateCardsAfterMove, calculateScore, and computeNotPlayedCards are well-encapsulated and reusable.
+
 #### React
 
 It's kinda embarrassing, but I confess I need to strengthen my React skills. It's been at least 5 years since the last time I professionally worked with it, and the front-end personal projects I've been working on in this meantime were developed based on Vue.

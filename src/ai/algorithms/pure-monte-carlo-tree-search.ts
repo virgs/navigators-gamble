@@ -12,7 +12,7 @@ import { AiAlgorithm } from './ai-algorithm'
 
 export class PureMonteCarloTreeSearch implements AiAlgorithm {
     private readonly gameConfig: GameConfiguration
-    private readonly playerId: string
+    private readonly aiPlayerId: string
     private readonly playersIds: string[]
     private readonly playerTurnOrder: number
     private readonly iterationsPerAlternative: number
@@ -21,7 +21,7 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
     constructor(initMessage: InitializeAiMessage) {
         this.gameConfig = initMessage.gameConfig
         this.iterationsPerAlternative = initMessage.configuration.iterationsPerAlternative
-        this.playerId = initMessage.playerId
+        this.aiPlayerId = initMessage.playerId
         this.playersIds = initMessage.playersIds
         this.playerTurnOrder = initMessage.turnOrder
         this.gameCards = directions.flatMap((dir) => Array(this.gameConfig.cardsPerDirection).fill(dir))
@@ -29,33 +29,25 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
 
     public async makeMove(moveRequest: MoveRequest): Promise<MoveResponse> {
         const board = BoardSerializer.deserialize(moveRequest.board)
-        const possibleMoves = this.findNextMoveAlternatives(this.playerId, moveRequest.playerCards, board)
+        const possibleMoves = this.findNextMoveAlternatives(this.aiPlayerId, moveRequest.playerCards, board)
 
         const moveResults = new Map<number, Move & { score: number }>()
-        for (let count = 0; count < this.iterationsPerAlternative; count++) {
-            const boardCopy = board.clone()
+        for (let count = 0; count < Math.max(this.iterationsPerAlternative, 1); count++) {
             // randomly selects a move from the possible moves
             // to add some stupidness to the ai
-            const index = Math.floor(Math.random() * possibleMoves.length)
+            const index = count % possibleMoves.length
+            // const index = Math.floor(Math.random() * possibleMoves.length)
             const possibleMove = possibleMoves[index]
-            const moveWins: number = this.simulateRandomGame(possibleMove, moveRequest, boardCopy) ? 1 : 0
-            if (moveResults.has(index)) {
-                moveResults.set(index, { ...possibleMove, score: moveResults.get(index)!.score + moveWins })
-            } else {
-                moveResults.set(index, { ...possibleMove, score: moveWins })
-            }
+            const result: number = this.simulateRandomGame(possibleMove, moveRequest, board.clone())
+            const previousResults = moveResults.get(index)
+            moveResults.set(index, {
+                ...possibleMove,
+                score: (previousResults?.score ?? 0) + result,
+            })
         }
         const bestMove = [...moveResults.values()].reduce(
-            (acc, move) => {
-                if (move.score > acc.score) {
-                    return move
-                }
-                return acc
-            },
-            {
-                ...possibleMoves[0],
-                score: Number.NEGATIVE_INFINITY,
-            }
+            (best, current) => (current.score > best.score ? current : best),
+            { score: Number.NEGATIVE_INFINITY } as Move & { score: number }
         )
 
         return {
@@ -65,12 +57,12 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
                 vertixId: bestMove.vertixId,
                 direction: bestMove.direction,
                 cardIndex: moveRequest.playerCards.indexOf(bestMove.direction),
-                playerId: this.playerId,
+                playerId: this.aiPlayerId,
             },
         }
     }
 
-    private simulateRandomGame(initialMove: Move, moveRequest: MoveRequest, board: Board): boolean {
+    private simulateRandomGame(initialMove: Move, moveRequest: MoveRequest, board: Board): number {
         let turn = this.playerTurnOrder
         let move = initialMove
         let playerHand = [...moveRequest.playerCards]
@@ -84,8 +76,7 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
                 playerHand = this.updateCardsAfterMove(playerHand, move.direction, availableCards.pop())
             }
 
-            //TODO terminate the method earlier in case of a expressive score difference
-            scores[this.playerId] += this.calculateScore(moveScores, move.playerId)
+            scores[this.aiPlayerId] += this.calculateScore(moveScores, move.playerId)
 
             turn = (turn + 1) % this.playersIds.length
 
@@ -100,18 +91,23 @@ export class PureMonteCarloTreeSearch implements AiAlgorithm {
         //bonus points
         board.getVertices().forEach((vertix) => {
             if (vertix.ownerId !== undefined) {
-                scores[vertix.ownerId] += vertix.direction ? 1 : 0
+                scores[vertix.ownerId] += vertix.direction !== undefined ? 1 : 0
             }
         })
-        const playerScore = scores[this.playerId] ?? 0
 
-        const playerHasWon = Object.entries(scores)
-            .filter(([id, _]) => id !== this.playerId)
-            .every(([, score]) => {
-                return score < playerScore
-            })
+        scores
 
-        return playerHasWon
+        return Object.keys(scores).reduce((acc, playerId) => {
+            return acc + (playerId === this.aiPlayerId ? scores[playerId] : -scores[playerId])
+        }, 0)
+
+        // const aiScore = scores[this.aiPlayerId] ?? 0
+
+        // const aiWins = Object.entries(scores)
+        //     .filter(([id, _]) => id !== this.aiPlayerId)
+        //     .every(([, score]) => score < aiScore)
+
+        // return aiWins
     }
 
     private updateCardsAfterMove(playerHand: Directions[], played: Directions, newCard?: Directions): Directions[] {

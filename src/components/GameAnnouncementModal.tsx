@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import { useAnnounceCommandListener } from '../events/events'
 import './GameAnnouncementModal.scss'
@@ -18,6 +18,8 @@ export const GameAnnouncementModal = (): ReactNode => {
             }, payload.duration)
         )
     })
+
+    useEffect(() => (() => clearTimeout(timer)), [])
 
     return (
         <Modal

@@ -19,6 +19,7 @@ export class AudioController {
     private readonly popAudios: HTMLAudioElement[] = []
     private readonly chainAudio: HTMLAudioElement = new Audio(chain)
     private readonly backgroundAudio: HTMLAudioElement = new Audio(background)
+    private paused: boolean = false
     private _muted: boolean = false
 
     private constructor() {
@@ -38,6 +39,18 @@ export class AudioController {
             audio.volume = 0.5
             audio.load()
             this.popAudios.push(audio)
+        })
+        document.addEventListener('visibilitychange', () => {
+            this.paused = document.visibilityState !== 'visible'
+            if (this.paused) {
+                this.backgroundAudio.pause()
+            } else {
+                if (!this._muted) {
+                    this.backgroundAudio.play().catch((error) => {
+                        console.error('Error playing audio:', error)
+                    })
+                }
+            }
         })
     }
 
@@ -66,11 +79,9 @@ export class AudioController {
         const instance = AudioController.getInstance()
         instance._muted = muted
         if (muted) {
-            console.log('AudioController: muted')
             instance.backgroundAudio.pause()
             BrowserDb.setAudioStatus(false)
         } else {
-            console.log('AudioController: unmuted')
             instance.backgroundAudio.play()
             BrowserDb.setAudioStatus(true)
         }

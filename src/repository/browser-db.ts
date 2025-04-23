@@ -8,6 +8,7 @@ export type MatchStats = {
     draw: boolean
     levelConfiguration: GameConfiguration
     levelHash: string
+    timestamp: number
 }
 
 export class BrowserDb {
@@ -51,6 +52,12 @@ export class BrowserDb {
         const hash = this.hashString(JSON.stringify(levelConfiguration))
         return hash
     }
+
+    public static clearLevelStats(): void {
+        console.log('Clearing level stats')
+        localStorage.removeItem('levelStats')
+    }
+
     private static hashString(str: string): string {
         let hash = 0
         for (let i = 0; i < str.length; i++) {

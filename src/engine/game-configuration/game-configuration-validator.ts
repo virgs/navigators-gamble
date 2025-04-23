@@ -25,7 +25,7 @@ export const gameConfigurationLimits = {
             max: 200,
             step: 10,
         },
-        human: 90,
+        human: 50,
     },
     board: {
         vertices: {

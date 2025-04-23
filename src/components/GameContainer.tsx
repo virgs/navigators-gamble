@@ -6,7 +6,7 @@ import LevelEditor from '../level-editor/LevelEditor'
 import { sleep } from '../math/sleep'
 import { BrowserDb } from '../repository/browser-db'
 import './GameContainer.scss'
-import { HeaderComponent } from './HeaderComponent'
+import { HeaderComponent } from './header/HeaderComponent'
 import { GameScreen } from './screens/GameScreen'
 import { SetupScreen } from './screens/SetupScreen'
 
@@ -135,13 +135,13 @@ export const GameContainer = (): ReactNode => {
                             BrowserDb.addLevelStats(stats)
                             console.log('Stats saved', stats)
                             setSetupUpdateCounter((c) => c + 1)
-                            returnToHomeScreen()
+                            await returnToHomeScreen()
+                            setTestingLevel(false)
                             if (testingLevel) {
                                 onLevelEditorButtonClicked()
                             } else {
                                 setGameConfiguration(undefined)
                             }
-                            setTestingLevel(false)
                         }}
                     />
                 </div>

@@ -1,12 +1,13 @@
 import { ReactNode, useEffect, useState } from 'react'
-import { AudioController } from '../audio/audio-controller'
-import { directions } from '../engine/directions'
-import { GameConfiguration } from '../engine/game-configuration/game-configuration'
-import { PlayerType } from '../engine/game-configuration/player-type'
-import { usePlayerMadeMoveEventListener } from '../events/events'
+import { AudioController } from '../../audio/audio-controller'
+import { directions } from '../../engine/directions'
+import { GameConfiguration } from '../../engine/game-configuration/game-configuration'
+import { PlayerType } from '../../engine/game-configuration/player-type'
+import { usePlayerMadeMoveEventListener } from '../../events/events'
 import './HeaderComponent.scss'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
+import { HomeButtonConfirmationModal } from './HomeButtonConfirmationModal'
 
 type HeaderProps = {
     gameConfiguration?: GameConfiguration
@@ -24,6 +25,7 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
         )
     }
 
+    const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false)
     const [muted, setMuted] = useState<boolean>(AudioController.isMuted())
     const [turnCounter, setTurnCounter] = useState<number | undefined>(0)
     const [remainingCards, setRemainingCards] = useState<number | undefined>(totalCards())
@@ -53,7 +55,7 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
                         <span
                             id="home-button"
                             className="ms-2 button show"
-                            onClick={() => props.onHomeButton && props.onHomeButton()}
+                            onClick={() => setShowConfirmationModal(true)}
                         >
                             <i className="bi bi-house-fill"></i>
                         </span>
@@ -126,6 +128,10 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
                     </Row>
                 </Col>
             </Row>
+            <HomeButtonConfirmationModal
+                show={showConfirmationModal}
+                onHide={() => setShowConfirmationModal(false)}
+                onConfirm={() => { props.onHomeButton && props.onHomeButton() }} />
         </div>
     )
 }
