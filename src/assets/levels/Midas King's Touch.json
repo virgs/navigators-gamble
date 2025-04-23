@@ -1,5 +1,5 @@
 {
-  "levelId": "xjzt",
+  "levelId": "xmyr",
   "levelName": "Midas King's Touch",
   "players": [
     {
@@ -13,7 +13,7 @@
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.18,
+  "estimatedDifficulty": 0.41,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 6,
   "cardsPerDirection": 2,

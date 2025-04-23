@@ -1,5 +1,5 @@
 {
-  "levelId": "xhd6",
+  "levelId": "xesh",
   "levelName": "Solomon's Ring",
   "players": [
     {
@@ -13,7 +13,7 @@
       "type": 0
     }
   ],
-  "estimatedDifficulty": 0.63,
+  "estimatedDifficulty": 0.73,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 7,
   "cardsPerDirection": 2,

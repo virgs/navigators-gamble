@@ -1,5 +1,5 @@
 {
-  "levelId": "xo7x",
+  "levelId": "xtp4",
   "levelName": "Curse of the Jade Compass",
   "players": [
     {
@@ -13,7 +13,7 @@
       "type": 0
     }
   ],
-  "estimatedDifficulty": 0.24,
+  "estimatedDifficulty": 0.3,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 2,
   "cardsPerDirection": 4,

@@ -1,5 +1,5 @@
 {
-  "levelId": "x0bm",
+  "levelId": "x0uv",
   "levelName": "Alma Negra's Curse",
   "players": [
     {
@@ -13,7 +13,7 @@
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.66,
+  "estimatedDifficulty": 0.72,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 3,
   "cardsPerDirection": 4,

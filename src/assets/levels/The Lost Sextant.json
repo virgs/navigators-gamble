@@ -1,5 +1,5 @@
 {
-  "levelId": "xyjo",
+  "levelId": "xv9e",
   "levelName": "The Lost Sextant",
   "players": [
     {
@@ -13,7 +13,7 @@
       "type": 0
     }
   ],
-  "estimatedDifficulty": 0.17,
+  "estimatedDifficulty": 0.26,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 7,
   "cardsPerDirection": 2,

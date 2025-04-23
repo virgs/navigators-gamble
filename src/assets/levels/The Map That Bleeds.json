@@ -1,5 +1,5 @@
 {
-  "levelId": "xakt",
+  "levelId": "xw2g",
   "levelName": "The Map That Bleeds",
   "players": [
     {
@@ -13,7 +13,7 @@
       "type": 0
     }
   ],
-  "estimatedDifficulty": 0.35,
+  "estimatedDifficulty": 0.52,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 7,
   "cardsPerDirection": 5,

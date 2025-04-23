@@ -1,5 +1,5 @@
 {
-  "levelId": "xq4h",
+  "levelId": "xpp4",
   "levelName": "Vault of the Vultures",
   "players": [
     {
@@ -13,7 +13,7 @@
       "type": 0
     }
   ],
-  "estimatedDifficulty": 0.63,
+  "estimatedDifficulty": 0.73,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 2,
   "cardsPerDirection": 4,

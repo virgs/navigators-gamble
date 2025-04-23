@@ -1,5 +1,5 @@
 {
-  "levelId": "xcq7",
+  "levelId": "x17x",
   "levelName": "Tears of the Moon",
   "players": [
     {
@@ -13,7 +13,7 @@
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.5,
+  "estimatedDifficulty": 0.26,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 2,
   "cardsPerDirection": 2,

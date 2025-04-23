@@ -1,5 +1,5 @@
 {
-  "levelId": "xr9j",
+  "levelId": "xbqb",
   "levelName": "Emerald Eye of the Serpent",
   "players": [
     {
@@ -13,7 +13,7 @@
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.2,
+  "estimatedDifficulty": 0.36,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 7,
   "cardsPerDirection": 2,

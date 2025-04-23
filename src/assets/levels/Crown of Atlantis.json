@@ -1,5 +1,5 @@
 {
-  "levelId": "xfc5",
+  "levelId": "xijk",
   "levelName": "Crown of Atlantis",
   "players": [
     {
@@ -13,7 +13,7 @@
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.59,
+  "estimatedDifficulty": 0.55,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 2,
   "cardsPerDirection": 2,

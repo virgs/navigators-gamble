@@ -1,5 +1,5 @@
 {
-  "levelId": "xz0u",
+  "levelId": "xp9k",
   "levelName": "One-Eyed Willy's Treasure",
   "players": [
     {
@@ -13,7 +13,7 @@
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.74,
+  "estimatedDifficulty": 0.81,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 4,
   "cardsPerDirection": 3,

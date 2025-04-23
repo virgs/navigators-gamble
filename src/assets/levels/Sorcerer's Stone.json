@@ -1,5 +1,5 @@
 {
-  "levelId": "x0p7",
+  "levelId": "x6p4",
   "levelName": "Sorcerer's Stone",
   "players": [
     {
@@ -13,7 +13,7 @@
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.72,
+  "estimatedDifficulty": 0.89,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 6,
   "cardsPerDirection": 3,

@@ -1,5 +1,5 @@
 {
-  "levelId": "xspg",
+  "levelId": "xpke",
   "levelName": "Blackbeard’s Hidden Ledger",
   "players": [
     {
@@ -13,7 +13,7 @@
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.48,
+  "estimatedDifficulty": 0.08,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 5,
   "cardsPerDirection": 4,
