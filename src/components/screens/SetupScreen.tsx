@@ -49,7 +49,7 @@ export const SetupScreen = (props: SetupScreenProps): ReactNode => {
         const result: LevelConfigurationAndStats[] = []
         while (totalLevels.length > 0) {
             const level = totalLevels.shift() as GameConfiguration
-            const levelStats = BrowserDb.getLevelStats(level)
+            const levelStats = await BrowserDb.getLevelStats(level)
             const levelHasBeenBeaten = levelStats.some((stat) => stat.victory)
             result.push({
                 levelConfiguration: level,
@@ -92,7 +92,7 @@ export const SetupScreen = (props: SetupScreenProps): ReactNode => {
         <>
             <Row id="setup-screen-element" className="setup-screen-container g-0">
                 <Col xs={12} sm={5} lg={12} className="setup-screen-header">
-                    <Image className="setup-screen-title" src={title} fluid onDoubleClick={() => BrowserDb.clearLevelStats()} />
+                    <Image className="setup-screen-title" src={title} fluid onDoubleClick={async () => await BrowserDb.clearLevelStats()} />
                 </Col>
                 <Col xs={12} sm={7} lg={12} className="setup-screen-content">
                     <div className="setup-screen-levels">

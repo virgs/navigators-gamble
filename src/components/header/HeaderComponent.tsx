@@ -27,19 +27,16 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
 
     const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false)
     const [muted, setMuted] = useState<boolean>(AudioController.isMuted())
-    const [turnCounter, setTurnCounter] = useState<number | undefined>(0)
     const [remainingCards, setRemainingCards] = useState<number | undefined>(totalCards())
 
     useEffect(() => {
         if (props.gameConfiguration !== undefined) {
             setRemainingCards(totalCards())
-            setTurnCounter(0)
         }
     }, [props.gameConfiguration])
 
     usePlayerMadeMoveEventListener(() => {
         setRemainingCards((cards) => (cards === undefined ? undefined : cards - 1))
-        setTurnCounter((turnCounter ?? 0) + 1)
     })
 
     const toggleSound = () => {
@@ -90,14 +87,6 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
                                         </Col>
                                     </>
                                 )}
-                                <Col xs="auto" className="d-none d-lg-flex ms-lg-2">
-                                    <i className="bi bi-arrow-repeat mx-2" />
-                                    <span className="position-relative">
-                                        <span className="position-absolute top-100 start-100 translate-middle">
-                                            {turnCounter}
-                                        </span>
-                                    </span>
-                                </Col>
                                 <Col xs="auto" className="ms-lg-2">
                                     <i className="bi bi-files mx-2" />
                                     <span className="position-relative">

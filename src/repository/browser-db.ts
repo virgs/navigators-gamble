@@ -1,6 +1,8 @@
 import { GameConfiguration } from '../engine/game-configuration/game-configuration'
 
 const audioStorageKey = 'audioOn'
+const dbName = 'BrowserDb'
+const storeName = 'levelStats'
 
 export type MatchStats = {
     victory: boolean
@@ -14,48 +16,86 @@ export type MatchStats = {
 export class BrowserDb {
     private constructor() {}
 
-    public static getAudioStatus(): boolean {
-        const isAudioOn = localStorage.getItem(audioStorageKey)
-        if (isAudioOn === null || isAudioOn === 'true') {
-            localStorage.setItem(audioStorageKey, 'true')
-            return true
-        } else {
-            return false
-        }
+    private static async getDb(): Promise<IDBDatabase> {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(dbName, 1)
+            request.onupgradeneeded = () => {
+                const db = request.result
+                if (!db.objectStoreNames.contains(storeName)) {
+                    db.createObjectStore(storeName, { keyPath: 'id', autoIncrement: true })
+                }
+            }
+            request.onsuccess = () => resolve(request.result)
+            request.onerror = () => reject(request.error)
+        })
     }
-    public static setAudioStatus(isAudioOn: boolean): void {
-        if (isAudioOn) {
-            localStorage.setItem(audioStorageKey, 'true')
-        } else {
-            localStorage.setItem(audioStorageKey, 'false')
-        }
+
+    public static async getAudioStatus(): Promise<boolean> {
+        const db = await this.getDb()
+        return new Promise((resolve) => {
+            const transaction = db.transaction(storeName, 'readonly')
+            const store = transaction.objectStore(storeName)
+            const request = store.get(audioStorageKey)
+            request.onsuccess = () => {
+                const isAudioOn = request.result?.value ?? 'true'
+                resolve(isAudioOn === 'true')
+            }
+            request.onerror = () => resolve(true)
+        })
     }
-    public static getStats(): MatchStats[] {
-        const stats = localStorage.getItem('levelStats')
-        if (stats === null) {
-            return []
-        } else {
-            return JSON.parse(stats)
-        }
+
+    public static async setAudioStatus(isAudioOn: boolean): Promise<void> {
+        const db = await this.getDb()
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(storeName, 'readwrite')
+            const store = transaction.objectStore(storeName)
+            const request = store.put({ id: audioStorageKey, value: isAudioOn ? 'true' : 'false' })
+            request.onsuccess = () => resolve()
+            request.onerror = () => reject(request.error)
+        })
     }
-    public static getLevelStats(levelConfiguration: GameConfiguration): MatchStats[] {
-        const levelHash = BrowserDb.getLevelHash(levelConfiguration)
-        return BrowserDb.getStats().filter((stat: MatchStats) => stat.levelHash === levelHash)
+
+    public static async getStats(): Promise<MatchStats[]> {
+        const db = await this.getDb()
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(storeName, 'readonly')
+            const store = transaction.objectStore(storeName)
+            const request = store.getAll()
+            request.onsuccess = () => resolve(request.result)
+            request.onerror = () => reject(request.error)
+        })
     }
-    public static addLevelStats(stats: MatchStats): void {
-        const currentStats = this.getStats()
-        currentStats.push(stats)
-        localStorage.setItem('levelStats', JSON.stringify(currentStats))
+
+    public static async getLevelStats(levelConfiguration: GameConfiguration): Promise<MatchStats[]> {
+        const levelHash = this.getLevelHash(levelConfiguration)
+        const stats = await this.getStats()
+        return stats.filter((stat: MatchStats) => stat.levelHash === levelHash)
+    }
+
+    public static async addLevelStats(stats: MatchStats): Promise<void> {
+        const db = await this.getDb()
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(storeName, 'readwrite')
+            const store = transaction.objectStore(storeName)
+            const request = store.add(stats)
+            request.onsuccess = () => resolve()
+            request.onerror = () => reject(request.error)
+        })
     }
 
     public static getLevelHash(levelConfiguration: GameConfiguration): string {
-        const hash = this.hashString(JSON.stringify(levelConfiguration))
-        return hash
+        return this.hashString(JSON.stringify(levelConfiguration))
     }
 
-    public static clearLevelStats(): void {
-        console.log('Clearing level stats')
-        localStorage.removeItem('levelStats')
+    public static async clearLevelStats(): Promise<void> {
+        const db = await this.getDb()
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(storeName, 'readwrite')
+            const store = transaction.objectStore(storeName)
+            const request = store.clear()
+            request.onsuccess = () => resolve()
+            request.onerror = () => reject(request.error)
+        })
     }
 
     private static hashString(str: string): string {

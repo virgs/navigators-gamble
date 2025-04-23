@@ -24,7 +24,9 @@ export class AudioController {
 
     private constructor() {
         this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
-        this._muted = !BrowserDb.getAudioStatus()
+        BrowserDb.getAudioStatus().then((status) => {
+            this._muted = !status
+        })
         this.backgroundAudio.loop = true
         this.backgroundAudio.volume = 0.5
 
@@ -75,15 +77,15 @@ export class AudioController {
         this.setMuted(!instance._muted)
     }
 
-    public static setMuted(muted: boolean): void {
+    public static async setMuted(muted: boolean): Promise<void> {
         const instance = AudioController.getInstance()
         instance._muted = muted
         if (muted) {
             instance.backgroundAudio.pause()
-            BrowserDb.setAudioStatus(false)
+            await BrowserDb.setAudioStatus(false)
         } else {
             instance.backgroundAudio.play()
-            BrowserDb.setAudioStatus(true)
+            await BrowserDb.setAudioStatus(true)
         }
     }
 

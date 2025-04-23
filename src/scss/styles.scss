@@ -30,18 +30,18 @@ $form-range-thumb-bg: var(--compass-dark-gray);
 
 @include media-breakpoint-up(xs) {
     .vertix {
-        transform: translate(-50%, -50%) scale(0.5);
-    }
-}
-
-@include media-breakpoint-up(sm) {
-    .vertix {
-        transform: translate(-50%, -50%) scale(0.75);
+        transform: translate(-50%, -50%) scale(0.65);
+        &.scoring {
+            transform: scale(0.75) translate(-70%, -70%);
+        }
     }
 }
 
 @include media-breakpoint-up(md) {
     .vertix {
-        transform: translate(-50%, -50%) scale(0.8);
+        transform: translate(-50%, -50%) scale(0.9);
+        &.scoring {
+            transform: scale(1.2) translate(-40%, -40%);
+        }
     }
 }

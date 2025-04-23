@@ -112,7 +112,7 @@ export const GameScreen = (props: GameScreenProps): ReactNode => {
         <>
             <div className={classes.join(' ')}>
                 <div
-                    className="col-12 col-sm-6 col-lg-12 d-flex align-content-between align-content-sm-center align-content-lg-between justify-content-center"
+                    className="col-12 col-sm-7 col-lg-12 d-flex align-content-between align-content-sm-center align-content-lg-between justify-content-center"
                     style={{ flexWrap: 'wrap', alignContent: 'normal' }}
                 >
                     <div
@@ -128,9 +128,9 @@ export const GameScreen = (props: GameScreenProps): ReactNode => {
                     <div className="game-screen-board">
                         <BoardComponent board={props.gameConfiguration.board} />
                     </div>
-                    <div className="w-100 mb-5 d-sm-none d-lg-block">{visiblePlayerComponent}</div>
+                    <div className="w-100 mb-2 mb-lg-5 d-sm-none d-lg-block">{visiblePlayerComponent}</div>
                 </div>
-                <div className="col-6 d-none d-sm-flex d-lg-none" style={{ flexWrap: 'wrap', alignContent: 'normal' }}>
+                <div className="col-5 d-none d-sm-flex d-lg-none" style={{ flexWrap: 'wrap', alignContent: 'normal' }}>
                     <div className="w-100 d-flex align-items-center" style={{ justifyContent: 'space-left' }}>
                         {hiddenPlayers}
                     </div>

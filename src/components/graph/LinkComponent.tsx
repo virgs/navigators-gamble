@@ -4,7 +4,7 @@ import { colors } from '../../constants/colors'
 import { SerializableVertix } from '../../engine/board/serializable-board'
 import { ScoreType } from '../../engine/score-calculator/score-type'
 import { useFinishVerticesAnimationsCommandListener, useLinkAnimationCommandListener } from '../../events/events'
-import { add, multiplyByScalar, normalize, Point, rotate90degreesCCW, subtract } from '../../math/point'
+import { add, multiplyByScalar, normalize, Point, rotate45degreesCCW, rotate90degreesCCW, subtract } from '../../math/point'
 import './LinkComponent.scss'
 
 export type LinkComponentProps = {
@@ -74,11 +74,12 @@ export const LinkComponent = (props: LinkComponentProps): ReactNode => {
     }
 
     const drawCancelCross = (middleOnCurve: Point, normal: Point): ReactNode => {
-        const antiNormal = multiplyByScalar(normal, -1)
-        const perpendicular = rotate90degreesCCW(normal)
+        const normal45degrees = rotate45degreesCCW(normal)
+        const antiNormal = multiplyByScalar(normal45degrees, -1)
+        const perpendicular = rotate90degreesCCW(normal45degrees)
         const antiPerpendicular = multiplyByScalar(perpendicular, -1)
         const firstLine = {
-            origin: add(middleOnCurve, multiplyByScalar(normal, 10)),
+            origin: add(middleOnCurve, multiplyByScalar(normal45degrees, 10)),
             target: add(middleOnCurve, multiplyByScalar(antiNormal, 10)),
         }
         const secondLine = {

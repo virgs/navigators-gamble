@@ -21,10 +21,19 @@ export const rotatePoint = (point: Point, angle: number): Point => {
 const MATH_90_COS = Math.cos(-Math.PI / 2)
 const MATH_90_SIN = Math.sin(-Math.PI / 2)
 
+const MATH_45_COS = Math.cos(-Math.PI / 4)
+const MATH_45_SIN = Math.sin(-Math.PI / 4)
+
 export const rotate90degreesCCW = (point: Point): Point => {
     return {
         x: point.x * MATH_90_COS - point.y * MATH_90_SIN,
         y: point.x * MATH_90_SIN + point.y * MATH_90_COS,
+    }
+}
+export const rotate45degreesCCW = (point: Point): Point => {
+    return {
+        x: point.x * MATH_45_COS - point.y * MATH_45_SIN,
+        y: point.x * MATH_45_SIN + point.y * MATH_45_COS,
     }
 }
 

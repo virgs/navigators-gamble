@@ -51,8 +51,8 @@ export const ScoreComponent = (props: { player: GamePlayerCommonAttributes; turn
                 ></ScoreIncrease>
             ))}
             {score}
-            <span className="ms-1 turn-arrow" style={{ color: turn ? color : 'transparent' }}>
-                ⬅︎
+            <span className={"ms-1 turn-arrow ".concat(turn ? 'show' : '')} style={{ color: color }} >
+                ⇐
             </span>
         </div>
     )

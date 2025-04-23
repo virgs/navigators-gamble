@@ -1,5 +1,5 @@
 .link {
-    stroke-width: 2px;
+    stroke-width: 1.5px;
 
     transform-origin: center left;
     opacity: 0.5;
@@ -16,8 +16,8 @@
     &.cancel,
     &.pair {
         opacity: 0.95;
-        filter: opacity(0.8);
-        stroke-width: 4px;
+        filter: opacity(0.85);
+        stroke-width: 3px;
         stroke-dasharray: 10;
         animation: dash 5s linear alternate infinite;
     }

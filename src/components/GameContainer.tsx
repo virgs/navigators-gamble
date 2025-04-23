@@ -132,7 +132,7 @@ export const GameContainer = (): ReactNode => {
                     <GameScreen
                         gameConfiguration={gameConfiguration!}
                         onGameFinished={async (stats) => {
-                            BrowserDb.addLevelStats(stats)
+                            await BrowserDb.addLevelStats(stats)
                             console.log('Stats saved', stats)
                             setSetupUpdateCounter((c) => c + 1)
                             await returnToHomeScreen()
