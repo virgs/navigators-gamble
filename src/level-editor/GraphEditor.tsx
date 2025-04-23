@@ -216,7 +216,10 @@ export default function GraphEditor(props: GraphEditorProps) {
                     setStageDragInit(undefined)
                 }}
                 onClick={(e) => handleClick(e.evt)}
-                className="grapheditor-container"
+                className="graph-editor-container"
+                style={{
+                    height: props.canvasSize
+                }}
             >
                 <Layer>
                     {/* Grid lines */}

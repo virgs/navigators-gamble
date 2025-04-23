@@ -9,10 +9,11 @@ export type CardComponentProps = {
     card: Card
     selected: boolean
     ownerTurnOrder?: number
+    animations?: boolean
 }
 
 export const CardComponent = (props: CardComponentProps): ReactNode => {
-    const [cardBoxClasses, setCardBoxClasses] = useState<string[]>(['card-box', 'show'])
+    const [cardBoxClasses, setCardBoxClasses] = useState<string[]>(['card-box'].concat(props.animations ? [' show'] : []))
     const [initialsStyle, setInitialsStyle] = useState<React.CSSProperties>({})
 
     useEffect(() => {
@@ -38,7 +39,7 @@ export const CardComponent = (props: CardComponentProps): ReactNode => {
 
     if (props.card.covered) {
         return (
-            <div className="card-box show">
+            <div className={"card-box ".concat(props.animations ? 'show' : '')}>
                 <div className="card-content covered" />
                 <div className="background-cover-image"></div>
             </div>

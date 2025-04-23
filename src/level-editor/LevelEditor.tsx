@@ -222,10 +222,10 @@ export default function LevelEditor(props: {
     }
 
     return (
-        <div className="level-editor-container">
+        <div className="level-editor-container mx-1 mb-2">
             <div className="level-editor p-4 space-y-2">
                 <h1 className="title mx-auto">Level Editor</h1>
-                <div className="row justify-content-between">
+                <div className="row gy-2 justify-content-between">
                     <div className="col-auto">
                         <button
                             onClick={() => {
@@ -307,7 +307,9 @@ export default function LevelEditor(props: {
 
                     <div className="col-2">
                         <label htmlFor="initialCardsPerPlayer" className="form-label">
-                            Hand size: {initialCardsPerPlayer}
+                            <i className="bi bi-x-diamond me-1 ms-lg-2 d-block"></i>
+                            <span className="d-none d-lg-inline">Hand size: </span>
+                            {initialCardsPerPlayer}
                         </label>
                         <input
                             type="range"
@@ -322,7 +324,9 @@ export default function LevelEditor(props: {
                     </div>
                     <div className="col-2">
                         <label htmlFor="cardsPerDirection" className="form-label">
-                            Direction: {cardsPerDirection}
+                            <i className="bi bi-compass me-1 ms-lg-2 d-block"></i>
+                            <span className="d-none d-lg-inline">Directions: </span>
+                            {cardsPerDirection}
                         </label>
                         <input
                             type="range"
@@ -337,7 +341,9 @@ export default function LevelEditor(props: {
                     </div>
                     <div className="col-2">
                         <label htmlFor="iterationsPerAlternative" className="form-label">
-                            AI level: {iterations}
+                            <i className="bi bi-gear-fill me-1 ms-lg-2 d-block"></i>
+                            <span className="d-none d-lg-inline">AI iterations: </span>
+                            {iterations}
                         </label>
                         <input
                             type="range"
@@ -352,13 +358,15 @@ export default function LevelEditor(props: {
                     </div>
                     <div className="col-2">
                         <label htmlFor="iterationsPerAlternative" className="form-label">
-                            Difficulty
+                            <i className="bi bi-bar-chart-line-fill me-1 ms-lg-2 d-block"></i>
+                            <span className="d-none d-lg-inline">Difficulty</span>
                         </label>
                         <DifficultyGauge value={estimatedDifficulty} minValue={0} maxValue={1}></DifficultyGauge>
                     </div>
                     <div className="col-4">
                         <label htmlFor="iterationsPerAlternative" className="form-label d-block">
-                            Starting Player
+                            <i className="bi bi-flag-fill me-1 ms-lg-2 d-block"></i>
+                            <span className="d-none d-lg-inline">Starting Player</span>
                         </label>
                         <input
                             onChange={() => setHumanPlayerStarts(true)}
@@ -370,8 +378,8 @@ export default function LevelEditor(props: {
                             autoComplete="off"
                         />
                         <label className="btn w-50" htmlFor="human-player">
-                            Human
-                            <i className="bi bi-person-raised-hand ms-2"></i>
+                            <span className="d-none d-lg-inline me-lg-2">Human</span>
+                            <i className="bi bi-person-raised-hand"></i>
                         </label>
 
                         <input
@@ -384,8 +392,8 @@ export default function LevelEditor(props: {
                             autoComplete="off"
                         />
                         <label className="btn w-50" htmlFor="ai-player">
-                            AI
-                            <i className="bi bi-robot ms-2"></i>
+                            <span className="d-none d-lg-inline me-lg-2">AI</span>
+                            <i className="bi bi-robot"></i>
                         </label>
                     </div>
 

@@ -1,15 +1,21 @@
 import { ReactNode, useState } from 'react'
 import { AudioController } from '../../audio/audio-controller'
 import { colors } from '../../constants/colors'
-import { SerializableVertix } from '../../engine/board/serializable-board'
 import { ScoreType } from '../../engine/score-calculator/score-type'
 import { useFinishVerticesAnimationsCommandListener, useLinkAnimationCommandListener } from '../../events/events'
 import { add, multiplyByScalar, normalize, Point, rotate45degreesCCW, rotate90degreesCCW, subtract } from '../../math/point'
 import './LinkComponent.scss'
 
+type SimplifiedVertix = {
+    id: string
+    position: Point
+}
+
 export type LinkComponentProps = {
-    first: SerializableVertix
-    second: SerializableVertix
+    first: SimplifiedVertix
+    second: SimplifiedVertix
+    scoreType?: ScoreType
+    color?: string
     convertToBoardDimensions: (point: Point) => Point
 }
 
@@ -18,8 +24,8 @@ const BEZIER_CURVE_ANCHOR_DISTANCE = 20
 
 export const LinkComponent = (props: LinkComponentProps): ReactNode => {
     const [scoring, setScoring] = useState<string>('')
-    const [scoreType, setScoreType] = useState<ScoreType | undefined>(undefined)
-    const [color, setColor] = useState<string>('var(--compass-black)')
+    const [scoreType, setScoreType] = useState<ScoreType | undefined>(props.scoreType)
+    const [color, setColor] = useState<string>(props.color ?? 'var(--compass-black)')
 
     const origin = props.convertToBoardDimensions(props.first.position)
     const target = props.convertToBoardDimensions(props.second.position)

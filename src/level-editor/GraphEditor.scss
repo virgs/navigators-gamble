@@ -1,11 +1,20 @@
-.grapheditor-container {
-    padding: 1rem;
+.graph-editor-container {
     justify-items: center;
     align-items: center;
-}
-
-.grapheditor-container canvas {
-    background-color: transparent !important;
+    overflow: auto;
+    position: relative;
     box-shadow: 3px 3px 13px var(--compass-medium-gray) !important;
-    padding: 10px !important;
+    display: flex;
+    justify-content: center;
+
+    .konvajs-content {
+        // position: absolute !important;
+        top: 0;
+        left: 0;
+    }
+
+    canvas {
+        background-color: transparent !important;
+        padding: 10px !important;
+    }
 }

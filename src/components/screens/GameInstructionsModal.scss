@@ -1,0 +1,16 @@
+#game-instructions-modal {
+    background-color: transparent;
+    font-family: 'Pirata One';
+
+    .game-instructions-body {
+        font-size: larger;
+    }
+
+    .combinations-example {
+        background-color: var(--compass-tertiary);
+        border: 2px solid var(--compass-secondary);
+        padding: 4px;
+        margin: 4px;
+        box-shadow: 3px 3px 3px var(--compass-secondary);
+    }
+}

@@ -98,9 +98,6 @@ export const GaugeComponent = ({ direction }: GaugeComponentProps): ReactNode =>
         };
     }, []);
 
-    // //@ts-expect-error
-    // const gaugeSize = cardContentRef.current?.clientWidth ?? 50
-
     return (
         <div ref={cardContentRef} className="gauge">
             {gaugeComponent}

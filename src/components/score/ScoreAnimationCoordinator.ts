@@ -19,13 +19,11 @@ import { sleep } from '../../math/sleep'
 const scoreAnnouncementMap: Record<ScoreType, string> = {
     [ScoreType.BONUS]: 'Bonus points',
     [ScoreType.CANCEL]: 'Directions cancel',
-    [ScoreType.SEQUENCE]: 'Direction sequence',
-    [ScoreType.PAIR]: 'Direction pair',
+    [ScoreType.SEQUENCE]: 'Directions sequence',
+    [ScoreType.PAIR]: 'Directions pair',
 }
 
 const isDevMode = import.meta.env.MODE === 'development'
-
-console.log('isDevMode', isDevMode)
 
 export class ScoreAnimationCoordinator {
     public static readonly INTERVAL_BETWEEN_ANIMATIONS = isDevMode ? 200 : 2000
