@@ -1,0 +1,123 @@
+{
+  "levelId": "xcq7",
+  "levelName": "Tears of the Moon",
+  "players": [
+    {
+      "id": "human-player",
+      "type": 0
+    },
+    {
+      "id": "ai-player",
+      "type": 1,
+      "iterationsPerAlternative": 0,
+      "aiAlgorithm": 0
+    }
+  ],
+  "estimatedDifficulty": 0.5,
+  "visibleHandPlayerId": "human-player",
+  "initialCardsPerPlayer": 2,
+  "cardsPerDirection": 2,
+  "board": {
+    "vertices": [
+      {
+        "id": "vx1du",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxigt",
+          "vxych"
+        ]
+      },
+      {
+        "id": "vxych",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vx6el"
+        ]
+      },
+      {
+        "id": "vx6el",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.5
+        },
+        "linkedVertices": [
+          "vxv4d"
+        ]
+      },
+      {
+        "id": "vxv4d",
+        "position": {
+          "x": 0.2142857142857143,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": []
+      },
+      {
+        "id": "vxnpg",
+        "position": {
+          "x": 0.2142857142857143,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vxv4d"
+        ]
+      },
+      {
+        "id": "vxigt",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.7857142857142857
+        },
+        "linkedVertices": [
+          "vxnpg"
+        ]
+      },
+      {
+        "id": "vxc9f",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.2142857142857143
+        },
+        "linkedVertices": [
+          "vxtr9"
+        ]
+      },
+      {
+        "id": "vxtr9",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vxacs"
+        ]
+      },
+      {
+        "id": "vxacs",
+        "position": {
+          "x": 0.7857142857142857,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vxxi1"
+        ]
+      },
+      {
+        "id": "vxxi1",
+        "position": {
+          "x": 0.7857142857142857,
+          "y": 0.2142857142857143
+        },
+        "linkedVertices": [
+          "vxc9f"
+        ]
+      }
+    ]
+  }
+}

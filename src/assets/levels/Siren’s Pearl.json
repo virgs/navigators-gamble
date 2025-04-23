@@ -1,0 +1,137 @@
+{
+  "levelId": "x9xa",
+  "levelName": "Siren’s Pearl",
+  "players": [
+    {
+      "id": "ai-player",
+      "type": 1,
+      "iterationsPerAlternative": 100,
+      "aiAlgorithm": 0
+    },
+    {
+      "id": "human-player",
+      "type": 0
+    }
+  ],
+  "estimatedDifficulty": 0.21,
+  "visibleHandPlayerId": "human-player",
+  "initialCardsPerPlayer": 6,
+  "cardsPerDirection": 5,
+  "board": {
+    "vertices": [
+      {
+        "id": "vxpo4",
+        "position": {
+          "x": 0.2142857142857143,
+          "y": 0.7857142857142857
+        },
+        "linkedVertices": [
+          "vxk8b"
+        ]
+      },
+      {
+        "id": "vxr2s",
+        "position": {
+          "x": 0.5,
+          "y": 0.7857142857142857
+        },
+        "linkedVertices": [
+          "vxpo4"
+        ]
+      },
+      {
+        "id": "vxl36",
+        "position": {
+          "x": 0.7857142857142857,
+          "y": 0.7857142857142857
+        },
+        "linkedVertices": [
+          "vxr2s"
+        ]
+      },
+      {
+        "id": "vx7zq",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxl36",
+          "vxqyv"
+        ]
+      },
+      {
+        "id": "vxfr7",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vx7zq"
+        ]
+      },
+      {
+        "id": "vxejw",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vxfr7",
+          "vxx5k"
+        ]
+      },
+      {
+        "id": "vxk8b",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxejw"
+        ]
+      },
+      {
+        "id": "vx7yk",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vx476",
+          "vxk8b"
+        ]
+      },
+      {
+        "id": "vxqyv",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vx7yk"
+        ]
+      },
+      {
+        "id": "vx476",
+        "position": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "linkedVertices": [
+          "vxqyv"
+        ]
+      },
+      {
+        "id": "vxx5k",
+        "position": {
+          "x": 0.5,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxfr7"
+        ]
+      }
+    ]
+  }
+}

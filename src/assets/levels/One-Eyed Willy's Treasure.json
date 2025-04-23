@@ -1,88 +1,108 @@
 {
-    "levelId": "xbu4",
-    "levelName": "One-Eyed Willy's Treasure",
-    "players": [
-        {
-            "id": "human-player",
-            "type": 0
-        },
-        {
-            "id": "ai-player",
-            "type": 1,
-            "iterationsPerAlternative": 200,
-            "aiAlgorithm": 0
-        }
-    ],
-    "estimatedDifficulty": 0.74,
-    "visibleHandPlayerId": "human-player",
-    "initialCardsPerPlayer": 4,
-    "cardsPerDirection": 3,
-    "board": {
-        "vertices": [
-            {
-                "id": "v1",
-                "position": {
-                    "x": 0.2142857142857143,
-                    "y": 0.2142857142857143
-                },
-                "linkedVertices": ["v2"]
-            },
-            {
-                "id": "v2",
-                "position": {
-                    "x": 0.35714285714285715,
-                    "y": 0.35714285714285715
-                },
-                "linkedVertices": ["v3", "v6"]
-            },
-            {
-                "id": "v3",
-                "position": {
-                    "x": 0.35714285714285715,
-                    "y": 0.6428571428571429
-                },
-                "linkedVertices": ["v4"]
-            },
-            {
-                "id": "v4",
-                "position": {
-                    "x": 0.2142857142857143,
-                    "y": 0.7857142857142857
-                },
-                "linkedVertices": ["v5", "v1"]
-            },
-            {
-                "id": "v5",
-                "position": {
-                    "x": 0.6428571428571429,
-                    "y": 0.7857142857142857
-                },
-                "linkedVertices": ["v6"]
-            },
-            {
-                "id": "v6",
-                "position": {
-                    "x": 0.7857142857142857,
-                    "y": 0.5
-                },
-                "linkedVertices": ["v3", "v8"]
-            },
-            {
-                "id": "v8",
-                "position": {
-                    "x": 0.6428571428571429,
-                    "y": 0.2142857142857143
-                },
-                "linkedVertices": ["v1", "vxgfb"]
-            },
-            {
-                "id": "vxgfb",
-                "position": {
-                    "x": 0.9285714285714286,
-                    "y": 0.5
-                },
-                "linkedVertices": ["v5"]
-            }
-        ]
+  "levelId": "xz0u",
+  "levelName": "One-Eyed Willy's Treasure",
+  "players": [
+    {
+      "id": "human-player",
+      "type": 0
+    },
+    {
+      "id": "ai-player",
+      "type": 1,
+      "iterationsPerAlternative": 200,
+      "aiAlgorithm": 0
     }
+  ],
+  "estimatedDifficulty": 0.74,
+  "visibleHandPlayerId": "human-player",
+  "initialCardsPerPlayer": 4,
+  "cardsPerDirection": 3,
+  "board": {
+    "vertices": [
+      {
+        "id": "v1",
+        "position": {
+          "x": 0.2142857142857143,
+          "y": 0.2142857142857143
+        },
+        "linkedVertices": [
+          "v2"
+        ]
+      },
+      {
+        "id": "v2",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "v3",
+          "v6"
+        ]
+      },
+      {
+        "id": "v3",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "v4"
+        ]
+      },
+      {
+        "id": "v4",
+        "position": {
+          "x": 0.2142857142857143,
+          "y": 0.7857142857142857
+        },
+        "linkedVertices": [
+          "v5",
+          "v1"
+        ]
+      },
+      {
+        "id": "v5",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.7857142857142857
+        },
+        "linkedVertices": [
+          "v6"
+        ]
+      },
+      {
+        "id": "v6",
+        "position": {
+          "x": 0.7857142857142857,
+          "y": 0.5
+        },
+        "linkedVertices": [
+          "v3",
+          "v8"
+        ]
+      },
+      {
+        "id": "v8",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.2142857142857143
+        },
+        "linkedVertices": [
+          "v1",
+          "vxgfb"
+        ]
+      },
+      {
+        "id": "vxgfb",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.5
+        },
+        "linkedVertices": [
+          "v5"
+        ]
+      }
+    ]
+  }
 }

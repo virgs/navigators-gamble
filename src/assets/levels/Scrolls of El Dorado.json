@@ -1,0 +1,116 @@
+{
+  "levelId": "xhjj",
+  "levelName": "Scrolls of El Dorado",
+  "players": [
+    {
+      "id": "ai-player",
+      "type": 1,
+      "iterationsPerAlternative": 120,
+      "aiAlgorithm": 0
+    },
+    {
+      "id": "human-player",
+      "type": 0
+    }
+  ],
+  "estimatedDifficulty": 0.33,
+  "visibleHandPlayerId": "human-player",
+  "initialCardsPerPlayer": 5,
+  "cardsPerDirection": 2,
+  "board": {
+    "vertices": [
+      {
+        "id": "vxtqb",
+        "position": {
+          "x": 0.2142857142857143,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxdh1"
+        ]
+      },
+      {
+        "id": "vxdh1",
+        "position": {
+          "x": 0.7857142857142857,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": []
+      },
+      {
+        "id": "vxpfh",
+        "position": {
+          "x": 0.2142857142857143,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxmpl",
+          "vxcc9"
+        ]
+      },
+      {
+        "id": "vxmpl",
+        "position": {
+          "x": 0.7857142857142857,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxd8a"
+        ]
+      },
+      {
+        "id": "vxd8a",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxqxv"
+        ]
+      },
+      {
+        "id": "vxcc9",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxf39",
+          "vxd8a"
+        ]
+      },
+      {
+        "id": "vxf39",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.2142857142857143
+        },
+        "linkedVertices": [
+          "vxtqb",
+          "vxqxv"
+        ]
+      },
+      {
+        "id": "vxqxv",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.2142857142857143
+        },
+        "linkedVertices": [
+          "vxdh1"
+        ]
+      },
+      {
+        "id": "vxny5",
+        "position": {
+          "x": 0.7857142857142857,
+          "y": 0.7857142857142857
+        },
+        "linkedVertices": [
+          "vxmpl",
+          "vxd8a"
+        ]
+      }
+    ]
+  }
+}

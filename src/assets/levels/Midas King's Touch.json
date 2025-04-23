@@ -1,96 +1,120 @@
 {
-    "levelId": "x6k8",
-    "levelName": "Midas King's Touch",
-    "players": [
-        {
-            "id": "human-player",
-            "type": 0
-        },
-        {
-            "id": "ai-player",
-            "type": 1,
-            "iterationsPerAlternative": 110,
-            "aiAlgorithm": 0
-        }
-    ],
-    "estimatedDifficulty": 0.18,
-    "visibleHandPlayerId": "human-player",
-    "initialCardsPerPlayer": 6,
-    "cardsPerDirection": 2,
-    "board": {
-        "vertices": [
-            {
-                "id": "v1",
-                "position": {
-                    "x": 0.35714285714285715,
-                    "y": 0.35714285714285715
-                },
-                "linkedVertices": ["v2", "v3", "v4", "v5"]
-            },
-            {
-                "id": "v2",
-                "position": {
-                    "x": 0.5,
-                    "y": 0.07142857142857144
-                },
-                "linkedVertices": ["v3"]
-            },
-            {
-                "id": "v3",
-                "position": {
-                    "x": 0.6428571428571429,
-                    "y": 0.35714285714285715
-                },
-                "linkedVertices": ["v9", "v5"]
-            },
-            {
-                "id": "v4",
-                "position": {
-                    "x": 0.07142857142857144,
-                    "y": 0.5
-                },
-                "linkedVertices": ["v7"]
-            },
-            {
-                "id": "v5",
-                "position": {
-                    "x": 0.5,
-                    "y": 0.5
-                },
-                "linkedVertices": []
-            },
-            {
-                "id": "v6",
-                "position": {
-                    "x": 0.9285714285714286,
-                    "y": 0.5
-                },
-                "linkedVertices": ["v3"]
-            },
-            {
-                "id": "v7",
-                "position": {
-                    "x": 0.35714285714285715,
-                    "y": 0.6428571428571429
-                },
-                "linkedVertices": ["v1", "v5"]
-            },
-            {
-                "id": "v8",
-                "position": {
-                    "x": 0.5,
-                    "y": 0.9285714285714286
-                },
-                "linkedVertices": ["v7"]
-            },
-            {
-                "id": "v9",
-                "position": {
-                    "x": 0.6428571428571429,
-                    "y": 0.6428571428571429
-                },
-                "linkedVertices": ["v8", "v6", "v7", "v5"]
-            }
-        ]
+  "levelId": "xjzt",
+  "levelName": "Midas King's Touch",
+  "players": [
+    {
+      "id": "human-player",
+      "type": 0
+    },
+    {
+      "id": "ai-player",
+      "type": 1,
+      "iterationsPerAlternative": 110,
+      "aiAlgorithm": 0
     }
+  ],
+  "estimatedDifficulty": 0.18,
+  "visibleHandPlayerId": "human-player",
+  "initialCardsPerPlayer": 6,
+  "cardsPerDirection": 2,
+  "board": {
+    "vertices": [
+      {
+        "id": "v1",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "v2",
+          "v3",
+          "v4",
+          "v5"
+        ]
+      },
+      {
+        "id": "v2",
+        "position": {
+          "x": 0.5,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "v3"
+        ]
+      },
+      {
+        "id": "v3",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "v9",
+          "v5"
+        ]
+      },
+      {
+        "id": "v4",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.5
+        },
+        "linkedVertices": [
+          "v7"
+        ]
+      },
+      {
+        "id": "v5",
+        "position": {
+          "x": 0.5,
+          "y": 0.5
+        },
+        "linkedVertices": []
+      },
+      {
+        "id": "v6",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.5
+        },
+        "linkedVertices": [
+          "v3"
+        ]
+      },
+      {
+        "id": "v7",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "v1",
+          "v5"
+        ]
+      },
+      {
+        "id": "v8",
+        "position": {
+          "x": 0.5,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "v7"
+        ]
+      },
+      {
+        "id": "v9",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "v8",
+          "v6",
+          "v7",
+          "v5"
+        ]
+      }
+    ]
+  }
 }

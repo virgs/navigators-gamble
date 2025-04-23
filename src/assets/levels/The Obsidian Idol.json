@@ -1,6 +1,6 @@
 {
-  "levelId": "xomq",
-  "levelName": "Fountain of Youth",
+  "levelId": "x2fb",
+  "levelName": "The Obsidian Idol",
   "players": [
     {
       "id": "human-player",
@@ -9,107 +9,106 @@
     {
       "id": "ai-player",
       "type": 1,
-      "iterationsPerAlternative": 80,
+      "iterationsPerAlternative": 0,
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.23,
+  "estimatedDifficulty": 0.2,
   "visibleHandPlayerId": "human-player",
-  "initialCardsPerPlayer": 6,
-  "cardsPerDirection": 4,
+  "initialCardsPerPlayer": 3,
+  "cardsPerDirection": 5,
   "board": {
     "vertices": [
       {
-        "id": "vxi2a",
-        "position": {
-          "x": 0.07142857142857144,
-          "y": 0.07142857142857144
-        },
-        "linkedVertices": [
-          "vx843"
-        ]
-      },
-      {
-        "id": "vx843",
-        "position": {
-          "x": 0.35714285714285715,
-          "y": 0.07142857142857144
-        },
-        "linkedVertices": [
-          "vxnw0",
-          "vx1yw"
-        ]
-      },
-      {
-        "id": "vxnw0",
-        "position": {
-          "x": 0.35714285714285715,
-          "y": 0.35714285714285715
-        },
-        "linkedVertices": [
-          "vx48g"
-        ]
-      },
-      {
-        "id": "vx48g",
-        "position": {
-          "x": 0.07142857142857144,
-          "y": 0.35714285714285715
-        },
-        "linkedVertices": [
-          "vxi2a"
-        ]
-      },
-      {
-        "id": "vxzzp",
-        "position": {
-          "x": 0.6428571428571429,
-          "y": 0.9285714285714286
-        },
-        "linkedVertices": [
-          "vxrc3",
-          "vx1yw"
-        ]
-      },
-      {
-        "id": "vxrc3",
-        "position": {
-          "x": 0.6428571428571429,
-          "y": 0.6428571428571429
-        },
-        "linkedVertices": [
-          "vxe7x"
-        ]
-      },
-      {
-        "id": "vxe7x",
+        "id": "v-xrw0",
         "position": {
           "x": 0.9285714285714286,
-          "y": 0.6428571428571429
-        },
-        "linkedVertices": [
-          "vxzpw"
-        ]
-      },
-      {
-        "id": "vxzpw",
-        "position": {
-          "x": 0.9285714285714286,
-          "y": 0.9285714285714286
-        },
-        "linkedVertices": [
-          "vxzzp"
-        ]
-      },
-      {
-        "id": "vx1yw",
-        "position": {
-          "x": 0.5,
           "y": 0.5
         },
         "linkedVertices": [
-          "vxe7x",
-          "vx48g"
+          "v-xstk"
+        ]
+      },
+      {
+        "id": "v-xstk",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "v-xlhv"
+        ]
+      },
+      {
+        "id": "v-xaxq",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "v-xpmc"
+        ]
+      },
+      {
+        "id": "v-xnx3",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "v-xlhv"
+        ]
+      },
+      {
+        "id": "v-xc04",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "v-xlhv",
+          "v-xaxq",
+          "v-xpmc"
+        ]
+      },
+      {
+        "id": "v-xlhv",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "v-x41p"
+        ]
+      },
+      {
+        "id": "v-xpmc",
+        "position": {
+          "x": 0.7857142857142857,
+          "y": 0.5
+        },
+        "linkedVertices": [
+          "v-xrw0"
+        ]
+      },
+      {
+        "id": "v-x2fh",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "v-xnx3"
+        ]
+      },
+      {
+        "id": "v-x41p",
+        "position": {
+          "x": 0.2142857142857143,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "v-x2fh"
         ]
       }
     ]

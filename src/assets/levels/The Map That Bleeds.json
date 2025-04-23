@@ -1,0 +1,182 @@
+{
+  "levelId": "xakt",
+  "levelName": "The Map That Bleeds",
+  "players": [
+    {
+      "id": "ai-player",
+      "type": 1,
+      "iterationsPerAlternative": 200,
+      "aiAlgorithm": 0
+    },
+    {
+      "id": "human-player",
+      "type": 0
+    }
+  ],
+  "estimatedDifficulty": 0.35,
+  "visibleHandPlayerId": "human-player",
+  "initialCardsPerPlayer": 7,
+  "cardsPerDirection": 5,
+  "board": {
+    "vertices": [
+      {
+        "id": "vx88y",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vx28y",
+          "vxr8p"
+        ]
+      },
+      {
+        "id": "vx28y",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": []
+      },
+      {
+        "id": "vxpf6",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vx28y",
+          "vxuxd",
+          "vx835"
+        ]
+      },
+      {
+        "id": "vxuxd",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxkhb"
+        ]
+      },
+      {
+        "id": "vxr8p",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vx4kp",
+          "vx28y",
+          "vx835",
+          "vx8tm"
+        ]
+      },
+      {
+        "id": "vx835",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vxuxd"
+        ]
+      },
+      {
+        "id": "vxkhb",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vxy6g",
+          "vx835"
+        ]
+      },
+      {
+        "id": "vxzls",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vx7h0"
+        ]
+      },
+      {
+        "id": "vx4kp",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxspn",
+          "vx8tm"
+        ]
+      },
+      {
+        "id": "vxy6g",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxowt",
+          "vx835"
+        ]
+      },
+      {
+        "id": "vxz7o",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxkhb"
+        ]
+      },
+      {
+        "id": "vx7h0",
+        "position": {
+          "x": 0.2142857142857143,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vx4kp"
+        ]
+      },
+      {
+        "id": "vxspn",
+        "position": {
+          "x": 0.5,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxy6g"
+        ]
+      },
+      {
+        "id": "vxowt",
+        "position": {
+          "x": 0.7857142857142857,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxz7o"
+        ]
+      },
+      {
+        "id": "vx8tm",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vx88y",
+          "vxzls"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "levelId": "xr9j",
+  "levelName": "Emerald Eye of the Serpent",
+  "players": [
+    {
+      "id": "human-player",
+      "type": 0
+    },
+    {
+      "id": "ai-player",
+      "type": 1,
+      "iterationsPerAlternative": 200,
+      "aiAlgorithm": 0
+    }
+  ],
+  "estimatedDifficulty": 0.2,
+  "visibleHandPlayerId": "human-player",
+  "initialCardsPerPlayer": 7,
+  "cardsPerDirection": 2,
+  "board": {
+    "vertices": [
+      {
+        "id": "v-xdzt",
+        "position": {
+          "x": 0.5,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "v-xgrx"
+        ]
+      },
+      {
+        "id": "v-xf1o",
+        "position": {
+          "x": 0.5,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": []
+      },
+      {
+        "id": "v-xgrx",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.5
+        },
+        "linkedVertices": [
+          "v-xczq"
+        ]
+      },
+      {
+        "id": "v-xj8s",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.7857142857142857
+        },
+        "linkedVertices": [
+          "v-xwi9",
+          "v-xdzt"
+        ]
+      },
+      {
+        "id": "v-xwi9",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.5
+        },
+        "linkedVertices": [
+          "v-xf1o",
+          "v-xgrx"
+        ]
+      },
+      {
+        "id": "v-xczq",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.7857142857142857
+        },
+        "linkedVertices": [
+          "v-xj8s",
+          "v-xdzt"
+        ]
+      },
+      {
+        "id": "vxvxf",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "v-xf1o",
+          "v-xgrx"
+        ]
+      }
+    ]
+  }
+}

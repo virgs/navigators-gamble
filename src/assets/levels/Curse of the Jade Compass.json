@@ -1,116 +1,116 @@
 {
-  "levelId": "xomq",
-  "levelName": "Fountain of Youth",
+  "levelId": "xo7x",
+  "levelName": "Curse of the Jade Compass",
   "players": [
-    {
-      "id": "human-player",
-      "type": 0
-    },
     {
       "id": "ai-player",
       "type": 1,
       "iterationsPerAlternative": 80,
       "aiAlgorithm": 0
+    },
+    {
+      "id": "human-player",
+      "type": 0
     }
   ],
-  "estimatedDifficulty": 0.23,
+  "estimatedDifficulty": 0.24,
   "visibleHandPlayerId": "human-player",
-  "initialCardsPerPlayer": 6,
+  "initialCardsPerPlayer": 2,
   "cardsPerDirection": 4,
   "board": {
     "vertices": [
       {
-        "id": "vxi2a",
-        "position": {
-          "x": 0.07142857142857144,
-          "y": 0.07142857142857144
-        },
-        "linkedVertices": [
-          "vx843"
-        ]
-      },
-      {
-        "id": "vx843",
-        "position": {
-          "x": 0.35714285714285715,
-          "y": 0.07142857142857144
-        },
-        "linkedVertices": [
-          "vxnw0",
-          "vx1yw"
-        ]
-      },
-      {
-        "id": "vxnw0",
-        "position": {
-          "x": 0.35714285714285715,
-          "y": 0.35714285714285715
-        },
-        "linkedVertices": [
-          "vx48g"
-        ]
-      },
-      {
-        "id": "vx48g",
-        "position": {
-          "x": 0.07142857142857144,
-          "y": 0.35714285714285715
-        },
-        "linkedVertices": [
-          "vxi2a"
-        ]
-      },
-      {
-        "id": "vxzzp",
-        "position": {
-          "x": 0.6428571428571429,
-          "y": 0.9285714285714286
-        },
-        "linkedVertices": [
-          "vxrc3",
-          "vx1yw"
-        ]
-      },
-      {
-        "id": "vxrc3",
-        "position": {
-          "x": 0.6428571428571429,
-          "y": 0.6428571428571429
-        },
-        "linkedVertices": [
-          "vxe7x"
-        ]
-      },
-      {
-        "id": "vxe7x",
-        "position": {
-          "x": 0.9285714285714286,
-          "y": 0.6428571428571429
-        },
-        "linkedVertices": [
-          "vxzpw"
-        ]
-      },
-      {
-        "id": "vxzpw",
-        "position": {
-          "x": 0.9285714285714286,
-          "y": 0.9285714285714286
-        },
-        "linkedVertices": [
-          "vxzzp"
-        ]
-      },
-      {
-        "id": "vx1yw",
+        "id": "vxnhb",
         "position": {
           "x": 0.5,
+          "y": 0.2142857142857143
+        },
+        "linkedVertices": [
+          "vxq1o",
+          "vxg1j",
+          "vx1kh",
+          "vxnqj"
+        ]
+      },
+      {
+        "id": "vxm3j",
+        "position": {
+          "x": 0.2142857142857143,
           "y": 0.5
         },
         "linkedVertices": [
-          "vxe7x",
-          "vx48g"
+          "vxnhb",
+          "vxu7z"
         ]
+      },
+      {
+        "id": "vxpse",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxu7z",
+          "vxm3j"
+        ]
+      },
+      {
+        "id": "vxg1j",
+        "position": {
+          "x": 0.7857142857142857,
+          "y": 0.5
+        },
+        "linkedVertices": [
+          "vx7af"
+        ]
+      },
+      {
+        "id": "vx7af",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vx1kh"
+        ]
+      },
+      {
+        "id": "vx1kh",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxg1j"
+        ]
+      },
+      {
+        "id": "vxu7z",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxnhb"
+        ]
+      },
+      {
+        "id": "vxq1o",
+        "position": {
+          "x": 0.5,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxnqj"
+        ]
+      },
+      {
+        "id": "vxnqj",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": []
       }
     ]
   }

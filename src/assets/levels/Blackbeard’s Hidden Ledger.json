@@ -1,136 +1,166 @@
 {
-    "levelId": "xkcs",
-    "levelName": "Blackbeard’s Hidden Ledger",
-    "players": [
-        {
-            "id": "human-player",
-            "type": 0
-        },
-        {
-            "id": "ai-player",
-            "type": 1,
-            "iterationsPerAlternative": 0,
-            "aiAlgorithm": 0
-        }
-    ],
-    "estimatedDifficulty": 0.48,
-    "visibleHandPlayerId": "human-player",
-    "initialCardsPerPlayer": 5,
-    "cardsPerDirection": 4,
-    "board": {
-        "vertices": [
-            {
-                "id": "vxet9",
-                "position": {
-                    "x": 0.07142857142857144,
-                    "y": 0.9285714285714286
-                },
-                "linkedVertices": ["vxn78"]
-            },
-            {
-                "id": "vxjts",
-                "position": {
-                    "x": 0.2142857142857143,
-                    "y": 0.9285714285714286
-                },
-                "linkedVertices": ["vxet9", "vxu4n"]
-            },
-            {
-                "id": "vxcu9",
-                "position": {
-                    "x": 0.7857142857142857,
-                    "y": 0.9285714285714286
-                },
-                "linkedVertices": []
-            },
-            {
-                "id": "vxjak",
-                "position": {
-                    "x": 0.9285714285714286,
-                    "y": 0.9285714285714286
-                },
-                "linkedVertices": ["vxcu9"]
-            },
-            {
-                "id": "vxn78",
-                "position": {
-                    "x": 0.07142857142857144,
-                    "y": 0.6428571428571429
-                },
-                "linkedVertices": ["vx7ih"]
-            },
-            {
-                "id": "vxu4n",
-                "position": {
-                    "x": 0.35714285714285715,
-                    "y": 0.6428571428571429
-                },
-                "linkedVertices": ["vx19o"]
-            },
-            {
-                "id": "vx4e7",
-                "position": {
-                    "x": 0.6428571428571429,
-                    "y": 0.6428571428571429
-                },
-                "linkedVertices": ["vxcu9", "vxadn"]
-            },
-            {
-                "id": "vxiob",
-                "position": {
-                    "x": 0.9285714285714286,
-                    "y": 0.6428571428571429
-                },
-                "linkedVertices": ["vxjak"]
-            },
-            {
-                "id": "vx19o",
-                "position": {
-                    "x": 0.5,
-                    "y": 0.35714285714285715
-                },
-                "linkedVertices": ["vx4e7", "vx2r7"]
-            },
-            {
-                "id": "vx2r7",
-                "position": {
-                    "x": 0.5,
-                    "y": 0.07142857142857144
-                },
-                "linkedVertices": ["vxtkl"]
-            },
-            {
-                "id": "vx7ih",
-                "position": {
-                    "x": 0.07142857142857144,
-                    "y": 0.35714285714285715
-                },
-                "linkedVertices": ["vxx7n", "vxu4n"]
-            },
-            {
-                "id": "vxx7n",
-                "position": {
-                    "x": 0.2142857142857143,
-                    "y": 0.2142857142857143
-                },
-                "linkedVertices": ["vx2r7"]
-            },
-            {
-                "id": "vxadn",
-                "position": {
-                    "x": 0.9285714285714286,
-                    "y": 0.35714285714285715
-                },
-                "linkedVertices": ["vxiob"]
-            },
-            {
-                "id": "vxtkl",
-                "position": {
-                    "x": 0.7857142857142857,
-                    "y": 0.2142857142857143
-                },
-                "linkedVertices": ["vxadn"]
-            }
-        ]
+  "levelId": "xspg",
+  "levelName": "Blackbeard’s Hidden Ledger",
+  "players": [
+    {
+      "id": "human-player",
+      "type": 0
+    },
+    {
+      "id": "ai-player",
+      "type": 1,
+      "iterationsPerAlternative": 0,
+      "aiAlgorithm": 0
     }
+  ],
+  "estimatedDifficulty": 0.48,
+  "visibleHandPlayerId": "human-player",
+  "initialCardsPerPlayer": 5,
+  "cardsPerDirection": 4,
+  "board": {
+    "vertices": [
+      {
+        "id": "vxet9",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxn78"
+        ]
+      },
+      {
+        "id": "vxjts",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxet9",
+          "vxu4n"
+        ]
+      },
+      {
+        "id": "vxcu9",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": []
+      },
+      {
+        "id": "vxjak",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxcu9"
+        ]
+      },
+      {
+        "id": "vxn78",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vx7ih"
+        ]
+      },
+      {
+        "id": "vxu4n",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vx19o"
+        ]
+      },
+      {
+        "id": "vx4e7",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxcu9",
+          "vxadn"
+        ]
+      },
+      {
+        "id": "vxiob",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxjak"
+        ]
+      },
+      {
+        "id": "vx19o",
+        "position": {
+          "x": 0.5,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vx4e7",
+          "vx2r7"
+        ]
+      },
+      {
+        "id": "vx2r7",
+        "position": {
+          "x": 0.5,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxtkl"
+        ]
+      },
+      {
+        "id": "vx7ih",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vxx7n",
+          "vxu4n"
+        ]
+      },
+      {
+        "id": "vxx7n",
+        "position": {
+          "x": 0.2142857142857143,
+          "y": 0.2142857142857143
+        },
+        "linkedVertices": [
+          "vx2r7"
+        ]
+      },
+      {
+        "id": "vxadn",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vxiob"
+        ]
+      },
+      {
+        "id": "vxtkl",
+        "position": {
+          "x": 0.7857142857142857,
+          "y": 0.2142857142857143
+        },
+        "linkedVertices": [
+          "vxadn"
+        ]
+      }
+    ]
+  }
 }
