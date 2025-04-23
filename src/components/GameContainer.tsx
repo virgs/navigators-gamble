@@ -1,6 +1,7 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { AudioController } from '../audio/audio-controller'
 import { GameConfiguration } from '../engine/game-configuration/game-configuration'
+import { GithubCorner } from '../github-corner/GithubCorner'
 import LevelEditor from '../level-editor/LevelEditor'
 import { sleep } from '../math/sleep'
 import { BrowserDb } from '../repository/browser-db'
@@ -30,6 +31,7 @@ const removeFromMap = <T,>(map: Set<T>, value: T): Set<T> => {
 export const GameContainer = (): ReactNode => {
     const [gameScreens, setGameScreens] = useState<Set<GameScreens>>(new Set([GameScreens.LEVEL_SETUP]))
     const [setupUpdateCounter, setSetupUpdateCounter] = useState<number>(0)
+    const [testingLevel, setTestingLevel] = useState<boolean>(false)
 
     const [backgroundClasses, setBackgroundClasses] = useState<string[]>(['background-image'])
     const [gameOnClasses, setGameOnClasses] = useState<string[]>([])
@@ -38,7 +40,7 @@ export const GameContainer = (): ReactNode => {
 
     const [gameConfiguration, setGameConfiguration] = useState<GameConfiguration | undefined>(undefined)
 
-    const onHumeButtonClicked = async () => {
+    const returnToHomeScreen = async () => {
         AudioController.playChainSound()
         if (gameScreens.has(GameScreens.LEVEL_EDITOR)) {
             setLevelEditorClasses((classes) => classes.concat(hideToLeftClass))
@@ -63,12 +65,52 @@ export const GameContainer = (): ReactNode => {
                 classes.filter((gs) => gs !== GameScreens[GameScreens.GAME_ON].toLowerCase())
             )
             await sleep(screenTransitionsDurationsInMs)
-            setGameConfiguration(undefined)
             setGameScreens((gs) => removeFromMap(gs, GameScreens.GAME_ON))
             setGameOnClasses((classes) => classes.filter((classes) => classes !== hideToRightClass))
             setSetupScreenClasses((classes) => classes.filter((classes) => classes !== showFromLeftClass))
         }
         return undefined
+    }
+
+    const onHomeButtonClicked = async () => {
+        const cameFromLevelEditor = gameScreens.has(GameScreens.LEVEL_EDITOR)
+        const cameFromGameScreen = gameScreens.has(GameScreens.GAME_ON)
+        await returnToHomeScreen()
+
+        if (cameFromLevelEditor) {
+            setTestingLevel(false)
+            setGameConfiguration(undefined)
+        } else if (cameFromGameScreen) {
+            if (testingLevel) {
+                onLevelEditorButtonClicked()
+            } else {
+                setGameConfiguration(undefined)
+            }
+            setTestingLevel(false)
+        }
+        return undefined
+    }
+
+    const onStartButtonClicked = async (config: GameConfiguration) => {
+        AudioController.playChainSound()
+        setGameConfiguration(config)
+        setSetupScreenClasses((classes) => classes.concat(hideToLeftClass))
+        setGameOnClasses((classes) => classes.concat(showFromRightClass))
+        setGameScreens((gs) => gs.add(GameScreens.GAME_ON))
+        setBackgroundClasses((classes) =>
+            classes.concat(GameScreens[GameScreens.GAME_ON].toLowerCase())
+        )
+    }
+
+    const onLevelEditorButtonClicked = async () => {
+        AudioController.playChainSound()
+        // setGameConfiguration(undefined)
+        setSetupScreenClasses((classes) => classes.concat(hideToRightClass))
+        setLevelEditorClasses((classes) => classes.concat(showFromLeftClass))
+        setGameScreens((gs) => gs.add(GameScreens.LEVEL_EDITOR))
+        setBackgroundClasses((classes) =>
+            classes.concat(GameScreens[GameScreens.LEVEL_EDITOR].toLowerCase())
+        )
     }
 
     const renderGameScreens = (): ReactNode => {
@@ -78,26 +120,8 @@ export const GameContainer = (): ReactNode => {
                 <div className={['setup-screen'].concat(...setupScreenClasses).join(' ')}>
                     <SetupScreen
                         setupUpdateCounter={setupUpdateCounter}
-                        onStartButton={async (config: GameConfiguration) => {
-                            AudioController.playChainSound()
-                            setGameConfiguration(config)
-                            setSetupScreenClasses((classes) => classes.concat(hideToLeftClass))
-                            setGameOnClasses((classes) => classes.concat(showFromRightClass))
-                            setGameScreens((gs) => gs.add(GameScreens.GAME_ON))
-                            setBackgroundClasses((classes) =>
-                                classes.concat(GameScreens[GameScreens.GAME_ON].toLowerCase())
-                            )
-                        }}
-                        onLevelEditorButton={async () => {
-                            AudioController.playChainSound()
-                            setGameConfiguration(undefined)
-                            setSetupScreenClasses((classes) => classes.concat(hideToRightClass))
-                            setLevelEditorClasses((classes) => classes.concat(showFromLeftClass))
-                            setGameScreens((gs) => gs.add(GameScreens.LEVEL_EDITOR))
-                            setBackgroundClasses((classes) =>
-                                classes.concat(GameScreens[GameScreens.LEVEL_EDITOR].toLowerCase())
-                            )
-                        }}
+                        onStartButton={async (config: GameConfiguration) => onStartButtonClicked(config)}
+                        onLevelEditorButton={() => onLevelEditorButtonClicked()}
                     ></SetupScreen>
                 </div>
             )
@@ -111,7 +135,13 @@ export const GameContainer = (): ReactNode => {
                             BrowserDb.addLevelStats(stats)
                             console.log('Stats saved', stats)
                             setSetupUpdateCounter((c) => c + 1)
-                            onHumeButtonClicked()
+                            returnToHomeScreen()
+                            if (testingLevel) {
+                                onLevelEditorButtonClicked()
+                            } else {
+                                setGameConfiguration(undefined)
+                            }
+                            setTestingLevel(false)
                         }}
                     />
                 </div>
@@ -123,8 +153,10 @@ export const GameContainer = (): ReactNode => {
                     <LevelEditor
                         configuration={gameConfiguration}
                         onPlay={async (config: GameConfiguration) => {
+                            setTestingLevel(true)
                             setGameConfiguration(config)
-                            onHumeButtonClicked()
+                            await returnToHomeScreen()
+                            onStartButtonClicked(config)
                         }}
                     />
                 </div>
@@ -139,13 +171,16 @@ export const GameContainer = (): ReactNode => {
     }
 
     return (
-        <div className="container-lg g-0 game-container" onPointerDown={() => AudioController.start()}>
-            <div className={backgroundClasses.join(' ')} />
-            <HeaderComponent
-                gameConfiguration={gameConfiguration}
-                onHomeButton={gameScreens.size !== 1 ? () => onHumeButtonClicked() : undefined}
-            />
-            <div className="game-screens-container">{renderGameScreens()}</div>
-        </div>
+        <>
+            <GithubCorner />
+            <div className="container-lg g-0 game-container" onPointerDown={() => AudioController.start()}>
+                <div className={backgroundClasses.join(' ')} />
+                <HeaderComponent
+                    gameConfiguration={gameConfiguration}
+                    onHomeButton={gameScreens.size !== 1 ? () => onHomeButtonClicked() : undefined}
+                />
+                <div className="game-screens-container">{renderGameScreens()}</div>
+            </div>
+        </>
     )
 }

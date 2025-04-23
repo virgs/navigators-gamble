@@ -38,9 +38,8 @@ export class BrowserDb {
         }
     }
     public static getLevelStats(levelConfiguration: GameConfiguration): MatchStats[] {
-        return BrowserDb.getStats().filter(
-            (stat: MatchStats) => stat.levelHash === BrowserDb.getLevelHash(levelConfiguration)
-        )
+        const levelHash = BrowserDb.getLevelHash(levelConfiguration)
+        return BrowserDb.getStats().filter((stat: MatchStats) => stat.levelHash === levelHash)
     }
     public static addLevelStats(stats: MatchStats): void {
         const currentStats = this.getStats()

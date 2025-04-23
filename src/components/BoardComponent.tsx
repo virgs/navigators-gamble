@@ -5,7 +5,7 @@ import './BoardComponent.scss'
 import { LinkComponent, LinkComponentProps } from './graph/LinkComponent'
 import { VertixComponent } from './graph/VertixComponent'
 import { Point } from 'framer-motion'
-import { multiplyByScalar } from '../math/point'
+import { add, multiplyByScalar } from '../math/point'
 
 type BoardComponentProps = {
     board: SerializabledBoard
@@ -62,7 +62,12 @@ export const BoardComponent = (props: BoardComponentProps): ReactNode => {
         if (boardWidth === undefined) {
             return point
         }
-        return multiplyByScalar(point, boardWidth)
+        const adjustedWidth = 0.9 * boardWidth
+        const adjustedOrigin = 0.05 * boardWidth
+        return add(multiplyByScalar(point, adjustedWidth), {
+            x: adjustedOrigin,
+            y: adjustedOrigin,
+        })
     }
 
     return (

@@ -1,9 +1,8 @@
 import { Gauge, gaugeClasses, useGaugeState } from '@mui/x-charts'
-import { useWindowSize } from '@uidotdev/usehooks'
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import { Directions, directionToAngle, directions } from '../../engine/directions'
-import './GaugeComponent.scss'
 import { degreeToRadians } from '../../math/trigonometry'
+import './GaugeComponent.scss'
 
 export type GaugeComponentProps = {
     direction: Directions
@@ -55,8 +54,8 @@ const GaugeTicks = (): ReactNode => {
 
 export const GaugeComponent = ({ direction }: GaugeComponentProps): ReactNode => {
     const [gaugeComponent, setGaugeComponent] = useState<ReactNode>(undefined)
-    const cardContentRef = useRef(null)
-    const size = useWindowSize()
+    const [gaugeSize, setGaugeSize] = useState<number>(0)
+    const cardContentRef = useRef<HTMLDivElement>(null)
 
     const angle = directionToAngle(direction)
 
@@ -80,10 +79,27 @@ export const GaugeComponent = ({ direction }: GaugeComponentProps): ReactNode =>
                 <GaugeTicks></GaugeTicks>
             </Gauge>
         )
-    }, [size])
+    }, [gaugeSize])
 
-    //@ts-expect-error
-    const gaugeSize = cardContentRef.current?.clientWidth ?? 50
+    useEffect(() => {
+        const observer = new ResizeObserver(entries => {
+            const { width } = entries[0].contentRect;
+            setGaugeSize(width);
+        });
+
+        if (cardContentRef.current) {
+            observer.observe(cardContentRef.current);
+        }
+
+        return () => {
+            if (cardContentRef.current) {
+                observer.unobserve(cardContentRef.current);
+            }
+        };
+    }, []);
+
+    // //@ts-expect-error
+    // const gaugeSize = cardContentRef.current?.clientWidth ?? 50
 
     return (
         <div ref={cardContentRef} className="gauge">

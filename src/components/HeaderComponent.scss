@@ -3,7 +3,9 @@
     width: 100%;
     align-items: center;
     color: white;
-    border-bottom: 1px solid var(--compass-black);
+    border: 1px solid var(--compass-dark-gray);
+    border-top: none;
+    border-bottom: none;
     font-family: 'Pirata One', system-ui;
     font-weight: lighter;
     font-style: normal;

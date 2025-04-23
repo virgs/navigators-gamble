@@ -17,7 +17,7 @@ import GraphEditor from './GraphEditor'
 import './LevelEditor.scss'
 
 const CANVAS_SIZE = 400
-const GRID_LINES = 10
+const GRID_LINES = 8
 
 const createRandomValueFromLimits = (limits: { min: number; max: number; step: number }) => {
     const diff = limits.max - limits.min

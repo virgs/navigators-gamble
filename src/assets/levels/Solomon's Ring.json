@@ -1,0 +1,152 @@
+{
+  "levelId": "x0lw",
+  "levelName": "Solomon's Ring",
+  "players": [
+    {
+      "id": "ai-player",
+      "type": 1,
+      "iterationsPerAlternative": 40,
+      "aiAlgorithm": 0
+    },
+    {
+      "id": "human-player",
+      "type": 0
+    }
+  ],
+  "estimatedDifficulty": 0.63,
+  "visibleHandPlayerId": "human-player",
+  "initialCardsPerPlayer": 7,
+  "cardsPerDirection": 2,
+  "board": {
+    "vertices": [
+      {
+        "id": "vxrz4",
+        "position": {
+          "x": 0.38888888888888884,
+          "y": 0.9444444444444444
+        },
+        "linkedVertices": [
+          "vxgaj",
+          "vxwbg"
+        ]
+      },
+      {
+        "id": "vxju0",
+        "position": {
+          "x": 0.611111111111111,
+          "y": 0.9444444444444444
+        },
+        "linkedVertices": [
+          "vxrz4",
+          "vxwbg"
+        ]
+      },
+      {
+        "id": "vxgaj",
+        "position": {
+          "x": 0.05555555555555555,
+          "y": 0.611111111111111
+        },
+        "linkedVertices": [
+          "vxxu9",
+          "vxx5h"
+        ]
+      },
+      {
+        "id": "vxxu9",
+        "position": {
+          "x": 0.05555555555555555,
+          "y": 0.38888888888888884
+        },
+        "linkedVertices": [
+          "vxtm6",
+          "vxx5h"
+        ]
+      },
+      {
+        "id": "vxfr6",
+        "position": {
+          "x": 0.611111111111111,
+          "y": 0.05555555555555555
+        },
+        "linkedVertices": [
+          "vxk6a",
+          "vxwhr"
+        ]
+      },
+      {
+        "id": "vxtm6",
+        "position": {
+          "x": 0.38888888888888884,
+          "y": 0.05555555555555555
+        },
+        "linkedVertices": [
+          "vxfr6",
+          "vxwhr"
+        ]
+      },
+      {
+        "id": "vxk6a",
+        "position": {
+          "x": 0.9444444444444444,
+          "y": 0.38888888888888884
+        },
+        "linkedVertices": [
+          "vx4x2",
+          "vxq1u"
+        ]
+      },
+      {
+        "id": "vx4x2",
+        "position": {
+          "x": 0.9444444444444444,
+          "y": 0.611111111111111
+        },
+        "linkedVertices": [
+          "vxju0",
+          "vxq1u"
+        ]
+      },
+      {
+        "id": "vxx5h",
+        "position": {
+          "x": 0.2777777777777778,
+          "y": 0.5
+        },
+        "linkedVertices": [
+          "vxwhr"
+        ]
+      },
+      {
+        "id": "vxwhr",
+        "position": {
+          "x": 0.5,
+          "y": 0.2777777777777778
+        },
+        "linkedVertices": [
+          "vxq1u"
+        ]
+      },
+      {
+        "id": "vxq1u",
+        "position": {
+          "x": 0.7222222222222221,
+          "y": 0.5
+        },
+        "linkedVertices": [
+          "vxwbg"
+        ]
+      },
+      {
+        "id": "vxwbg",
+        "position": {
+          "x": 0.5,
+          "y": 0.7222222222222221
+        },
+        "linkedVertices": [
+          "vxx5h"
+        ]
+      }
+    ]
+  }
+}
