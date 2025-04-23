@@ -1,71 +1,103 @@
-### The game
+# Navigator's Gamble
 
-Describe how the game works and its graph-like features
+![Screenshot](./screenshot.png)
 
-### Goals
+Yeap. As you might think, this is yet another game development project of mine.
+If you haven't done it yet, I highly recommend checking the other ones I have on GitHub:
 
-1. Study pure monte carlo tree search (provide real links)
-2. [Study react](https://react.dev/)
-3. [Study HTML/CSS](#htmlcss)
-4. Last but not least: **to have fun**. Yay!
+- [Pacman](https://github.com/virgs/pacman)
+- [Minesweeper AI](https://github.com/virgs/minesweeper-ai)
+- [Flappy Bird AI](https://github.com/virgs/flappy-bird-ai)
+- [2048 AI](https://github.com/virgs/2048-ai)
+- [Rubik's Cubes AI](https://github.com/virgs/rubiks-cubes-ai)
+- [Mancala](https://github.com/virgs/mancala)
+- [Tetris](https://github.com/virgs/tetris)
+- [Sudoku](https://github.com/virgs/sudoku)
 
-#### Artificial Intelligence
+## 🧭 How to Play (According to a Very Lost Explorer)
 
-A pure version of the MCTS is used to decide the next direction to move to. In order to do so, **1500** games are randomly played until the game is over having one direction fixed as the next move. The direction that has the better average score in each direction is chosen as "next move".
+In [**Navigator’s Gamble**](https://virgs.github.io/navigators-gamble), you and your rivals wander through a suspiciously dangerous map — think ancient ruins, volcanic jungles, and skeletons who clearly died doing something dramatic. Your goal? Slap down directional cards to claim paths and outwit your opponents. It's basically what happens when pirates find Dijkstra's algorithm and decide to use it for evil (or fun — same thing, really).
 
-##### Monte Carlos Tree Search
+Every move you make is just another step through a **beautifully chaotic graph**. Vertices are shiny treasure spots, and edges? Oh, those are either noble alliances or regrettable life choices.
 
-Monte Carlo tree search (MCTS) is a heuristic search algorithm for some kinds of decision processes, most notably those employed in software that plays board games. In that context MCTS is used to solve the game tree.
+And no, you don’t need a CS degree — but if you’ve ever looked at a node graph and thought, _“spaghetti, but make it tactical,”_ then you’re already halfway to treasure.
 
-- **Selection**: Start at the root of the tree and recursively select nodes until a leaf node is reached. The selection can be random or based on a simple policy.
-- **Expansion**: If the selected node hasn't been fully expanded (i.e., there are unexplored moves from that state), expand it by adding a child node corresponding to an unexplored move.
-- **Simulation (Rollout)**: Conduct a simulation (also known as a rollout or playout) from the newly added node or the previously existing one. This involves making random moves or using a simple heuristic until a terminal state is reached.
-- **Backpropagation**: Update the statistics of all nodes traversed during the selection and expansion steps. This involves incrementing visit counts and adjusting the cumulative value based on the outcome of the simulation.
+You’re an explorer, or a pirate, or maybe that astronomer with a questionable moral compass. Just place cards, connect paths, and pretend you know what you’re doing. It's like Dijkstra meets Uno, sprinkled with curses, volcanic lighting, and at least one guy yelling "YOU STOLE MY ROUTE."
 
-Repeat these steps for a specified number of iterations or until a time limit is reached. The final move is typically chosen based on the statistics gathered at the root node.
+If you've ever wanted to play cards while role-playing as a pirate-academic-strategist, _Navigator’s Gamble_ is the game for you. You're welcome.
 
-##### Pure MTCS
+---
 
-The [pure version of MCTS](https://en.wikipedia.org/wiki/Monte_Carlo_tree_search#Pure_Monte_Carlo_game_search) doesn't incorporate heuristics like UCB, making it more straightforward but potentially less efficient in balancing exploration and exploitation. It serves as a foundational framework upon which various enhancements can be applied to tailor the algorithm to specific problems.
+## 🎨 Inspiration
 
-This basic procedure can be applied to any game whose positions necessarily have a finite number of moves and finite length. Such as 2048. For each position, all feasible moves are determined: k random games are played out to the very end, and the scores are recorded. The move leading to the best score is chosen. Ties are broken by fair coin flips.
+Okay, cards on the table: I didn’t come up with this game entirely on my own. _Navigator’s Gamble_ is **heavily** inspired by [this Google Doodle](https://doodles.google/doodle/rise-of-the-half-moon/). It’s basically the same core mechanics — just, you know, wearing a pirate hat and shouting a lot more.
 
-Pure Monte Carlo Game Search results in strong play in several games with random elements, as described below in the [outcome section](#outcome). It converges to optimal play (as k tends to infinity) in board filling games with random turn order.
+The original had loooong animations and didn’t tell me how many moon cards were in the deck. That felt unfair. My strategic soul couldn’t take it. So I fixed it. With code. And a suspicious number of navigators.
 
-###### Core
+---
 
-The PureMonteCarloTreeSearch class appears to be logically structured and implements a Monte Carlo Tree Search (MCTS) algorithm with random simulations. However, there are a few areas that could be improved or clarified to ensure correctness and robustness. Below is an analysis of the class:
+## 🎯 Goals
 
-Strengths
-Monte Carlo Simulation Logic:
+1. Study [Pure Monte Carlo Tree Search](https://en.wikipedia.org/wiki/Monte_Carlo_tree_search#Pure_Monte_Carlo_game_search) and pretend I always knew what that was.
+2. Get rid of the rust and get back to [React](https://react.dev/).
+3. Touch grass... I mean [HTML/CSS](#htmlcss).
+4. Make up for the info the original game cruelly withheld.
+5. And of course: **have fun.** 🥳 Because nothing says fun like debugging AI simulations at 2am.
 
-The simulateRandomGame method simulates random games to evaluate moves, which is a core part of MCTS.
-It uses a loop to simulate moves until the board is full, updating scores and player hands appropriately.
-Move Selection:
+---
 
-The makeMove method evaluates possible moves and selects the best one based on the win rate (score / games).
-Dynamic Player Turn Handling:
+### 📚 Studies
 
-The simulateRandomGame method dynamically updates the turn and alternates between players.
-Utility Methods:
+#### 🤖 Artificial Intelligence (a.k.a. Simulated Luck)
 
-Methods like updateCardsAfterMove, calculateScore, and computeNotPlayedCards are well-encapsulated and reusable.
+The game uses a **pure** Monte Carlo Tree Search to decide the AI’s next move. This means it plays out a bunch of random games in its mind-palace and picks the move that seems to win most often. Like gambling, but smarter.
+
+As the level goes up, so do the AI’s iteration counts — and, sadly, your chances of winning go down.
+
+##### Monte Carlo Tree Search: A Four-Step Tango
+
+1. **Selection**: Wander through the game tree until you hit a dead end (like a good Friday night).
+2. **Expansion**: Add a node for a move you haven’t tried yet.
+3. **Simulation**: Play the game out randomly from that point. Total chaos. Zero regrets.
+4. **Backpropagation**: Report back to all previous nodes like a good gossip courier with win/loss stats.
+
+Do this a bunch of times. Eventually, one move will statistically look better than the rest. That's your winner.
+
+###### Pure MCTS
+
+The [pure version](https://en.wikipedia.org/wiki/Monte_Carlo_tree_search#Pure_Monte_Carlo_game_search) skips the fancy math (like UCB). No heuristics, just raw randomness. Surprisingly effective — like guessing on a multiple choice exam and acing it.
+
+It works well in games with finite moves and turns — think _2048_ or any game where chaos eventually ends. Play k random games for each move and pick the best one. If they tie? Flip a coin. It’s math.
+
+---
 
 #### React
 
-It's kinda embarrassing, but I confess I need to strengthen my React skills. It's been at least 5 years since the last time I professionally worked with it, and the front-end personal projects I've been working on in this meantime were developed based on Vue.
+Confession time: I hadn’t touched React in years. Like, _“last time I used it, classes were still cool”_ kind of years.
 
-Needless to say, react has solidified itself as a cornerstone in contemporary web development. Its relevance in the present landscape is unmistakable, providing developers with an efficient tool to manage complex UI logic and seamlessly update the view when the underlying data changes.
+Most of my side projects have been in Vue lately, but I figured if I’m going to build a graph-based card game in 2025, React might be the better boat to sail in. (Don't tell Vue I said that.)
+
+And let’s be honest — React isn’t going anywhere. Might as well be friends with it again.
+
+---
 
 #### HTML/CSS
 
-I feel like there is always something new to learn in HTML/CSS. For good reason, not just because it's a rapidly evolving stack, but mostly because I'm not very strong with it. I'm constantly surprised by what people do with them, and most of the time I have no idea how to do even 20% of what they're capable of.
+Here’s the thing: CSS is sorcery.
 
-I'm sure there's a long road paved with CSS and HTML blocks ahead, but I'm happy to be making progress.
+I’ve been working with the web for a while, but every time I see someone build an interactive 3D castle with three divs and a pseudo-element, I start questioning my life choices.
+
+HTML/CSS might be simple, but mastering them? That’s a whole expedition on its own. I'm making progress — one media query at a time.
+
+---
 
 ## Outcome
 
-If you didn't skip the goals section or weren't getting distracted playing a game like, let's say, 2048, you'll remember that the main goal was to have a better ratio win than me. As mentioned earlier, I'm a terrible player, and I don't think I've managed to win this game more than 2 or 3 times in my lifetime.
+If you’ve made it this far (without switching tabs to play _Navigator’s Gamble_), thanks!
+
+The project helped me improve a lot of skills — and honestly? That mix of building something weird, learning new things, and beating my own AI at its own game is a treasure in itself.
+
+Which is good, because I still haven’t found that fountain of youth.
 
 ## Code It Yourself
 
