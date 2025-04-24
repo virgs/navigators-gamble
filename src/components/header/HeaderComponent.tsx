@@ -62,7 +62,7 @@ export const HeaderComponent = (props: HeaderProps): ReactNode => {
                     <Row className="g-0 gx-2 justify-content-end align-items-center py-1">
                         {props.gameConfiguration !== undefined && (
                             <>
-                                <Col xs>
+                                <Col xs className='me-end text-truncate'>
                                     <span className="level-name">{props.gameConfiguration.levelName}</span>
                                 </Col>
                                 {process.env.NODE_ENV === 'development' && (
