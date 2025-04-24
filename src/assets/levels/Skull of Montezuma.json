@@ -1,5 +1,5 @@
 {
-  "levelId": "x76l",
+  "levelId": "x8l3",
   "levelName": "Skull of Montezuma",
   "players": [
     {
@@ -13,7 +13,7 @@
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.66,
+  "estimatedDifficulty": 0.57,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 5,
   "cardsPerDirection": 3,

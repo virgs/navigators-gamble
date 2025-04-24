@@ -1,5 +1,5 @@
 {
-  "levelId": "x5ya",
+  "levelId": "xlb4",
   "levelName": "Scrolls of El Dorado",
   "players": [
     {
@@ -13,7 +13,7 @@
       "type": 0
     }
   ],
-  "estimatedDifficulty": 0.33,
+  "estimatedDifficulty": 0.29,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 5,
   "cardsPerDirection": 2,

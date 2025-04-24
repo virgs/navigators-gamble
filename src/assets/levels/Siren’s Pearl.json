@@ -1,5 +1,5 @@
 {
-  "levelId": "xykv",
+  "levelId": "x2y8",
   "levelName": "Siren’s Pearl",
   "players": [
     {
@@ -13,10 +13,10 @@
       "type": 0
     }
   ],
-  "estimatedDifficulty": 0.4,
+  "estimatedDifficulty": 0.26,
   "visibleHandPlayerId": "human-player",
-  "initialCardsPerPlayer": 6,
-  "cardsPerDirection": 5,
+  "initialCardsPerPlayer": 5,
+  "cardsPerDirection": 3,
   "board": {
     "vertices": [
       {

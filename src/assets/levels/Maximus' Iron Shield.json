@@ -1,6 +1,6 @@
 {
-  "levelId": "xyva",
-  "levelName": "Tears of the Moon",
+  "levelId": "xdpd",
+  "levelName": "Maximus' Iron Shield",
   "players": [
     {
       "id": "human-player",
@@ -9,153 +9,157 @@
     {
       "id": "ai-player",
       "type": 1,
-      "iterationsPerAlternative": 140,
+      "iterationsPerAlternative": 240,
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.63,
+  "estimatedDifficulty": 0.74,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 3,
   "cardsPerDirection": 2,
   "board": {
     "vertices": [
       {
-        "id": "vx1du",
-        "position": {
-          "x": 0.9285714285714286,
-          "y": 0.9285714285714286
-        },
-        "linkedVertices": [
-          "vxigt",
-          "vxych"
-        ]
-      },
-      {
-        "id": "vxych",
+        "id": "vxkym",
         "position": {
           "x": 0.35714285714285715,
-          "y": 0.9285714285714286
+          "y": 0.5
         },
         "linkedVertices": [
-          "vx6el"
+          "vxpfo",
+          "vx7ya"
         ]
       },
       {
-        "id": "vx6el",
+        "id": "vx01q",
+        "position": {
+          "x": 0.2142857142857143,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxsvn"
+        ]
+      },
+      {
+        "id": "vxsvn",
+        "position": {
+          "x": 0.5,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxxqw"
+        ]
+      },
+      {
+        "id": "vxxqw",
+        "position": {
+          "x": 0.7857142857142857,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxiud"
+        ]
+      },
+      {
+        "id": "vx5ec",
+        "position": {
+          "x": 0.2142857142857143,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxpfo"
+        ]
+      },
+      {
+        "id": "vxt5f",
+        "position": {
+          "x": 0.5,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vx5ec"
+        ]
+      },
+      {
+        "id": "vxtcr",
+        "position": {
+          "x": 0.7857142857142857,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxt5f"
+        ]
+      },
+      {
+        "id": "vxpfo",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.7857142857142857
+        },
+        "linkedVertices": [
+          "vx6dc"
+        ]
+      },
+      {
+        "id": "vx6dc",
         "position": {
           "x": 0.07142857142857144,
           "y": 0.5
         },
         "linkedVertices": [
-          "vxv4d"
+          "vxn00"
         ]
       },
       {
-        "id": "vxv4d",
+        "id": "vxn00",
         "position": {
-          "x": 0.2142857142857143,
-          "y": 0.07142857142857144
+          "x": 0.07142857142857144,
+          "y": 0.2142857142857143
         },
-        "linkedVertices": []
+        "linkedVertices": [
+          "vx01q",
+          "vxkym"
+        ]
       },
       {
-        "id": "vxnpg",
+        "id": "vxiud",
         "position": {
-          "x": 0.2142857142857143,
+          "x": 0.9285714285714286,
+          "y": 0.2142857142857143
+        },
+        "linkedVertices": [
+          "vxkrp"
+        ]
+      },
+      {
+        "id": "vxkrp",
+        "position": {
+          "x": 0.9285714285714286,
           "y": 0.5
         },
         "linkedVertices": [
-          "vxv4d"
+          "vxmac"
         ]
       },
       {
-        "id": "vxigt",
+        "id": "vxmac",
         "position": {
-          "x": 0.5,
+          "x": 0.9285714285714286,
           "y": 0.7857142857142857
         },
         "linkedVertices": [
-          "vxnpg"
+          "vxtcr",
+          "vx7ya"
         ]
       },
       {
-        "id": "vxc9f",
-        "position": {
-          "x": 0.5,
-          "y": 0.2142857142857143
-        },
-        "linkedVertices": [
-          "vxtr9"
-        ]
-      },
-      {
-        "id": "vxtr9",
-        "position": {
-          "x": 0.5,
-          "y": 0.35714285714285715
-        },
-        "linkedVertices": [
-          "vxacs"
-        ]
-      },
-      {
-        "id": "vxacs",
-        "position": {
-          "x": 0.6428571428571429,
-          "y": 0.35714285714285715
-        },
-        "linkedVertices": [
-          "vxxi1"
-        ]
-      },
-      {
-        "id": "vxxi1",
-        "position": {
-          "x": 0.6428571428571429,
-          "y": 0.2142857142857143
-        },
-        "linkedVertices": [
-          "vxc9f"
-        ]
-      },
-      {
-        "id": "vxtd2",
-        "position": {
-          "x": 0.6428571428571429,
-          "y": 0.6428571428571429
-        },
-        "linkedVertices": [
-          "vxx76"
-        ]
-      },
-      {
-        "id": "vxdah",
+        "id": "vx7ya",
         "position": {
           "x": 0.6428571428571429,
           "y": 0.5
         },
         "linkedVertices": [
-          "vxtd2"
-        ]
-      },
-      {
-        "id": "vx3wz",
-        "position": {
-          "x": 0.7857142857142857,
-          "y": 0.5
-        },
-        "linkedVertices": [
-          "vxdah"
-        ]
-      },
-      {
-        "id": "vxx76",
-        "position": {
-          "x": 0.7857142857142857,
-          "y": 0.6428571428571429
-        },
-        "linkedVertices": [
-          "vx3wz"
+          "vxiud"
         ]
       }
     ]

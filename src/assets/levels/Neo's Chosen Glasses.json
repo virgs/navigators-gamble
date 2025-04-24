@@ -1,0 +1,188 @@
+{
+  "levelId": "x0rz",
+  "levelName": "Neo's Chosen Glasses",
+  "players": [
+    {
+      "id": "human-player",
+      "type": 0
+    },
+    {
+      "id": "ai-player",
+      "type": 1,
+      "iterationsPerAlternative": 250,
+      "aiAlgorithm": 0
+    }
+  ],
+  "estimatedDifficulty": 0.7,
+  "visibleHandPlayerId": "human-player",
+  "initialCardsPerPlayer": 2,
+  "cardsPerDirection": 3,
+  "board": {
+    "vertices": [
+      {
+        "id": "vx4pe",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxav9"
+        ]
+      },
+      {
+        "id": "vxav9",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxw6n"
+        ]
+      },
+      {
+        "id": "vxien",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vxqcs"
+        ]
+      },
+      {
+        "id": "vxqcs",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "vx5s3"
+        ]
+      },
+      {
+        "id": "vx5s3",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vxh04",
+          "vxwds"
+        ]
+      },
+      {
+        "id": "vxwds",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vx747"
+        ]
+      },
+      {
+        "id": "vx747",
+        "position": {
+          "x": 0.9285714285714286,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vx2yc"
+        ]
+      },
+      {
+        "id": "vx2yc",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vx20l"
+        ]
+      },
+      {
+        "id": "vxw8o",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vxj97"
+        ]
+      },
+      {
+        "id": "vxj97",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "vx3c2"
+        ]
+      },
+      {
+        "id": "vx3c2",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxysw",
+          "vxsty"
+        ]
+      },
+      {
+        "id": "vxsty",
+        "position": {
+          "x": 0.07142857142857144,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vx4pe"
+        ]
+      },
+      {
+        "id": "vxw6n",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vxsty"
+        ]
+      },
+      {
+        "id": "vxh04",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vxw6n",
+          "vxien"
+        ]
+      },
+      {
+        "id": "vx20l",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxwds"
+        ]
+      },
+      {
+        "id": "vxysw",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "vxw8o",
+          "vx20l"
+        ]
+      }
+    ]
+  }
+}

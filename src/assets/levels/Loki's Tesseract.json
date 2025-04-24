@@ -1,11 +1,11 @@
 {
-  "levelId": "x05z",
-  "levelName": "The Lost Sextant",
+  "levelId": "xwkk",
+  "levelName": "Loki's Tesseract",
   "players": [
     {
       "id": "ai-player",
       "type": 1,
-      "iterationsPerAlternative": 200,
+      "iterationsPerAlternative": 250,
       "aiAlgorithm": 0
     },
     {
@@ -13,80 +13,81 @@
       "type": 0
     }
   ],
-  "estimatedDifficulty": 0.22,
+  "estimatedDifficulty": 0.18,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 5,
-  "cardsPerDirection": 2,
+  "cardsPerDirection": 3,
   "board": {
     "vertices": [
       {
-        "id": "v-xo8b",
+        "id": "vxsy5",
         "position": {
-          "x": 0.5,
-          "y": 0.2142857142857143
+          "x": 0.2142857142857143,
+          "y": 0.7857142857142857
         },
         "linkedVertices": [
-          "v-xsp4",
-          "v-xpvn",
-          "v-xwzy"
+          "vx5e5"
         ]
       },
       {
-        "id": "v-x9n7",
+        "id": "vx5e5",
         "position": {
           "x": 0.5,
           "y": 0.7857142857142857
         },
         "linkedVertices": [
-          "v-xpvn",
-          "vxalo"
+          "vx5qr",
+          "vx94i"
         ]
       },
       {
-        "id": "v-xnvh",
+        "id": "vxloi",
         "position": {
           "x": 0.2142857142857143,
           "y": 0.5
         },
         "linkedVertices": [
-          "v-xwzy",
-          "v-xsp4"
+          "vxx6s",
+          "vxsy5"
         ]
       },
       {
-        "id": "v-xwzy",
+        "id": "vx94i",
         "position": {
           "x": 0.5,
           "y": 0.5
         },
         "linkedVertices": [
-          "v-x9n7"
+          "vx46l",
+          "vxloi"
         ]
       },
       {
-        "id": "v-xsp4",
+        "id": "vxx6s",
         "position": {
-          "x": 0.2142857142857143,
-          "y": 0.2142857142857143
+          "x": 0.5,
+          "y": 0.07142857142857144
         },
         "linkedVertices": []
       },
       {
-        "id": "v-xpvn",
+        "id": "vx46l",
         "position": {
-          "x": 0.9285714285714286,
-          "y": 0.5
-        },
-        "linkedVertices": []
-      },
-      {
-        "id": "vxalo",
-        "position": {
-          "x": 0.9285714285714286,
-          "y": 0.7857142857142857
+          "x": 0.7857142857142857,
+          "y": 0.07142857142857144
         },
         "linkedVertices": [
-          "v-xpvn"
+          "vxx6s"
+        ]
+      },
+      {
+        "id": "vx5qr",
+        "position": {
+          "x": 0.7857142857142857,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "vx46l"
         ]
       }
     ]

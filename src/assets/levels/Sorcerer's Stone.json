@@ -1,5 +1,5 @@
 {
-  "levelId": "x6p4",
+  "levelId": "xpe4",
   "levelName": "Sorcerer's Stone",
   "players": [
     {
@@ -13,9 +13,9 @@
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.89,
+  "estimatedDifficulty": 0.36,
   "visibleHandPlayerId": "human-player",
-  "initialCardsPerPlayer": 6,
+  "initialCardsPerPlayer": 5,
   "cardsPerDirection": 3,
   "board": {
     "vertices": [
@@ -44,7 +44,7 @@
       {
         "id": "v3",
         "position": {
-          "x": 0.35714285714285715,
+          "x": 0.2142857142857143,
           "y": 0.9285714285714286
         },
         "linkedVertices": []
@@ -52,12 +52,13 @@
       {
         "id": "v4",
         "position": {
-          "x": 0.6428571428571429,
+          "x": 0.7857142857142857,
           "y": 0.9285714285714286
         },
         "linkedVertices": [
           "v9",
-          "v5"
+          "v5",
+          "vxej7"
         ]
       },
       {
@@ -120,6 +121,16 @@
           "y": 0.35714285714285715
         },
         "linkedVertices": []
+      },
+      {
+        "id": "vxej7",
+        "position": {
+          "x": 0.5,
+          "y": 0.9285714285714286
+        },
+        "linkedVertices": [
+          "v3"
+        ]
       }
     ]
   }

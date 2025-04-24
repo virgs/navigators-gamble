@@ -1,6 +1,6 @@
 {
-  "levelId": "xw2g",
-  "levelName": "The Map That Bleeds",
+  "levelId": "xy2y",
+  "levelName": "Barboza's Golden Tooth",
   "players": [
     {
       "id": "ai-player",
@@ -13,10 +13,10 @@
       "type": 0
     }
   ],
-  "estimatedDifficulty": 0.52,
+  "estimatedDifficulty": 0.34,
   "visibleHandPlayerId": "human-player",
-  "initialCardsPerPlayer": 7,
-  "cardsPerDirection": 5,
+  "initialCardsPerPlayer": 5,
+  "cardsPerDirection": 3,
   "board": {
     "vertices": [
       {

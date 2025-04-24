@@ -342,7 +342,7 @@ export default function LevelEditor(props: {
                     <div className="col-2">
                         <label htmlFor="iterationsPerAlternative" className="form-label">
                             <i className="bi bi-gear-fill me-1 ms-lg-2 d-block"></i>
-                            <span className="d-none d-lg-inline">AI iterations: </span>
+                            <span className="d-none d-lg-inline">AI runs: </span>
                             {iterations}
                         </label>
                         <input

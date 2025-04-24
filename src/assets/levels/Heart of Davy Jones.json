@@ -1,5 +1,5 @@
 {
-  "levelId": "xdgf",
+  "levelId": "xkns",
   "levelName": "Heart of Davy Jones",
   "players": [
     {
@@ -13,7 +13,7 @@
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.79,
+  "estimatedDifficulty": 0.45,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 4,
   "cardsPerDirection": 3,
@@ -36,7 +36,8 @@
           "y": 0.2142857142857143
         },
         "linkedVertices": [
-          "v1"
+          "v1",
+          "vxfvr"
         ]
       },
       {
@@ -119,6 +120,16 @@
         },
         "linkedVertices": [
           "v5"
+        ]
+      },
+      {
+        "id": "vxfvr",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "v6"
         ]
       }
     ]

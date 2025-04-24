@@ -1,5 +1,5 @@
 {
-  "levelId": "xijk",
+  "levelId": "xftk",
   "levelName": "Crown of Atlantis",
   "players": [
     {
@@ -13,7 +13,7 @@
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.55,
+  "estimatedDifficulty": 0.56,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 2,
   "cardsPerDirection": 2,
@@ -57,7 +57,8 @@
           "y": 0.6428571428571429
         },
         "linkedVertices": [
-          "vxbuw"
+          "vxbuw",
+          "vx2ng"
         ]
       },
       {
@@ -67,7 +68,8 @@
           "y": 0.5
         },
         "linkedVertices": [
-          "vxz94"
+          "vxz94",
+          "vx2ng"
         ]
       },
       {
@@ -77,7 +79,8 @@
           "y": 0.5
         },
         "linkedVertices": [
-          "vxi7u"
+          "vxi7u",
+          "vx2ng"
         ]
       },
       {
@@ -97,10 +100,7 @@
           "x": 0.5,
           "y": 0.35714285714285715
         },
-        "linkedVertices": [
-          "vxcii",
-          "vxi7u"
-        ]
+        "linkedVertices": []
       },
       {
         "id": "vxcii",
@@ -109,7 +109,8 @@
           "y": 0.2142857142857143
         },
         "linkedVertices": [
-          "vx4nn"
+          "vx4nn",
+          "vx2ng"
         ]
       },
       {
@@ -119,7 +120,8 @@
           "y": 0.07142857142857144
         },
         "linkedVertices": [
-          "vxcii"
+          "vxcii",
+          "vx2ng"
         ]
       },
       {
@@ -140,7 +142,6 @@
         },
         "linkedVertices": [
           "vxz0f",
-          "vxi7u",
           "vx6zx"
         ]
       }

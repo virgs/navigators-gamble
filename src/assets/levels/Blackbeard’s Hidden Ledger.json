@@ -1,5 +1,5 @@
 {
-  "levelId": "xpke",
+  "levelId": "xhs4",
   "levelName": "Blackbeard’s Hidden Ledger",
   "players": [
     {
@@ -13,10 +13,10 @@
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.08,
+  "estimatedDifficulty": 0.16,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 5,
-  "cardsPerDirection": 4,
+  "cardsPerDirection": 3,
   "board": {
     "vertices": [
       {
@@ -107,7 +107,7 @@
         },
         "linkedVertices": [
           "vx4e7",
-          "vx2r7"
+          "vxtkl"
         ]
       },
       {
@@ -138,7 +138,8 @@
           "y": 0.2142857142857143
         },
         "linkedVertices": [
-          "vx2r7"
+          "vx2r7",
+          "vx19o"
         ]
       },
       {

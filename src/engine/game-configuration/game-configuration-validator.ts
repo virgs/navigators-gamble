@@ -11,21 +11,21 @@ const isVertixOutOfBound = (vertix: SerializableVertix) => {
 export const gameConfigurationLimits = {
     cardsPerDirection: {
         min: 2,
-        max: 5,
+        max: 3,
         step: 1,
     },
     initialCardsPerPlayer: {
         min: 2,
-        max: 7,
+        max: 5,
         step: 1,
     },
     intelligence: {
         ai: {
             min: 0,
-            max: 200,
+            max: 250,
             step: 10,
         },
-        human: 50,
+        human: 100,
     },
     board: {
         vertices: {

@@ -1,5 +1,5 @@
 {
-  "levelId": "xcmv",
+  "levelId": "x1di",
   "levelName": "Fountain of Youth",
   "players": [
     {
@@ -13,10 +13,10 @@
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.28,
+  "estimatedDifficulty": 0.27,
   "visibleHandPlayerId": "human-player",
-  "initialCardsPerPlayer": 6,
-  "cardsPerDirection": 4,
+  "initialCardsPerPlayer": 5,
+  "cardsPerDirection": 3,
   "board": {
     "vertices": [
       {

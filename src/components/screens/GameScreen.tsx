@@ -112,7 +112,7 @@ export const GameScreen = (props: GameScreenProps): ReactNode => {
         <>
             <div className={classes.join(' ')}>
                 <div
-                    className="col-12 col-sm-7 col-lg-12 d-flex align-content-between align-content-sm-center align-content-lg-between justify-content-center"
+                    className="col-12 col-sm-7 col-lg-12 d-flex align-content-evenly align-content-sm-center align-content-lg-between justify-content-center"
                     style={{ flexWrap: 'wrap', alignContent: 'normal', overflowX: 'hidden' }}
                 >
                     <div

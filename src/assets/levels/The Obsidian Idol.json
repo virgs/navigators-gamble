@@ -1,5 +1,5 @@
 {
-  "levelId": "xjgz",
+  "levelId": "x9ek",
   "levelName": "The Obsidian Idol",
   "players": [
     {
@@ -16,7 +16,7 @@
   "estimatedDifficulty": 0.05,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 3,
-  "cardsPerDirection": 5,
+  "cardsPerDirection": 3,
   "board": {
     "vertices": [
       {
@@ -56,6 +56,7 @@
           "y": 0.35714285714285715
         },
         "linkedVertices": [
+          "v-x2fh",
           "v-xlhv"
         ]
       },
@@ -77,15 +78,13 @@
           "x": 0.35714285714285715,
           "y": 0.35714285714285715
         },
-        "linkedVertices": [
-          "v-x41p"
-        ]
+        "linkedVertices": []
       },
       {
         "id": "v-xpmc",
         "position": {
-          "x": 0.7857142857142857,
-          "y": 0.5
+          "x": 0.6428571428571429,
+          "y": 0.7857142857142857
         },
         "linkedVertices": [
           "v-xrw0"
@@ -98,7 +97,7 @@
           "y": 0.07142857142857144
         },
         "linkedVertices": [
-          "v-xnx3"
+          "v-x41p"
         ]
       },
       {
@@ -108,7 +107,7 @@
           "y": 0.07142857142857144
         },
         "linkedVertices": [
-          "v-x2fh"
+          "v-xlhv"
         ]
       }
     ]

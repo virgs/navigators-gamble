@@ -45,6 +45,9 @@ export class ScoreAnimationCoordinator {
             const humanPlayerHasWon = payload
                 .filter((endGame) => endGame.playerType !== PlayerType.HUMAN)
                 .every((endGame) => endGame.playerScore < humanPlayerScore)
+            const humanPlayerHasLost = payload
+                .filter((endGame) => endGame.playerType !== PlayerType.HUMAN)
+                .some((endGame) => endGame.playerScore > humanPlayerScore)
 
             await sleep(ScoreAnimationCoordinator.INTERVAL_BETWEEN_ANIMATIONS)
             emitAnnounceCommand({
@@ -57,8 +60,10 @@ export class ScoreAnimationCoordinator {
 
             await sleep(ScoreAnimationCoordinator.INTERVAL_BETWEEN_ANIMATIONS)
 
+            const announcement = humanPlayerHasWon ? 'You won!' : humanPlayerHasLost ? 'You lost!' : 'You tied!'
+
             emitAnnounceCommand({
-                announcement: humanPlayerHasWon ? 'You won!' : 'You lost!',
+                announcement: announcement,
                 duration: ScoreAnimationCoordinator.INTERVAL_BETWEEN_ANIMATIONS,
             })
             await sleep(2 * ScoreAnimationCoordinator.INTERVAL_BETWEEN_ANIMATIONS)

@@ -77,7 +77,7 @@ export const GameInstructionsModal = (props: { show: boolean; onHide: Function }
             show={props.show}
             onHide={() => props.onHide()}
         >
-            <Modal.Header>
+            <Modal.Header closeButton>
                 <Modal.Title className='w-100 text-center'>
                     <h1 className='text-center'>Rules</h1>
                 </Modal.Title>

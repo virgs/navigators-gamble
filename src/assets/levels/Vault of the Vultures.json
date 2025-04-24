@@ -1,11 +1,11 @@
 {
-  "levelId": "xpp4",
+  "levelId": "x1av",
   "levelName": "Vault of the Vultures",
   "players": [
     {
       "id": "ai-player",
       "type": 1,
-      "iterationsPerAlternative": 200,
+      "iterationsPerAlternative": 250,
       "aiAlgorithm": 0
     },
     {
@@ -13,20 +13,21 @@
       "type": 0
     }
   ],
-  "estimatedDifficulty": 0.73,
+  "estimatedDifficulty": 0.3,
   "visibleHandPlayerId": "human-player",
-  "initialCardsPerPlayer": 2,
-  "cardsPerDirection": 4,
+  "initialCardsPerPlayer": 5,
+  "cardsPerDirection": 3,
   "board": {
     "vertices": [
       {
         "id": "v-xaev",
         "position": {
           "x": 0.7857142857142857,
-          "y": 0.5
+          "y": 0.6428571428571429
         },
         "linkedVertices": [
-          "v-xv06"
+          "v-xv06",
+          "v-xpx0"
         ]
       },
       {
@@ -36,14 +37,16 @@
           "y": 0.9285714285714286
         },
         "linkedVertices": [
-          "v-xoc6"
+          "vxemv",
+          "v-xpl1",
+          "v-xm8c"
         ]
       },
       {
         "id": "v-xay4",
         "position": {
           "x": 0.07142857142857144,
-          "y": 0.35714285714285715
+          "y": 0.5
         },
         "linkedVertices": [
           "v-xnwi",
@@ -64,7 +67,7 @@
         "id": "v-xpl1",
         "position": {
           "x": 0.07142857142857144,
-          "y": 0.6428571428571429
+          "y": 0.9285714285714286
         },
         "linkedVertices": [
           "v-xm8c",
@@ -74,51 +77,65 @@
       {
         "id": "v-xmlu",
         "position": {
-          "x": 0.6428571428571429,
+          "x": 0.7857142857142857,
           "y": 0.07142857142857144
+        },
+        "linkedVertices": [
+          "v-xpx0",
+          "vxlju"
+        ]
+      },
+      {
+        "id": "v-xuxu",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "v-xnwi",
+          "vxlju"
+        ]
+      },
+      {
+        "id": "v-xm8c",
+        "position": {
+          "x": 0.35714285714285715,
+          "y": 0.6428571428571429
+        },
+        "linkedVertices": [
+          "v-xaev",
+          "v-xay4",
+          "v-xuxu"
+        ]
+      },
+      {
+        "id": "v-xpx0",
+        "position": {
+          "x": 0.7857142857142857,
+          "y": 0.35714285714285715
+        },
+        "linkedVertices": [
+          "v-xuxu"
+        ]
+      },
+      {
+        "id": "vxlju",
+        "position": {
+          "x": 0.6428571428571429,
+          "y": 0.2142857142857143
         },
         "linkedVertices": [
           "v-xpx0"
         ]
       },
       {
-        "id": "v-xoc6",
+        "id": "vxemv",
         "position": {
-          "x": 0.2142857142857143,
-          "y": 0.9285714285714286
+          "x": 0.6428571428571429,
+          "y": 0.7857142857142857
         },
         "linkedVertices": [
-          "v-xm8c",
-          "v-xpl1"
-        ]
-      },
-      {
-        "id": "v-xuxu",
-        "position": {
-          "x": 0.2142857142857143,
-          "y": 0.2142857142857143
-        },
-        "linkedVertices": []
-      },
-      {
-        "id": "v-xm8c",
-        "position": {
-          "x": 0.2142857142857143,
-          "y": 0.5
-        },
-        "linkedVertices": [
-          "v-xaev",
-          "v-xay4"
-        ]
-      },
-      {
-        "id": "v-xpx0",
-        "position": {
-          "x": 0.35714285714285715,
-          "y": 0.07142857142857144
-        },
-        "linkedVertices": [
-          "v-xuxu"
+          "v-xaev"
         ]
       }
     ]
