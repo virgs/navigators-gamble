@@ -9,13 +9,13 @@
     {
       "id": "ai-player",
       "type": 1,
-      "iterationsPerAlternative": 60,
+      "iterationsPerAlternative": 250,
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.56,
+  "estimatedDifficulty": 0.57,
   "visibleHandPlayerId": "human-player",
-  "initialCardsPerPlayer": 2,
+  "initialCardsPerPlayer": 3,
   "cardsPerDirection": 2,
   "board": {
     "vertices": [

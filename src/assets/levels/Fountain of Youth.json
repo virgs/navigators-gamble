@@ -9,11 +9,11 @@
     {
       "id": "ai-player",
       "type": 1,
-      "iterationsPerAlternative": 80,
+      "iterationsPerAlternative": 300,
       "aiAlgorithm": 0
     }
   ],
-  "estimatedDifficulty": 0.27,
+  "estimatedDifficulty": 0.25,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 5,
   "cardsPerDirection": 3,

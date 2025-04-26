@@ -5,7 +5,7 @@
     {
       "id": "ai-player",
       "type": 1,
-      "iterationsPerAlternative": 120,
+      "iterationsPerAlternative": 500,
       "aiAlgorithm": 0
     },
     {
@@ -13,7 +13,7 @@
       "type": 0
     }
   ],
-  "estimatedDifficulty": 0.29,
+  "estimatedDifficulty": 0.59,
   "visibleHandPlayerId": "human-player",
   "initialCardsPerPlayer": 5,
   "cardsPerDirection": 2,
