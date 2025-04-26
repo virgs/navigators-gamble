@@ -1,6 +1,7 @@
 import { AiAlgorithmType } from '../../ai/algorithms/ai-algorithm-type'
 import { sleep } from '../../math/sleep'
 import { GameConfiguration, GamePlayerConfiguration } from '../game-configuration/game-configuration'
+import { gameConfigurationLimits } from '../game-configuration/game-configuration-validator'
 import { PlayerType } from '../game-configuration/player-type'
 import { GameEngine } from '../game-engine'
 
@@ -15,7 +16,7 @@ export class LevelEvaluator {
 
     public constructor(
         gameConfig: GameConfiguration,
-        humanLevel: number = 300,
+        humanLevel: number = gameConfigurationLimits.intelligence.human,
         parallelExecutions: number = 3,
         onUpdate?: (value: number, remainingIterations: number) => void
     ) {
@@ -75,7 +76,6 @@ export class LevelEvaluator {
     private async evaluateLevel(iterations: number): Promise<number> {
         let losses = 0
         for (let i = 0; i < iterations && !this.terminating; i++) {
-            console.log(`Iteration ${i + 1} of ${iterations}`)
             const gameEngine = new GameEngine(this.gameConfig)
             gameEngine.start()
             while (!gameEngine.isGameOver()) {

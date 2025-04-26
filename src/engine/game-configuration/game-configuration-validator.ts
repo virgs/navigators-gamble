@@ -15,17 +15,17 @@ export const gameConfigurationLimits = {
         step: 1,
     },
     initialCardsPerPlayer: {
-        min: 2,
+        min: 3,
         max: 5,
         step: 1,
     },
     intelligence: {
         ai: {
             min: 0,
-            max: 250,
-            step: 10,
+            max: 1000,
+            step: 50,
         },
-        human: 100,
+        human: 300,
     },
     board: {
         vertices: {

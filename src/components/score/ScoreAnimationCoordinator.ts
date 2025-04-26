@@ -73,8 +73,11 @@ export class ScoreAnimationCoordinator {
 
     private async startEndGameBonusPointsAnimation(payload: EndGameBonusPointsEvent[]): Promise<void> {
         const currentBonus = payload.shift()
-        if (currentBonus === undefined || currentBonus.vertices.length === 0) {
+        if (currentBonus === undefined) {
             return
+        }
+        if (currentBonus.vertices.length === 0) {
+            return await this.startEndGameBonusPointsAnimation(payload)
         }
 
         emitBeginVerticesAnimationsCommand({

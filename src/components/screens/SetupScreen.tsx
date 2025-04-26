@@ -8,8 +8,8 @@ import Row from 'react-bootstrap/Row'
 import title from '../../assets/title.png'
 import { GameConfiguration } from '../../engine/game-configuration/game-configuration'
 import { BrowserDb, MatchStats } from '../../repository/browser-db'
-import './SetupScreen.scss'
 import { GameInstructionsModal } from './GameInstructionsModal'
+import './SetupScreen.scss'
 
 type LevelConfigurationAndStats = {
     levelConfiguration: GameConfiguration
@@ -21,8 +21,6 @@ type SetupScreenProps = {
     onStartButton: (config: GameConfiguration) => void
     onLevelEditorButton: () => void
 }
-
-
 
 export const SetupScreen = (props: SetupScreenProps): ReactNode => {
     const [showInstructions, setShowInstructions] = useState<boolean>(false)
