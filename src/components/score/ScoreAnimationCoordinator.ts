@@ -26,7 +26,7 @@ const scoreAnnouncementMap: Record<ScoreType, string> = {
 const isDevMode = import.meta.env.MODE === 'development'
 
 export class ScoreAnimationCoordinator {
-    public static readonly INTERVAL_BETWEEN_ANIMATIONS = isDevMode ? 200 : 2000
+    public static readonly INTERVAL_BETWEEN_ANIMATIONS = isDevMode ? 200 : 1500
     public static readonly INTERVAL_BETWEEN_LINKS_ANIMATIONS = isDevMode ? 30 : 300
     private readonly players: GamePlayerConfiguration[]
 

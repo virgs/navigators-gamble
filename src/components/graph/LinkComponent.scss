@@ -17,13 +17,13 @@
     &.pair {
         opacity: 0.95;
         filter: opacity(0.85);
-        stroke-width: 3px;
+        stroke-width: 2px;
         stroke-dasharray: 10;
         animation: dash 5s linear alternate infinite;
     }
     &.sequence {
         opacity: 1;
-        stroke-width: 6px;
+        stroke-width: 4px;
         stroke-dasharray: none;
         animation: dash 5s linear alternate infinite;
     }

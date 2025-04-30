@@ -26,7 +26,6 @@ export const GameAnnouncementModal = (): ReactNode => {
             id="game-announcement-modal"
             backdrop="static"
             keyboard={false}
-            centered
             contentClassName="game-announcement-modal-content"
             show={content !== ''}
         >
