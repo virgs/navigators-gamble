@@ -85,10 +85,10 @@ export const GameInstructionsModal = (props: { show: boolean; onHide: Function }
             <Modal.Body>
                 <div className="game-instructions-body">
                     <p className='text-center'>
-                        On your turn, put the cards on the map symbols to create combinations of cardinal directions to score points.
+                        On your turn, place the cards on the map symbols to create combinations of cardinal directions to score points.
                     </p>
                     <p className='text-center'>
-                        The game will be ovver when the board is full. The player with the most points wins.
+                        The game will be over when the board is full. The player with the most points wins.
                     </p>
                     <h4 className='text-center'>Combinations</h4>
                     <Row className='combinations-example'>
