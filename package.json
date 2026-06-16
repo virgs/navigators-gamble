@@ -32,7 +32,7 @@
         "@types/node": "^22.13.14",
         "@types/react": "^19.0.10",
         "@types/react-dom": "^19.0.4",
-        "@vitejs/plugin-react": "^4.3.4",
+        "@vitejs/plugin-react": "^6.0.2",
         "eslint": "^9.21.0",
         "eslint-plugin-react-hooks": "^5.1.0",
         "eslint-plugin-react-refresh": "^0.4.19",
@@ -42,8 +42,8 @@
         "sass": "1.77.6",
         "typescript": "~5.7.2",
         "typescript-eslint": "^8.24.1",
-        "vite": "^6.4.2",
-        "vite-plugin-qrcode": "^0.2.4"
+        "vite": "^8.0.16",
+        "vite-plugin-qrcode": "^0.4.1"
     },
     "prettier": {
         "trailingComma": "es5",
